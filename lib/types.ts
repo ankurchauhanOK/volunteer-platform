@@ -30,6 +30,29 @@ export interface VolunteerProfile {
   emergencyContact?: { name: string; phone: string; relation: string }
   cvUrl?: string
   profileCompleteness: number
+
+  // New onboarding fields
+  qualification?: string
+  talentAreas?: string[]
+  hobbies?: string[]
+  hobbyRepresentation?: string
+  hobbyDescription?: string
+  hobbyProofUrl?: string
+  travelType?: string
+  preferredEnvironment?: string[]
+  preferredStayType?: string[]
+  tripDuration?: string
+  soloOrGroup?: string
+  experienceLevel?: string
+  remoteWork?: boolean
+  comfortLevel?: string
+  emergencyNotes?: string
+  medicalConsiderations?: string
+  specialRequirements?: string
+  communityGuidelinesAgreed?: boolean
+  respectfulConductAgreed?: boolean
+  phoneVerified?: boolean
+  onboardingStep?: number
 }
 
 export interface HostProfile {
@@ -50,6 +73,13 @@ export interface HostProfile {
   languages: string[]
   emergencyContact?: { name: string; phone: string }
   amenities: string[]
+
+  // Visual identity fields
+  hostPhoto?: string
+  propertyVibe?: string[]
+  introVideo?: string
+  volunteerExperience?: string[]
+  volunteerExperienceDesc?: string
 }
 
 export interface OpportunityListing {
