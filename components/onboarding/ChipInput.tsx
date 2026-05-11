@@ -46,7 +46,7 @@ export function ChipInput({
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
+      <label className="block text-xs font-semibold text-text uppercase tracking-wider">{label}</label>
 
       {searchable && (
         <div className="relative">
@@ -71,7 +71,7 @@ export function ChipInput({
               type="button"
               onClick={() => handleToggle(tag)}
               className={cn(
-                "px-2 py-0.5 rounded-full text-[11px] font-medium border transition-all",
+                "px-2 py-0.5 rounded-full text-xs font-medium border transition-all",
                 selected.includes(tag)
                   ? "bg-brand-100 border-brand-300 text-brand-700"
                   : "bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100",
@@ -107,10 +107,10 @@ export function ChipInput({
       )}
 
       {max && selected.length >= max && (
-        <p className="text-xs text-amber-600">Maximum {max} selections allowed</p>
+        <p className="text-xs font-medium text-amber-700">Maximum {max} selections allowed</p>
       )}
 
-      {helperText && <p className="text-xs text-gray-400">{helperText}</p>}
+      {helperText && <p className="text-xs text-text-muted">{helperText}</p>}
     </div>
   )
 }

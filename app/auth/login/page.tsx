@@ -153,9 +153,9 @@ export default function LoginPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
                 </svg>
               </div>
-              <span className="text-lg font-bold text-gray-900">Voluntree</span>
+              <span className="font-tanker text-lg text-text tracking-normal">Voluntree</span>
             </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
+            <h1 className="font-tanker text-2xl text-text">Welcome back</h1>
             <p className="text-sm text-gray-500 mt-1">Sign in to your account</p>
           </CardHeader>
           <CardContent>

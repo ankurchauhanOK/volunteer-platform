@@ -14,6 +14,7 @@ export interface User {
 
 export interface VolunteerProfile {
   userId: string
+  profilePhoto?: string
   age?: number
   gender?: string
   city?: string

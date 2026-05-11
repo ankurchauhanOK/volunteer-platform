@@ -140,7 +140,7 @@ export function GoogleSignIn() {
           <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer"
              className="text-amber-900 underline hover:no-underline">Google Cloud Console</a>
           {" "}and add it to <code className="font-mono text-amber-900 bg-amber-100 px-1 rounded">.env.local</code>:
-          <div className="mt-1.5 p-2 bg-amber-100/50 rounded-lg font-mono text-amber-900 text-[11px] break-all">
+          <div className="mt-1.5 p-2 bg-amber-100/50 rounded-lg font-mono text-amber-900 text-xs break-all">
             NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
           </div>
         </div>

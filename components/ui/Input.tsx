@@ -7,7 +7,7 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
     return (
       <div className="space-y-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-text">
+          <label htmlFor={inputId} className="text-xs font-semibold text-text uppercase tracking-wider">
             {label}
           </label>
         )}

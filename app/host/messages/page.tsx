@@ -59,7 +59,7 @@ export default function HostMessagesPage() {
         <div className="bg-gray-50 min-h-screen py-8">
           <Container>
             <div className="max-w-4xl mx-auto">
-              <h1 className="text-2xl font-bold text-gray-900 mb-6">Messages</h1>
+              <h1 className="font-tanker text-2xl text-text mb-6">Messages</h1>
 
               <div className="grid md:grid-cols-3 gap-4">
                 <Card className="md:col-span-1 md:max-h-[70vh] md:overflow-y-auto">

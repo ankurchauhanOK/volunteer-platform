@@ -46,7 +46,7 @@ export function SearchableSelect({
 
   return (
     <div className="space-y-1.5 relative" ref={ref}>
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
+      <label className="block text-xs font-semibold text-text uppercase tracking-wider">{label}</label>
       <button
         type="button"
         onClick={() => setOpen(!open)}

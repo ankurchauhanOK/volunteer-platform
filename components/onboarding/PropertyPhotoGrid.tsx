@@ -62,8 +62,8 @@ export function PropertyPhotoGrid({ photos, onChange }: PropertyPhotoGridProps) 
 
   return (
     <div className="space-y-3">
-      <label className="block text-sm font-medium text-gray-700">Property photos</label>
-      <p className="text-xs text-gray-500 -mt-2">Upload photos that represent your space and atmosphere.</p>
+      <label className="block text-xs font-semibold text-text uppercase tracking-wider">Property photos</label>
+      <p className="text-xs text-text-muted -mt-2">Upload photos that represent your space and atmosphere.</p>
 
       <div
         onDragOver={e => { e.preventDefault(); setDragOver(true) }}
@@ -79,8 +79,8 @@ export function PropertyPhotoGrid({ photos, onChange }: PropertyPhotoGridProps) 
         <svg className="mx-auto w-8 h-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
         </svg>
-        <p className="text-sm text-gray-500">Drag & drop photos here, or tap to browse</p>
-        <p className="text-xs text-gray-400 mt-1">{photos.length} / 20 uploaded</p>
+        <p className="text-sm text-text-secondary">Drag & drop photos here, or tap to browse</p>
+        <p className="text-xs text-text-muted mt-1">{photos.length} / 20 uploaded</p>
         <input ref={inputRef} type="file" accept="image/*" multiple capture="environment" className="hidden" onChange={handleChange} />
       </div>
 
@@ -103,7 +103,7 @@ export function PropertyPhotoGrid({ photos, onChange }: PropertyPhotoGridProps) 
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
-              <span className="absolute bottom-1 left-1 text-[10px] bg-black/50 text-white px-1.5 py-0.5 rounded">{idx + 1}</span>
+              <span className="absolute bottom-1 left-1 text-xs bg-black/50 text-white px-1.5 py-0.5 rounded">{idx + 1}</span>
             </div>
           ))}
           {showUploadCard && (
@@ -112,7 +112,7 @@ export function PropertyPhotoGrid({ photos, onChange }: PropertyPhotoGridProps) 
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
-              <span className="text-[10px]">Add more</span>
+              <span className="text-xs">Add more</span>
             </button>
           )}
         </div>
@@ -123,7 +123,7 @@ export function PropertyPhotoGrid({ photos, onChange }: PropertyPhotoGridProps) 
           <p className="text-xs font-medium text-gray-500">Suggested photos:</p>
           <div className="flex flex-wrap gap-1.5">
             {photoSuggestionLabels.map(label => (
-              <span key={label} className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 text-[11px] border border-gray-200">
+              <span key={label} className="px-2.5 py-1 rounded-full bg-gray-100 text-text-secondary text-xs border border-gray-200">
                 {label}
               </span>
             ))}
@@ -132,8 +132,8 @@ export function PropertyPhotoGrid({ photos, onChange }: PropertyPhotoGridProps) 
       )}
 
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 space-y-1">
-        <p className="text-xs font-medium text-amber-800">Tips for great photos:</p>
-        <ul className="text-[11px] text-amber-700 space-y-0.5">
+        <p className="text-xs font-semibold text-amber-800">Tips for great photos:</p>
+        <ul className="text-xs text-amber-700 space-y-0.5">
           <li>• Show clean and well-lit spaces</li>
           <li>• Upload real photos, not posters</li>
           <li>• Include where volunteers stay</li>

@@ -48,8 +48,8 @@ export function ProfileCompleteness({
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-semibold text-gray-900">Profile completeness</h4>
-        <span className="text-lg font-bold text-brand-600">{percentage}%</span>
+        <h4 className="font-tanker text-xl text-text">Profile completeness</h4>
+        <span className="font-tanker text-2xl text-brand-600">{percentage}%</span>
       </div>
 
       <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -78,9 +78,9 @@ export function ProfileCompleteness({
 
       {suggestions.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 space-y-1">
-          <p className="text-[11px] font-medium text-amber-800">Suggestions to improve:</p>
+          <p className="text-xs font-semibold text-amber-800">Suggestions to improve:</p>
           {suggestions.map(s => (
-            <p key={s} className="text-[11px] text-amber-700 flex items-center gap-1">
+            <p key={s} className="text-xs text-amber-700 flex items-center gap-1">
               <span>→</span> {s}
             </p>
           ))}

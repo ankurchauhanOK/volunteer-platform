@@ -97,7 +97,7 @@ export default function EditListingPage({ params }: { params: Promise<{ id: stri
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h1 className="text-2xl font-bold text-gray-900">Edit Listing</h1>
+                    <h1 className="font-tanker text-2xl text-text">Edit Listing</h1>
                     <Badge variant={existing.visibility === "published" ? "success" : "default"}>{existing.visibility}</Badge>
                   </div>
                   <p className="text-sm text-gray-500 mt-1">{existing.title}</p>

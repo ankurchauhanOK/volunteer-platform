@@ -32,7 +32,7 @@ export default function SavedPage() {
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Saved Opportunities</h1>
+                  <h1 className="font-tanker text-2xl text-text">Saved Opportunities</h1>
                   <p className="text-sm text-gray-500">{listings.length} saved opportunities</p>
                 </div>
                 <Link href="/opportunities"><Button size="sm">Browse More</Button></Link>

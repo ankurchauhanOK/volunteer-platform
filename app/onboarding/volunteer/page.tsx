@@ -7,10 +7,16 @@ import { Providers } from "@/components/Providers"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Textarea } from "@/components/ui/Textarea"
+import { Badge } from "@/components/ui/Badge"
+import { Progress } from "@/components/ui/Progress"
+import { Separator } from "@/components/ui/Separator"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar"
 import { db } from "@/lib/store"
 import { StepLayout } from "@/components/onboarding/StepLayout"
 import { ChipInput } from "@/components/onboarding/ChipInput"
 import { CardSelect } from "@/components/onboarding/CardSelect"
+import { RichCardSelect } from "@/components/onboarding/RichCardSelect"
+import { PhotoUpload } from "@/components/onboarding/PhotoUpload"
 import { SearchableSelect } from "@/components/onboarding/SearchableSelect"
 import { SectionFAQ } from "@/components/onboarding/SectionFAQ"
 import {
@@ -80,7 +86,7 @@ const defaultForm: OnboardingForm = {
 
 function calcCompleteness(form: OnboardingForm): number {
   const fields = [
-    form.fullName, form.age, form.city, form.gender,
+    form.fullName, !!form.profilePhoto, form.age, form.city, form.gender,
     form.languages.length > 0, form.qualification,
     form.skills.length > 0, form.talentAreas.length > 0,
     form.hobbies.length > 0, form.preferredDestinations.length > 0,
@@ -171,6 +177,7 @@ export default function VolunteerOnboardingPage() {
       emergencyContact: form.emergencyName
         ? { name: form.emergencyName, phone: form.emergencyPhone, relation: form.emergencyRelation }
         : undefined,
+      profilePhoto: form.profilePhoto || undefined,
       profileCompleteness: completeness,
 
       qualification: form.qualification || undefined,
@@ -195,7 +202,10 @@ export default function VolunteerOnboardingPage() {
       onboardingStep: step,
     })
 
-    db.users.update(user.id, { onboardingComplete: true })
+    db.users.update(user.id, {
+      onboardingComplete: true,
+      ...(form.profilePhoto ? { avatar: form.profilePhoto } : {}),
+    })
     localStorage.removeItem("vt_onboarding_volunteer")
     refreshUser()
     setLoading(false)
@@ -218,74 +228,82 @@ export default function VolunteerOnboardingPage() {
 
   // SCREEN 1: WELCOME
   const renderWelcome = () => (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 rounded-2xl bg-brand-100 flex items-center justify-center mx-auto mb-3">
-          <svg className="w-8 h-8 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-200">
+          <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
           </svg>
         </div>
-        <h2 className="text-lg font-semibold text-gray-900">Welcome to Voluntree!</h2>
-        <p className="text-sm text-gray-500 mt-1 max-w-sm mx-auto">
+        <h2 className="font-tanker heading-2xl text-text">Welcome to Voluntree!</h2>
+        <p className="text-sm text-text-secondary mt-2 max-w-md mx-auto leading-relaxed">
           Your profile helps hosts get to know you and find the perfect match for your volunteer journey.
         </p>
       </div>
 
-      <div className="bg-brand-50 rounded-xl p-4 space-y-2">
-        <p className="text-xs font-semibold text-brand-700 uppercase tracking-wider">We'll cover</p>
-        <div className="grid grid-cols-2 gap-1.5">
+      <div className="bg-gradient-to-br from-brand-50 to-mint-50 rounded-2xl border border-brand-100 p-5 space-y-3">
+        <p className="label-sm text-brand-700 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand-500" />
+          We&apos;ll help you build
+        </p>
+        <div className="grid grid-cols-2 gap-2">
           {[
-            ["📋", "Basic details"],
-            ["💪", "Skills & talents"],
-            ["🎨", "Hobbies & proof"],
-            ["🗺️", "Travel preferences"],
-            ["📅", "Availability"],
-            ["🛡️", "Safety info"],
-          ].map(([icon, label]) => (
-            <div key={label} className="flex items-center gap-2 text-sm text-gray-700">
-              <span>{icon}</span>
-              <span>{label}</span>
+            { icon: "📋", label: "Basic details" },
+            { icon: "💪", label: "Skills & talents" },
+            { icon: "🎨", label: "Hobbies & proof" },
+            { icon: "🗺️", label: "Travel preferences" },
+            { icon: "📅", label: "Availability" },
+            { icon: "🛡️", label: "Safety info" },
+          ].map(({ icon, label }) => (
+            <div key={label} className="flex items-center gap-2.5 text-sm text-text bg-white/70 rounded-xl px-3 py-2.5 border border-brand-100/50">
+              <span className="text-lg">{icon}</span>
+              <span className="font-medium">{label}</span>
             </div>
           ))}
         </div>
       </div>
 
       {user && (user.name || user.email || user.avatar) && (
-        <div className="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-3">
-          {user.avatar ? (
-            <img src={user.avatar} alt="" className="w-10 h-10 rounded-full object-cover" />
-          ) : (
-            <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-sm">
-              {user.name?.charAt(0) || "?"}
-            </div>
-          )}
+        <div className="bg-white rounded-2xl border border-border p-4 flex items-center gap-3 card-hover">
+          <Avatar className="w-12 h-12 ring-2 ring-brand-100">
+            <AvatarImage src={user.avatar} />
+            <AvatarFallback className="bg-brand-100 text-brand-700 text-base">{user.name?.charAt(0) || "?"}</AvatarFallback>
+          </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
-            <p className="text-xs text-gray-500 truncate">{user.email}</p>
+            <p className="text-sm font-semibold text-text truncate">{user.name}</p>
+            <p className="text-xs text-text-muted truncate">{user.email}</p>
           </div>
-          <span className="text-[10px] text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Google</span>
+          <Badge variant="primary" size="sm">Connected</Badge>
         </div>
       )}
 
-      <div className="text-center text-xs text-gray-400">
-        You can always update your profile later in settings.
+      <div className="text-center">
+        <p className="text-xs text-text-muted">You can always update your profile later in settings.</p>
       </div>
     </div>
   )
 
   // SCREEN 2: BASIC DETAILS
   const renderBasicDetails = () => (
-    <div className="space-y-4">
+    <div className="space-y-5">
+      <PhotoUpload
+        value={form.profilePhoto}
+        onChange={v => update("profilePhoto", v)}
+        helperText="A friendly photo helps hosts recognize and trust you faster."
+      />
+
+      <Separator />
+
       <div className="grid grid-cols-2 gap-3">
         <Input
-          label="Full name"
+          label="👤 Full name"
           id="fullName"
           value={form.fullName}
           onChange={e => update("fullName", e.target.value)}
           placeholder="Your name"
         />
         <Input
-          label="Age"
+          label="🎂 Age"
           type="number"
           id="age"
           value={form.age}
@@ -296,14 +314,14 @@ export default function VolunteerOnboardingPage() {
 
       <div className="grid grid-cols-2 gap-3">
         <SearchableSelect
-          label="City"
+          label="📍 City"
           options={indianCityOptions.map(c => ({ value: c, label: c }))}
           value={form.city}
           onChange={v => update("city", v)}
           placeholder="Search city..."
         />
         <Input
-          label="Country"
+          label="🌍 Country"
           id="country"
           value={form.country}
           onChange={e => update("country", e.target.value)}
@@ -312,14 +330,14 @@ export default function VolunteerOnboardingPage() {
 
       <div className="grid grid-cols-2 gap-3">
         <SearchableSelect
-          label="Gender (optional)"
+          label="⚧️ Gender (optional)"
           options={genderOptions}
           value={form.gender}
           onChange={v => update("gender", v)}
           placeholder="Select"
         />
         <SearchableSelect
-          label="Qualification"
+          label="🎓 Qualification"
           options={qualificationOptions}
           value={form.qualification}
           onChange={v => update("qualification", v)}
@@ -328,7 +346,7 @@ export default function VolunteerOnboardingPage() {
       </div>
 
       <ChipInput
-        label="Languages you speak"
+        label="🗣️ Languages you speak"
         options={languageOptions}
         selected={form.languages}
         onChange={v => update("languages", v)}
@@ -402,8 +420,8 @@ export default function VolunteerOnboardingPage() {
                 }`}
               >
                 <span className="text-lg">{opt.icon}</span>
-                <span className={`text-[11px] font-medium ${
-                  form.hobbyRepresentation === opt.value ? "text-brand-700" : "text-gray-600"
+                <span className={`text-xs font-medium ${
+                  form.hobbyRepresentation === opt.value ? "text-brand-700" : "text-text-secondary"
                 }`}>
                   {opt.label}
                 </span>
@@ -717,62 +735,130 @@ export default function VolunteerOnboardingPage() {
     if (!form.hobbies.length) suggestions.push("Add hobbies")
     if (!form.hobbyRepresentation) suggestions.push("Upload proof of your hobby")
     if (!form.availabilityStart) suggestions.push("Set your travel dates")
-    if (!form.profilePhoto) suggestions.push("Add a profile photo")
     if (!form.hobbyDescription && form.hobbies.length > 0) suggestions.push("Complete your bio")
+    if (!form.emergencyName) suggestions.push("Add emergency contact")
 
-    const summaryItems = [
-      { label: "Name", value: form.fullName },
-      { label: "Age", value: form.age },
-      { label: "Location", value: [form.city, form.country].filter(Boolean).join(", ") },
-      { label: "Gender", value: form.gender ? genderOptions.find(g => g.value === form.gender)?.label || form.gender : "" },
-      { label: "Languages", value: form.languages.join(", ") },
-      { label: "Qualification", value: form.qualification ? qualificationOptions.find(q => q.value === form.qualification)?.label || form.qualification : "" },
-      { label: "Skills", value: form.skills.join(", ") },
-      { label: "Talent areas", value: form.talentAreas.join(", ") },
-      { label: "Hobbies", value: form.hobbies.join(", ") },
-      { label: "Destinations", value: form.preferredDestinations.join(", ") },
-      { label: "Travel type", value: form.travelType ? travelTypeOptions.find(t => t.value === form.travelType)?.label : "" },
-      { label: "Availability", value: [form.availabilityStart, form.availabilityEnd].filter(Boolean).join(" → ") },
-      { label: "Travel style", value: form.travelStyle ? travelStyleOptions.find(t => t.value === form.travelStyle)?.label : "" },
-      { label: "Emergency contact", value: form.emergencyName ? `${form.emergencyName} (${form.emergencyRelation})` : "" },
-    ].filter(item => item.value)
+    const completenessColor = completeness >= 80 ? "text-green-600" : completeness >= 50 ? "text-amber-600" : "text-text-muted"
 
     return (
       <div className="space-y-5">
-        <div className="bg-brand-50 rounded-xl p-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-semibold text-brand-700">Profile completeness</span>
-            <span className="text-lg font-bold text-brand-700">{completeness}%</span>
+        <div className="bg-gradient-to-br from-brand-50 to-mint-50 rounded-2xl border border-brand-100 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h3 className="font-bold text-text">Profile completeness</h3>
+              <p className="text-xs text-text-secondary">Here&apos;s how your profile looks to hosts</p>
+            </div>
+            <div className="text-right">
+              <span className={`text-3xl font-bold ${completenessColor}`}>{completeness}%</span>
+              {completeness >= 80 && <p className="text-xs font-medium text-green-600">🌟 Looks great!</p>}
+            </div>
           </div>
-          <div className="w-full bg-brand-200 rounded-full h-2.5">
-            <div
-              className="bg-brand-600 h-2.5 rounded-full transition-all duration-700"
-              style={{ width: `${completeness}%` }}
-            />
+          <Progress value={completeness} className="h-2.5" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-white rounded-xl border border-border p-4 space-y-2">
+            <div className="flex items-center gap-2">
+              <Avatar className="w-10 h-10 ring-2 ring-brand-100">
+                <AvatarImage src={form.profilePhoto || user?.avatar} />
+                <AvatarFallback className="bg-brand-100 text-brand-700 text-sm">{(form.fullName || user?.name || "?").charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-text truncate">{form.fullName || user?.name}</p>
+                <p className="text-xs text-text-muted truncate">{form.city || form.country}</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl border border-border p-4 space-y-1">
+            <p className="text-xs text-text-muted">Languages</p>
+            <div className="flex flex-wrap gap-1">
+              {form.languages.length > 0 ? form.languages.slice(0, 3).map(l => (
+                <Badge key={l} variant="primary" size="sm">{l}</Badge>
+              )) : <span className="text-xs text-text-muted italic">Not set</span>}
+              {form.languages.length > 3 && (
+                <Badge variant="outline" size="sm">+{form.languages.length - 3}</Badge>
+              )}
+            </div>
           </div>
         </div>
 
+        {form.skills.length > 0 && (
+          <div className="bg-white rounded-xl border border-border p-4 space-y-2">
+            <p className="text-xs font-semibold text-text flex items-center gap-1.5">
+              <span>💪</span> Skills
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {form.skills.map(s => (
+                <Badge key={s} variant="primary" size="sm">{s}</Badge>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {(form.preferredDestinations.length > 0 || form.travelType) && (
+          <div className="bg-white rounded-xl border border-border p-4 space-y-2">
+            <p className="text-xs font-semibold text-text flex items-center gap-1.5">
+              <span>🗺️</span> Travel preferences
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {form.preferredDestinations.slice(0, 4).map(d => (
+                <Badge key={d} variant="info" size="sm">{d}</Badge>
+              ))}
+              {form.preferredDestinations.length > 4 && (
+                <Badge variant="outline" size="sm">+{form.preferredDestinations.length - 4}</Badge>
+              )}
+              {form.travelType && (
+                <Badge variant="secondary" size="sm">
+                  {travelTypeOptions.find(t => t.value === form.travelType)?.label || form.travelType}
+                </Badge>
+              )}
+            </div>
+          </div>
+        )}
+
+        {form.hobbies.length > 0 && (
+          <div className="bg-white rounded-xl border border-border p-4 space-y-2">
+            <p className="text-xs font-semibold text-text flex items-center gap-1.5">
+              <span>🎨</span> Hobbies
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {form.hobbies.map(h => (
+                <Badge key={h} variant="purple" size="sm">{h}</Badge>
+              ))}
+            </div>
+            {form.hobbyRepresentation && (
+              <p className="text-xs text-text-muted mt-1">
+                Proof: {hobbyRepresentationOptions.find(o => o.value === form.hobbyRepresentation)?.label || form.hobbyRepresentation}
+              </p>
+            )}
+          </div>
+        )}
+
+        {form.availabilityStart && (
+          <div className="bg-white rounded-xl border border-border p-4 space-y-1">
+            <p className="text-xs font-semibold text-text flex items-center gap-1.5">
+              <span>📅</span> Availability
+            </p>
+            <p className="text-sm text-text">
+              {form.availabilityStart}{form.availabilityEnd ? ` → ${form.availabilityEnd}` : ""}
+            </p>
+          </div>
+        )}
+
         {suggestions.length > 0 && (
-          <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
-            <p className="text-xs font-semibold text-amber-700 mb-2">Suggestions to improve your profile</p>
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2">
+            <p className="text-xs font-semibold text-amber-800 flex items-center gap-1.5">
+              <span>💡</span> Tips to improve
+            </p>
             <div className="flex flex-wrap gap-1.5">
               {suggestions.map(s => (
-                <span key={s} className="text-xs text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">
+                <span key={s} className="text-xs text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">
                   {s}
                 </span>
               ))}
             </div>
           </div>
         )}
-
-        <div className="bg-white border border-gray-100 rounded-xl divide-y divide-gray-50">
-          {summaryItems.map(item => (
-            <div key={item.label} className="flex items-start gap-3 px-4 py-2.5">
-              <span className="text-xs font-medium text-gray-500 w-28 shrink-0">{item.label}</span>
-              <span className="text-xs text-gray-800">{item.value || <span className="text-gray-300 italic">Not set</span>}</span>
-            </div>
-          ))}
-        </div>
       </div>
     )
   }

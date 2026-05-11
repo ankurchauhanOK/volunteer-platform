@@ -73,7 +73,7 @@ export default function HomePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
               </svg>
             </div>
-            <span className="text-lg font-bold text-text">Voluntree</span>
+            <span className="font-tanker text-lg text-text tracking-normal">Voluntree</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -119,7 +119,7 @@ export default function HomePage() {
             <Badge variant="primary" size="lg" className="mb-6">
               <Sparkles className="h-3.5 w-3.5 mr-1" /> India&apos;s Volunteer Travel Community
             </Badge>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-text text-balance leading-[1.1]">
+            <h1 className="font-tanker text-4xl sm:text-5xl lg:text-6xl text-text text-balance tracking-normal">
               Travel with purpose.<br />
               <span className="gradient-text">Stay free. Make an impact.</span>
             </h1>
@@ -158,7 +158,7 @@ export default function HomePage() {
       <section className="section-padding">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-text">Why Voluntree?</h2>
+            <h2 className="font-tanker text-3xl sm:text-4xl text-text">Why Voluntree?</h2>
             <p className="mt-3 text-base text-text-secondary max-w-2xl mx-auto">
               We make volunteer travel simple, safe, and rewarding for everyone.
             </p>
@@ -180,7 +180,7 @@ export default function HomePage() {
       <section className="section-padding bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-text">How It Works</h2>
+            <h2 className="font-tanker text-3xl sm:text-4xl text-text">How It Works</h2>
             <p className="mt-3 text-base text-text-secondary max-w-2xl mx-auto">Three simple steps to start your volunteer travel journey.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -207,7 +207,7 @@ export default function HomePage() {
             <Card className="p-8 sm:p-10 bg-gradient-to-br from-brand-50 to-white border-brand-100">
               <CardContent className="p-0 space-y-5">
                 <Badge variant="primary" size="lg">For Volunteers</Badge>
-                <h3 className="text-2xl sm:text-3xl font-bold text-text">Travel & volunteer across India</h3>
+                <h3 className="font-tanker text-2xl sm:text-3xl text-text">Travel & volunteer across India</h3>
                 <p className="text-text-secondary leading-relaxed">Find meaningful placements that match your skills. Get free accommodation, meals, and a genuine cultural experience.</p>
                 <ul className="space-y-3">
                   {["Work a few hours daily", "Free stay & meals included", "Connect with local communities", "Build real skills & friendships"].map(item => (
@@ -226,7 +226,7 @@ export default function HomePage() {
             <Card className="p-8 sm:p-10 bg-gradient-to-br from-ocean-50 to-white border-ocean-100">
               <CardContent className="p-0 space-y-5">
                 <Badge variant="secondary" size="lg">For Hosts</Badge>
-                <h3 className="text-2xl sm:text-3xl font-bold text-text">Share your space & mission</h3>
+                <h3 className="font-tanker text-2xl sm:text-3xl text-text">Share your space & mission</h3>
                 <p className="text-text-secondary leading-relaxed">Get support from passionate travelers. Showcase your project and host volunteers who bring fresh energy and ideas.</p>
                 <ul className="space-y-3">
                   {["List your space for free", "Get help from skilled travelers", "Share your culture & mission", "Build your community"].map(item => (
@@ -248,7 +248,7 @@ export default function HomePage() {
       <section className="section-padding bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-text">What People Say</h2>
+            <h2 className="font-tanker text-3xl sm:text-4xl text-text">What People Say</h2>
             <p className="mt-3 text-base text-text-secondary">Real stories from our community.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -279,7 +279,7 @@ export default function HomePage() {
 
       <section className="section-padding bg-gradient-to-br from-brand-500 to-brand-700">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white">Ready to start your journey?</h2>
+          <h2 className="font-tanker text-3xl sm:text-4xl text-white">Ready to start your journey?</h2>
           <p className="mt-4 text-base text-brand-100 leading-relaxed max-w-xl mx-auto">
             Join thousands of travelers and hosts who are already making volunteer travel a reality across India.
           </p>

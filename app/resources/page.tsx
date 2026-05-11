@@ -24,7 +24,7 @@ export default function ResourcesPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <div className="mb-10">
-              <h1 className="text-3xl font-bold text-gray-900">Resources</h1>
+              <h1 className="font-tanker text-3xl text-text">Resources</h1>
               <p className="text-gray-500 mt-2">Guides, tips, and stories to help you make the most of your volunteer-travel experience</p>
             </div>
             <div className="grid sm:grid-cols-2 gap-5">

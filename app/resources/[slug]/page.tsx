@@ -78,7 +78,7 @@ export default function ResourceDetailPage({ params }: { params: Promise<{ slug:
             <Card>
               <CardContent className="p-8">
                 <p className="text-xs font-medium text-brand-600 uppercase tracking-wider mb-2">{article.category}</p>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">{article.title}</h1>
+                <h1 className="font-tanker text-2xl md:text-3xl text-text mb-6">{article.title}</h1>
                 <div className="prose prose-sm prose-gray max-w-none">
                   {article.content.split("\n\n").map((paragraph, i) => {
                     if (paragraph.startsWith("## ")) {

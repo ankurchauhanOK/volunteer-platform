@@ -33,7 +33,7 @@ export function CardSelect({
 
   return (
     <div className="space-y-2">
-      {label && <label className="block text-sm font-medium text-gray-700">{label}</label>}
+      {label && <label className="block text-xs font-semibold text-text uppercase tracking-wider">{label}</label>}
       <div className={cn("grid gap-2.5", columns === 2 ? "grid-cols-2" : "grid-cols-3")}>
         {options.map(option => (
           <button
@@ -66,7 +66,7 @@ export function CardSelect({
               {option.label}
             </span>
             {option.description && (
-              <span className="text-[10px] text-gray-400 leading-tight">{option.description}</span>
+              <span className="text-xs text-text-muted leading-tight">{option.description}</span>
             )}
             {isSelected(option.value) && (
               <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-brand-500 flex items-center justify-center">
@@ -78,7 +78,7 @@ export function CardSelect({
           </button>
         ))}
       </div>
-      {helperText && <p className="text-xs text-gray-400">{helperText}</p>}
+      {helperText && <p className="text-xs text-text-muted">{helperText}</p>}
     </div>
   )
 }

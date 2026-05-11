@@ -30,7 +30,7 @@ export default function FAQPage() {
         <Container>
           <div className="max-w-3xl mx-auto">
             <div className="mb-10 text-center">
-              <h1 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h1>
+              <h1 className="font-tanker text-3xl text-text">Frequently Asked Questions</h1>
               <p className="text-gray-500 mt-2">Everything you need to know about Voluntree</p>
             </div>
             <div className="space-y-3">

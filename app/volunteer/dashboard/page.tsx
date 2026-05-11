@@ -31,7 +31,7 @@ export default function VolunteerDashboardPage() {
           <Container className="py-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+                <h1 className="font-tanker text-2xl text-text">
                   Welcome back, {user.name.split(" ")[0]}!
                 </h1>
                 <p className="text-sm text-gray-500 mt-1">

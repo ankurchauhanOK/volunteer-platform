@@ -34,7 +34,7 @@ export default function ApplicationsPage() {
             <div className="max-w-3xl mx-auto">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">My Applications</h1>
+                  <h1 className="font-tanker text-2xl text-text">My Applications</h1>
                   <p className="text-sm text-gray-500">{applications.length} total applications</p>
                 </div>
                 <Link href="/opportunities"><Button size="sm">Browse More</Button></Link>

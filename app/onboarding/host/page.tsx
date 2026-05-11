@@ -10,16 +10,31 @@ import { Textarea } from "@/components/ui/Textarea"
 import { Select } from "@/components/ui/Select"
 import { Card, CardContent } from "@/components/ui/Card"
 import { Badge } from "@/components/ui/Badge"
+import { Progress } from "@/components/ui/Progress"
 import { HostPhotoUpload } from "@/components/onboarding/HostPhotoUpload"
 import { PropertyPhotoGrid } from "@/components/onboarding/PropertyPhotoGrid"
 import { PropertyVibeSelector } from "@/components/onboarding/PropertyVibeSelector"
 import { IntroVideoInput } from "@/components/onboarding/IntroVideoInput"
 import { ExperiencePreviewBlock } from "@/components/onboarding/ExperiencePreviewBlock"
 import { ProfileCompleteness } from "@/components/onboarding/ProfileCompleteness"
+import { RichCardSelect } from "@/components/onboarding/RichCardSelect"
 import { db } from "@/lib/store"
 import { categoryOptions, stateOptions, vibeOptions, experienceOptions } from "@/lib/utils"
 
 const steps = ["Host Type", "Business Details", "Photos & Visual Identity", "Location & Facilities", "Rules & Expectations", "Review & Complete"]
+
+const hostTypeCards = [
+  { value: "hostel", label: "Hostel", description: "Social atmosphere with dorm and private rooms", icon: "🏨" },
+  { value: "homestay", label: "Homestay", description: "Family-run space with personal touch", icon: "🏡" },
+  { value: "eco-lodge", label: "Eco Lodge", description: "Sustainable accommodation in nature", icon: "🌿" },
+  { value: "cafe", label: "Cafe", description: "Cozy cafe needing creative help", icon: "☕" },
+  { value: "farm", label: "Farm", description: "Organic farming and rural life", icon: "🌾" },
+  { value: "ngo", label: "NGO", description: "Non-profit with community impact", icon: "🤝" },
+  { value: "school", label: "School", description: "Education and teaching focused", icon: "📚" },
+  { value: "community-center", label: "Community Center", description: "Local gathering and development space", icon: "🏛️" },
+  { value: "restaurant", label: "Restaurant", description: "Busy kitchen and dining experience", icon: "🍽️" },
+  { value: "other", label: "Other", description: "Something unique and different", icon: "✨" },
+]
 
 export default function HostOnboardingPage() {
   const { user, refreshUser } = useAuth()
@@ -300,7 +315,7 @@ export default function HostOnboardingPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
               </svg>
             </div>
-            <span className="text-base font-bold text-gray-900">Voluntree</span>
+            <span className="font-tanker text-lg text-text tracking-normal">Voluntree</span>
           </div>
 
           <div className="mb-2 flex items-center justify-between">

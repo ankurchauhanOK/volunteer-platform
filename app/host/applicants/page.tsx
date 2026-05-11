@@ -62,7 +62,7 @@ export default function HostApplicantsPage() {
         <div className="bg-gray-50 min-h-screen py-8">
           <Container>
             <div className="max-w-4xl mx-auto">
-              <h1 className="text-2xl font-bold text-gray-900 mb-6">Applicants</h1>
+              <h1 className="font-tanker text-2xl text-text mb-6">Applicants</h1>
 
               <div className="grid lg:grid-cols-2 gap-6">
                 {/* Application List */}

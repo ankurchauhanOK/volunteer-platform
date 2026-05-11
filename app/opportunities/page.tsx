@@ -49,7 +49,7 @@ export default function OpportunitiesPage() {
       <div className="bg-gray-50 min-h-screen">
         <Container className="py-8">
           <div className="mb-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Volunteer Opportunities</h1>
+            <h1 className="font-tanker text-2xl md:text-3xl text-text">Volunteer Opportunities</h1>
             <p className="text-gray-500 mt-1">Find your next adventure across India</p>
           </div>
 

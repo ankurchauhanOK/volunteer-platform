@@ -36,7 +36,7 @@ export function Navbar() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
             </svg>
           </div>
-          <span className="text-lg font-bold text-text">Voluntree</span>
+          <span className="font-tanker text-lg text-text tracking-normal">Voluntree</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">

@@ -34,7 +34,7 @@ export function PropertyVibeSelector({ selected, onChange }: PropertyVibeSelecto
 
   return (
     <div className="space-y-3">
-      <label className="block text-sm font-medium text-gray-700">What best describes your place?</label>
+      <label className="block text-xs font-semibold text-text uppercase tracking-wider">What best describes your place?</label>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {vibeOpts.map(vibe => (
           <button

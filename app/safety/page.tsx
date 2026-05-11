@@ -13,7 +13,7 @@ export default function SafetyPage() {
         <Container>
           <div className="max-w-3xl mx-auto">
             <div className="mb-10">
-              <h1 className="text-3xl font-bold text-gray-900">Trust & Safety</h1>
+              <h1 className="font-tanker text-3xl text-text">Trust & Safety</h1>
               <p className="text-gray-500 mt-2">Your safety is our top priority. Learn about the measures we take to protect our community.</p>
             </div>
 
@@ -27,7 +27,7 @@ export default function SafetyPage() {
                       </svg>
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-2">Host Verification</h2>
+                      <h2 className="font-tanker text-lg text-text mb-2">Host Verification</h2>
                       <p className="text-sm text-gray-600 leading-relaxed">All hosts undergo identity verification before listing opportunities. We review business documentation, verify contact information, and check community reviews. Verified hosts receive a special badge that helps volunteers make informed decisions.</p>
                     </div>
                   </div>
@@ -43,7 +43,7 @@ export default function SafetyPage() {
                       </svg>
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-2">Community Reviews</h2>
+                      <h2 className="font-tanker text-lg text-text mb-2">Community Reviews</h2>
                       <p className="text-sm text-gray-600 leading-relaxed">After each stay, both volunteers and hosts can leave honest reviews. Our review system includes ratings for communication, safety, cleanliness, and overall experience. This creates a self-regulating community where quality is rewarded.</p>
                     </div>
                   </div>
@@ -59,7 +59,7 @@ export default function SafetyPage() {
                       </svg>
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-2">Reporting System</h2>
+                      <h2 className="font-tanker text-lg text-text mb-2">Reporting System</h2>
                       <p className="text-sm text-gray-600 leading-relaxed">If something doesn&apos;t feel right, you can report a listing or user directly from any page. Our moderation team reviews all reports within 24 hours. We take issues like misrepresentation, harassment, and safety concerns very seriously.</p>
                     </div>
                   </div>
@@ -75,7 +75,7 @@ export default function SafetyPage() {
                       </svg>
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-2">Emergency Support</h2>
+                      <h2 className="font-tanker text-lg text-text mb-2">Emergency Support</h2>
                       <p className="text-sm text-gray-600 leading-relaxed">We provide emergency contact information for all verified hosts. Volunteers can access this information once their application is accepted. Our support team is available 24/7 to help with urgent situations.</p>
                     </div>
                   </div>
@@ -91,7 +91,7 @@ export default function SafetyPage() {
                       </svg>
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-2">Code of Conduct</h2>
+                      <h2 className="font-tanker text-lg text-text mb-2">Code of Conduct</h2>
                       <p className="text-sm text-gray-600 leading-relaxed">All members must agree to our community guidelines and code of conduct. Hosts sign a responsibility agreement ensuring they provide safe conditions and fair treatment. Volunteers agree to respect host property and contribute meaningfully.</p>
                     </div>
                   </div>
@@ -100,7 +100,7 @@ export default function SafetyPage() {
             </div>
 
             <div className="mt-8 p-6 bg-brand-50 rounded-2xl border border-brand-100 text-center">
-              <h2 className="text-lg font-semibold text-brand-900 mb-2">Have a safety concern?</h2>
+              <h2 className="font-tanker text-lg text-text mb-2">Have a safety concern?</h2>
               <p className="text-sm text-brand-700 mb-4">Our team is here to help. Don&apos;t hesitate to reach out.</p>
               <Link href="/contact">
                 <Button>Contact Support</Button>

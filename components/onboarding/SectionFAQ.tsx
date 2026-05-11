@@ -22,7 +22,7 @@ export function SectionFAQ({ items }: SectionFAQProps) {
           <button
             type="button"
             onClick={() => setOpenIndex(openIndex === i ? null : i)}
-            className="w-full flex items-center justify-between px-3 py-2.5 text-left text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-between px-3 py-2.5 text-left text-sm font-medium text-text-secondary hover:bg-gray-50 transition-colors"
           >
             {item.question}
             <svg
@@ -33,7 +33,7 @@ export function SectionFAQ({ items }: SectionFAQProps) {
             </svg>
           </button>
           {openIndex === i && (
-            <div className="px-3 pb-2.5 text-xs text-gray-500 leading-relaxed">{item.answer}</div>
+            <div className="px-3 pb-2.5 text-sm text-text-secondary leading-relaxed">{item.answer}</div>
           )}
         </div>
       ))}

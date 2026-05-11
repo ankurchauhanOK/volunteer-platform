@@ -124,7 +124,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
               </div>
 
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{listing.title}</h1>
+                <h1 className="font-tanker text-2xl md:text-3xl text-text mb-2">{listing.title}</h1>
                 <div className="flex items-center gap-3 text-sm text-gray-500 mb-4">
                   <span className="flex items-center gap-1">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

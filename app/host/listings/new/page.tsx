@@ -81,7 +81,7 @@ export default function CreateListingPage() {
             <div className="max-w-2xl mx-auto">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Create Opportunity</h1>
+                  <h1 className="font-tanker text-2xl text-text">Create Opportunity</h1>
                   <p className="text-sm text-gray-500">List a new volunteer opportunity</p>
                 </div>
               </div>

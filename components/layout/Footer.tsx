@@ -15,7 +15,7 @@ export function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
                 </svg>
               </div>
-              <span className="font-bold text-text">Voluntree</span>
+              <span className="font-tanker text-lg text-text tracking-normal">Voluntree</span>
             </div>
             <p className="text-sm text-text-secondary leading-relaxed">India&apos;s volunteer travel community. Travel with purpose.</p>
           </div>
