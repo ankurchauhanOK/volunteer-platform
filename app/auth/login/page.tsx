@@ -117,13 +117,6 @@ function LoginForm() {
         </form>
       )}
 
-      <p className="text-center text-sm text-gray-500">
-        Don&apos;t have an account?{" "}
-        <Link href="/auth/signup" className="text-brand-600 hover:text-brand-700 font-medium">
-          Sign up
-        </Link>
-      </p>
-
       {/* Demo accounts */}
       <div className="pt-4 border-t border-gray-100">
         <p className="text-xs text-gray-400 text-center mb-3">Demo accounts</p>

@@ -178,7 +178,7 @@ export default function EditListingPage({ params }: { params: Promise<{ id: stri
                 </Card>
 
                 <div className="flex justify-between">
-                  <Button variant="danger" onClick={() => { if (confirm("Delete this listing?")) { db.listings.delete(id); router.push("/host/listings") } }}>
+                  <Button variant="destructive" onClick={() => { if (confirm("Delete this listing?")) { db.listings.delete(id); router.push("/host/listings") } }}>
                     Delete
                   </Button>
                   <div className="flex gap-3">

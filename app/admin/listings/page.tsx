@@ -60,7 +60,7 @@ export default function AdminListingsPage() {
                             <td className="p-4">
                               <div className="flex gap-2">
                                 <Link href={`/opportunities/${l.id}`}><Button variant="ghost" size="sm">View</Button></Link>
-                                <Button variant="danger" size="sm" onClick={() => { db.listings.update(l.id, { visibility: "archived" }); window.location.reload() }}>Archive</Button>
+                                <Button variant="destructive" size="sm" onClick={() => { db.listings.update(l.id, { visibility: "archived" }); window.location.reload() }}>Archive</Button>
                               </div>
                             </td>
                           </tr>

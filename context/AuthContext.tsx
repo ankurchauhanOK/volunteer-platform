@@ -8,7 +8,6 @@ interface AuthContextType {
   user: User | null
   isLoading: boolean
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
-  signup: (data: { name: string; email: string; password: string; role: UserRole }) => Promise<{ success: boolean; error?: string }>
   googleLogin: (email: string, name: string, picture?: string) => Promise<{ success: boolean; error?: string; isNewUser?: boolean; role?: string }>
   logout: () => void
   updateUser: (data: Partial<User>) => void
@@ -48,21 +47,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { success: true }
   }
 
-  const signup = async (data: { name: string; email: string; password: string; role: UserRole }) => {
-    const existing = db.users.findByEmail(data.email)
-    if (existing) return { success: false, error: "An account with this email already exists" }
-    const user = db.users.create({
-      email: data.email,
-      password: data.password,
-      name: data.name,
-      role: data.role,
-      onboardingComplete: false,
-    })
-    setUser(user)
-    localStorage.setItem("vt_current_user", JSON.stringify(user))
-    return { success: true }
-  }
-
   const googleLogin = async (email: string, name: string, picture?: string) => {
     const existing = db.users.findByEmail(email)
     if (existing) {
@@ -98,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-      <AuthContext.Provider value={{ user, isLoading, login, signup, googleLogin, logout, updateUser, refreshUser }}>
+      <AuthContext.Provider value={{ user, isLoading, login, googleLogin, logout, updateUser, refreshUser }}>
       {children}
     </AuthContext.Provider>
   )

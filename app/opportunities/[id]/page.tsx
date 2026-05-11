@@ -351,7 +351,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
               <Textarea label="Reason for reporting" id="report" value={reportReason} onChange={e => setReportReason(e.target.value)} placeholder="Tell us what's wrong with this listing" />
               <div className="flex justify-end gap-3 mt-4">
                 <Button variant="ghost" onClick={() => setReportModal(false)}>Cancel</Button>
-                <Button variant="danger" onClick={handleReport} disabled={!reportReason}>Submit Report</Button>
+                <Button variant="destructive" onClick={handleReport} disabled={!reportReason}>Submit Report</Button>
               </div>
             </CardContent>
           </Card>

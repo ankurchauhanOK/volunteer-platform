@@ -27,7 +27,7 @@ export default function AdminReportsPage() {
               </div>
               <div className="flex gap-2">
                 {["all", "open", "investigating", "resolved", "dismissed"].map(f => (
-                  <Button key={f} variant={filter === f ? "primary" : "ghost"} size="sm" onClick={() => setFilter(f)}>
+                  <Button key={f} variant={filter === f ? "default" : "ghost"} size="sm" onClick={() => setFilter(f)}>
                     {f.charAt(0).toUpperCase() + f.slice(1)}
                   </Button>
                 ))}
@@ -52,7 +52,7 @@ export default function AdminReportsPage() {
                             <div className="flex items-center gap-2 mb-1">
                               <p className="font-medium text-gray-900">Report by {reporter?.name || "Unknown"}</p>
                               <Badge variant={
-                                report.status === "open" ? "error" :
+                                report.status === "open" ? "destructive" :
                                 report.status === "investigating" ? "warning" :
                                 report.status === "resolved" ? "success" : "default"
                               }>{report.status}</Badge>
@@ -75,7 +75,7 @@ export default function AdminReportsPage() {
                               db.reports.update(report.id, { status: "investigating" as any })
                               window.location.reload()
                             }}>Investigate</Button>
-                            <Button variant="danger" size="sm" onClick={() => {
+                            <Button variant="destructive" size="sm" onClick={() => {
                               db.reports.update(report.id, { status: "resolved" as any })
                               window.location.reload()
                             }}>Resolve</Button>

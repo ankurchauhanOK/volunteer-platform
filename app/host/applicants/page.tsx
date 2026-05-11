@@ -95,7 +95,7 @@ export default function HostApplicantsPage() {
                               <Badge variant={
                                 app.status === "submitted" ? "info" :
                                 app.status === "accepted" || app.status === "confirmed" ? "success" :
-                                app.status === "rejected" ? "error" : "default"
+                                app.status === "rejected" ? "destructive" : "default"
                               }>
                                 {statusInfo?.label || app.status}
                               </Badge>
@@ -170,7 +170,7 @@ export default function HostApplicantsPage() {
                         {selectedApp.status === "submitted" || selectedApp.status === "viewed" ? (
                           <div className="flex gap-3">
                             <Button variant="outline" className="flex-1" onClick={() => handleStatus(selectedApp.id, "waitlisted")}>Waitlist</Button>
-                            <Button variant="danger" className="flex-1" onClick={() => handleStatus(selectedApp.id, "rejected")}>Decline</Button>
+                            <Button variant="destructive" className="flex-1" onClick={() => handleStatus(selectedApp.id, "rejected")}>Decline</Button>
                             <Button className="flex-1" onClick={() => handleStatus(selectedApp.id, "accepted")}>Accept</Button>
                           </div>
                         ) : selectedApp.status === "accepted" ? (

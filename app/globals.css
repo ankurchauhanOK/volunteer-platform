@@ -1,17 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #f0f7f4;
-  --color-brand-100: #dceee3;
-  --color-brand-200: #b9ddc7;
-  --color-brand-300: #8dc4a3;
-  --color-brand-400: #5ca77a;
-  --color-brand-500: #3d8b5e;
-  --color-brand-600: #2d6f49;
-  --color-brand-700: #25593b;
-  --color-brand-800: #204730;
-  --color-brand-900: #1b3a28;
-  --color-brand-950: #0d2016;
+  --color-brand-50: #f0faf4;
+  --color-brand-100: #ddf2e5;
+  --color-brand-200: #b9e3cb;
+  --color-brand-300: #8dcea8;
+  --color-brand-400: #5cb17e;
+  --color-brand-500: #2f7d52;
+  --color-brand-600: #256d45;
+  --color-brand-700: #1e5a39;
+  --color-brand-800: #1a4a30;
+  --color-brand-900: #163d28;
+  --color-brand-950: #0c2115;
+
+  --color-mint-50: #f2fdf6;
+  --color-mint-100: #ddf2e5;
+  --color-mint-200: #b9e3cb;
+  --color-mint-300: #8dcea8;
 
   --color-earth-50: #faf8f5;
   --color-earth-100: #f0ece4;
@@ -23,7 +28,6 @@
   --color-earth-700: #7f5e47;
   --color-earth-800: #694d3e;
   --color-earth-900: #584136;
-  --color-earth-950: #2f211b;
 
   --color-ocean-50: #eff7fc;
   --color-ocean-100: #d7ecf7;
@@ -33,9 +37,6 @@
   --color-ocean-500: #2f8cc0;
   --color-ocean-600: #2070a3;
   --color-ocean-700: #1b5a84;
-  --color-ocean-800: #1a4d6d;
-  --color-ocean-900: #1b415b;
-  --color-ocean-950: #12293d;
 
   --color-sunset-50: #fef6ee;
   --color-sunset-100: #fde9d4;
@@ -45,16 +46,55 @@
   --color-sunset-500: #ee6517;
   --color-sunset-600: #df4d0d;
   --color-sunset-700: #b9370e;
-  --color-sunset-800: #932d13;
-  --color-sunset-900: #772712;
-  --color-sunset-950: #401007;
+
+  --color-warm-50: #fffbeb;
+  --color-warm-100: #fef3c7;
+  --color-warm-200: #f2c66d;
+  --color-warm-300: #eab308;
+  --color-warm-400: #ca8a04;
+
+  --color-sky-50: #f0f9ff;
+  --color-sky-100: #e0f2fe;
+  --color-sky-200: #7ec8e3;
+  --color-sky-300: #38bdf8;
+  --color-sky-400: #0284c7;
+
+  --color-cream: #f7f8f5;
+  --color-surface: #ffffff;
+  --color-border: #e5e9e4;
+  --color-border-light: #f0f1ef;
+  --color-text: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+  --color-success: #cfefd9;
+  --color-success-text: #166534;
+  --color-warning: #fef3c7;
+  --color-warning-text: #92400e;
+  --color-error: #fee2e2;
+  --color-error-text: #991b1b;
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
 }
 
 body {
   font-family: var(--font-sans);
+  color: var(--color-text);
+  background-color: var(--color-cream);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
 }
 
 @keyframes fadeIn {
@@ -78,8 +118,42 @@ body {
 }
 
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(52, 211, 153, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(52, 211, 153, 0.6); }
+  0%, 100% { box-shadow: 0 0 5px rgba(47, 125, 82, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(47, 125, 82, 0.6); }
+}
+
+@keyframes confettiDrop {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.1); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes checkPop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
 }
 
 .animate-fade-in {
@@ -100,4 +174,49 @@ body {
 
 .animate-glow {
   animation: glow 2s ease-in-out infinite;
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.5s ease-out forwards;
+}
+
+.animate-check-pop {
+  animation: checkPop 0.3s ease-out forwards;
+}
+
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-confetti {
+  animation: confettiDrop 1.5s ease-out forwards;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Section spacing */
+.section-padding {
+  @apply py-16 md:py-24;
+}
+
+/* Card hover effect */
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-md hover:-translate-y-0.5;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-gradient-to-r from-brand-600 to-brand-400 bg-clip-text text-transparent;
 }

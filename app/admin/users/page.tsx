@@ -54,7 +54,7 @@ export default function AdminUsersPage() {
                             </div>
                           </td>
                           <td className="p-4 text-gray-500">{u.email}</td>
-                          <td className="p-4"><Badge variant={u.role === "admin" ? "error" : u.role === "host" ? "info" : "success"}>{u.role}</Badge></td>
+                          <td className="p-4"><Badge variant="destructive">{u.role}</Badge></td>
                           <td className="p-4 text-gray-500">{formatDate(u.createdAt)}</td>
                           <td className="p-4">{u.onboardingComplete ? <Badge variant="success">Complete</Badge> : <Badge variant="warning">Incomplete</Badge>}</td>
                         </tr>

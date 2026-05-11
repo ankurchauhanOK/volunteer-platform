@@ -110,7 +110,7 @@ export default function VolunteerDashboardPage() {
                                 <p className="text-sm font-medium text-gray-900 truncate">{listing?.title || "Unknown"}</p>
                                 <p className="text-xs text-gray-500">{formatDate(app.createdAt)}</p>
                               </div>
-                              <Badge variant={app.status === "accepted" || app.status === "confirmed" ? "success" : app.status === "rejected" ? "error" : app.status === "submitted" || app.status === "viewed" ? "info" : "default"}>
+                              <Badge variant="destructive">
                                 {statusInfo?.label || app.status}
                               </Badge>
                             </div>

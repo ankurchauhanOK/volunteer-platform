@@ -21,7 +21,7 @@ const plans = [
       "Community access",
     ],
     cta: "Get Started",
-    href: "/auth/signup",
+    href: "/auth/login",
     popular: false,
   },
   {
@@ -39,7 +39,7 @@ const plans = [
       "Exclusive host access",
     ],
     cta: "Go Premium",
-    href: "/auth/signup",
+    href: "/auth/login",
     popular: true,
   },
   {
@@ -57,7 +57,7 @@ const plans = [
       "Priority listing placement",
     ],
     cta: "Become a Host",
-    href: "/auth/signup?role=host",
+    href: "/auth/login",
     popular: false,
   },
 ]
@@ -100,7 +100,7 @@ export default function PricingPage() {
                     </ul>
                     <Link href={plan.href}>
                       <Button
-                        variant={plan.popular ? "primary" : "outline"}
+                        variant={plan.popular ? "default" : "outline"}
                         className="w-full"
                       >
                         {plan.cta}

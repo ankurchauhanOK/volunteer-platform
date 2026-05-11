@@ -79,7 +79,7 @@ export default function ApplicationsPage() {
                                         </Link>
                                         <Badge variant={
                                           app.status === "confirmed" || app.status === "accepted" ? "success" :
-                                          app.status === "rejected" ? "error" :
+                                          app.status === "rejected" ? "destructive" :
                                           app.status === "submitted" || app.status === "viewed" ? "info" :
                                           app.status === "waitlisted" ? "purple" : "default"
                                         } size="sm">

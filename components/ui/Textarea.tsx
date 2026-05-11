@@ -1,37 +1,33 @@
-"use client"
-
-import { forwardRef } from "react"
+import * as React from "react"
 import { cn } from "@/lib/utils"
 
-interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?: string
-  error?: string
-}
-
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement> & { label?: string; error?: string }>(
   ({ className, label, error, id, ...props }, ref) => {
+    const textareaId = id || label?.toLowerCase().replace(/\s+/g, "-")
     return (
-      <div className="w-full">
+      <div className="space-y-1.5">
         {label && (
-          <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1.5">
+          <label htmlFor={textareaId} className="text-sm font-medium text-text">
             {label}
           </label>
         )}
         <textarea
-          ref={ref}
-          id={id}
+          id={textareaId}
           className={cn(
-            "w-full rounded-xl border-2 px-4 py-2.5 text-sm transition-all duration-200 outline-none resize-y min-h-[100px]",
-            "focus:border-brand-500 focus:ring-2 focus:ring-brand-100",
-            "placeholder:text-gray-400",
-            error ? "border-red-300 focus:border-red-500 focus:ring-red-100" : "border-gray-200 hover:border-gray-300",
+            "flex min-h-[80px] w-full rounded-xl border-2 bg-white px-4 py-2.5 text-sm text-text placeholder:text-text-muted",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-0",
+            "disabled:cursor-not-allowed disabled:opacity-50 resize-none",
+            error ? "border-error-text" : "border-border focus-visible:border-brand-500",
             className,
           )}
+          ref={ref}
           {...props}
         />
-        {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+        {error && <p className="text-xs text-error-text">{error}</p>}
       </div>
     )
   },
 )
 Textarea.displayName = "Textarea"
+
+export { Textarea }

@@ -55,14 +55,13 @@ export default function AdminDashboardPage() {
                               <p className="text-xs text-gray-500">{u.email} &middot; {u.role}</p>
                             </div>
                           </div>
-                          <Badge variant={u.role === "admin" ? "error" : u.role === "host" ? "info" : "success"}>
+                          <Badge variant={u.role === "admin" ? "destructive" : u.role === "host" ? "info" : "success"} size="sm">
                             {u.role}
                           </Badge>
                         </div>
                       ))}
                     </div>
                     <div className="mt-4 text-center">
-                      <Link href="/admin/users"><Button variant="ghost" size="sm">View All Users</Button></Link>
                     </div>
                   </CardContent>
                 </Card>
@@ -86,7 +85,7 @@ export default function AdminDashboardPage() {
                                 </div>
                                 <div className="flex gap-2">
                                   <Button size="sm" variant="ghost" onClick={() => db.reports.update(report.id, { status: "dismissed" as any })}>Dismiss</Button>
-                                  <Button size="sm" variant="danger" onClick={() => db.reports.update(report.id, { status: "resolved" as any })}>Resolve</Button>
+                                  <Button size="sm" variant="destructive" onClick={() => db.reports.update(report.id, { status: "resolved" as any })}>Resolve</Button>
                                 </div>
                               </div>
                             </div>

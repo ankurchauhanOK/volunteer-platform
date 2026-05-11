@@ -45,7 +45,7 @@ export default function HowItWorksPage() {
                   ))}
                 </div>
                 <div className="mt-8 text-center">
-                  <Link href="/auth/signup?role=volunteer">
+                  <Link href="/auth/login">
                     <Button size="lg">Start Your Journey</Button>
                   </Link>
                 </div>
@@ -79,7 +79,7 @@ export default function HowItWorksPage() {
                   ))}
                 </div>
                 <div className="mt-8 text-center">
-                  <Link href="/auth/signup?role=host">
+                  <Link href="/auth/login">
                     <Button variant="secondary" size="lg">Become a Host</Button>
                   </Link>
                 </div>
