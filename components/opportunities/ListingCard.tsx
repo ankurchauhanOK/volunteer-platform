@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { Card } from "@/components/ui/Card"
 import { Badge } from "@/components/ui/Badge"
@@ -25,14 +26,35 @@ const categoryGradients: Record<string, string> = {
   other: "from-brand-400 to-brand-700",
 }
 
+function getLocationImage(city: string, state: string): string {
+  const seed = `${city}-${state}-india`.toLowerCase().replace(/\s+/g, "-")
+  return `https://picsum.photos/seed/${seed}/600/400`
+}
+
 export function ListingCard({ listing, hostName }: ListingCardProps) {
+  const [imgLoaded, setImgLoaded] = useState(false)
+  const [imgError, setImgError] = useState(false)
   const gradient = categoryGradients[listing.category] || "from-brand-400 to-brand-700"
+  const imgSrc = listing.photos?.[0] || getLocationImage(listing.city, listing.state)
+  const showImage = imgLoaded && !imgError
 
   return (
     <Link href={`/opportunities/${listing.id}`} className="block group">
       <Card className="overflow-hidden border-border bg-surface transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
         {/* Image area */}
         <div className={`aspect-[4/3] bg-gradient-to-br ${gradient} relative overflow-hidden`}>
+          {/* Location image */}
+          {!imgError && (
+            <img
+              src={imgSrc}
+              alt={`${listing.city}, ${listing.state}`}
+              onLoad={() => setImgLoaded(true)}
+              onError={() => setImgError(true)}
+              className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${
+                imgLoaded ? "opacity-60" : "opacity-0"
+              }`}
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
           <div className="absolute top-3 left-3 flex gap-1.5 flex-wrap">
             <Badge variant="info" size="md" className="shadow-sm">
