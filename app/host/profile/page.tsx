@@ -13,9 +13,10 @@ import { AuthGuard } from "@/components/auth/AuthGuard"
 import { db } from "@/lib/store"
 import { categoryOptions, stateOptions } from "@/lib/utils"
 import { useAuth } from "@/context/AuthContext"
+import { AlertTriangle, Loader2 } from "lucide-react"
 
 export default function HostProfilePage() {
-  const { user } = useAuth()
+  const { user, deleteAccount } = useAuth()
   const router = useRouter()
   const existing = user ? db.hostProfiles.find(user.id) : null
 
@@ -34,6 +35,8 @@ export default function HostProfilePage() {
     emergencyPhone: existing?.emergencyContact?.phone || "",
   })
   const [saved, setSaved] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const handleSave = () => {
     if (!user) return
@@ -57,6 +60,14 @@ export default function HostProfilePage() {
     })
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
+  }
+
+  const handleDeleteAccount = async () => {
+    if (!user) return
+    setDeleting(true)
+    await new Promise(r => setTimeout(r, 500))
+    deleteAccount()
+    router.push("/")
   }
 
   if (!user) return null
@@ -112,6 +123,31 @@ export default function HostProfilePage() {
                       <Input label="Emergency Contact Name" id="emName" value={form.emergencyName} onChange={e => setForm({ ...form, emergencyName: e.target.value })} />
                       <Input label="Emergency Phone" id="emPhone" type="tel" value={form.emergencyPhone} onChange={e => setForm({ ...form, emergencyPhone: e.target.value })} />
                     </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-red-200 bg-red-50/50">
+                  <CardHeader><h2 className="font-semibold text-red-800 flex items-center gap-2"><AlertTriangle className="h-4 w-4" /> Danger Zone</h2></CardHeader>
+                  <CardContent className="space-y-3">
+                    <p className="text-sm text-red-700">Permanently delete your account and all associated data. This action cannot be undone.</p>
+                    {!showDeleteConfirm ? (
+                      <Button variant="destructive" onClick={() => setShowDeleteConfirm(true)}>
+                        Delete Account
+                      </Button>
+                    ) : (
+                      <div className="space-y-3 bg-white rounded-xl border border-red-200 p-4">
+                        <p className="text-sm font-medium text-red-800">Are you absolutely sure?</p>
+                        <p className="text-xs text-red-600">All your listings, applications, messages, and profile data will be permanently removed.</p>
+                        <div className="flex gap-2">
+                          <Button variant="destructive" onClick={handleDeleteAccount} loading={deleting}>
+                            {deleting ? "Deleting..." : "Yes, Delete My Account"}
+                          </Button>
+                          <Button variant="outline" onClick={() => setShowDeleteConfirm(false)} disabled={deleting}>
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </div>

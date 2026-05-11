@@ -12,6 +12,7 @@ interface AuthContextType {
   logout: () => void
   updateUser: (data: Partial<User>) => void
   refreshUser: () => void
+  deleteAccount: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -81,8 +82,58 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const deleteAccount = () => {
+    if (!user) return
+    const userId = user.id
+    const role = user.role
+
+    db.users.delete(userId)
+
+    if (role === "host") {
+      const profiles = getHostProfiles()
+      setItem("hostProfiles", profiles.filter((p: any) => p.userId !== userId))
+      const listings = getListings()
+      const hostListings = listings.filter((l: any) => l.hostId === userId)
+      const listingIds = hostListings.map((l: any) => l.id)
+      setItem("listings", listings.filter((l: any) => l.hostId !== userId))
+      const apps = getApps()
+      setItem("applications", apps.filter((a: any) => a.hostId !== userId && !listingIds.includes(a.listingId)))
+    } else {
+      const profiles = getVolProfiles()
+      setItem("volunteerProfiles", profiles.filter((p: any) => p.userId !== userId))
+      const apps = getApps()
+      setItem("applications", apps.filter((a: any) => a.volunteerId !== userId))
+    }
+
+    const allThreads = getThreads()
+    const userThreadIds = allThreads.filter((t: any) => t.participants.includes(userId)).map((t: any) => t.id)
+    setItem("threads", allThreads.filter((t: any) => !userThreadIds.includes(t.id)))
+    const allMsgs = getMsgs()
+    setItem("messages", allMsgs.filter((m: any) => !userThreadIds.includes(m.threadId)))
+
+    const allSaved = getSaved()
+    setItem("savedListings", allSaved.filter((s: any) => s.userId !== userId))
+    const allNotifs = getNotifs()
+    setItem("notifications", allNotifs.filter((n: any) => n.userId !== userId))
+    const allReviews = getReviews()
+    setItem("reviews", allReviews.filter((r: any) => r.fromUserId !== userId && r.toUserId !== userId))
+
+    logout()
+  }
+
+  const getHostProfiles = () => JSON.parse(localStorage.getItem("vt_hostProfiles") || "[]")
+  const getVolProfiles = () => JSON.parse(localStorage.getItem("vt_volunteerProfiles") || "[]")
+  const getListings = () => JSON.parse(localStorage.getItem("vt_listings") || "[]")
+  const getApps = () => JSON.parse(localStorage.getItem("vt_applications") || "[]")
+  const getThreads = () => JSON.parse(localStorage.getItem("vt_threads") || "[]")
+  const getMsgs = () => JSON.parse(localStorage.getItem("vt_messages") || "[]")
+  const getSaved = () => JSON.parse(localStorage.getItem("vt_savedListings") || "[]")
+  const getNotifs = () => JSON.parse(localStorage.getItem("vt_notifications") || "[]")
+  const getReviews = () => JSON.parse(localStorage.getItem("vt_reviews") || "[]")
+  const setItem = (key: string, data: any) => localStorage.setItem(key, JSON.stringify(data))
+
   return (
-      <AuthContext.Provider value={{ user, isLoading, login, googleLogin, logout, updateUser, refreshUser }}>
+      <AuthContext.Provider value={{ user, isLoading, login, googleLogin, logout, updateUser, refreshUser, deleteAccount }}>
       {children}
     </AuthContext.Provider>
   )

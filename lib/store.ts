@@ -41,6 +41,10 @@ export const db = {
       setItem("users", users)
       return users[idx]
     },
+    delete: (id: string) => {
+      const users = getItem<User>("users")
+      setItem("users", users.filter(u => u.id !== id))
+    },
   },
 
   volunteerProfiles: {
