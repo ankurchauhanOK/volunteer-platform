@@ -97,6 +97,31 @@ function calcCompleteness(form: OnboardingForm): number {
   return Math.round((filled / fields.length) * 100)
 }
 
+const skillIcons: Record<string, string> = {
+  teaching: "📚", farming: "🌾", hospitality: "🏨", "social media": "📱",
+  photography: "📸", video: "🎥", "animal care": "🐾", yoga: "🧘",
+  language: "🗣️", cooking: "🍳", "content writing": "✍️", "graphic design": "🎨",
+  "web development": "💻", music: "🎵", art: "🎭", dance: "💃",
+  sports: "⚽", english: "🔤", marketing: "📢", events: "🎪",
+  reception: "💁", housekeeping: "🧹", "event help": "🎯",
+}
+
+const hobbyIcons: Record<string, string> = {
+  trekking: "🏔️", photography: "📸", yoga: "🧘", cooking: "🍳",
+  music: "🎵", reading: "📖", writing: "✍️", dancing: "💃",
+  meditation: "🧘", "film making": "🎬", "bird watching": "🐦",
+  rafting: "🛶", sketching: "✏️", painting: "🎨", gardening: "🌱",
+  journaling: "📓", "travel storytelling": "🗺️", pottery: "🏺",
+  calligraphy: "🖋️", cycling: "🚴", swimming: "🏊", surfing: "🏄",
+}
+
+const destIcons: Record<string, string> = {
+  "Himachal Pradesh": "🏔️", Uttarakhand: "🌲", Kerala: "🌴", Goa: "🏖️",
+  Rajasthan: "🏰", Sikkim: "🏔️", Ladakh: "⛰️", Karnataka: "🌳",
+  "Tamil Nadu": "🏛️", Maharashtra: "🏙️", Meghalaya: "🌧️",
+  "Andaman Islands": "🏝️", Haryana: "🌾", Punjab: "🌾", "Delhi NCR": "🏛️",
+}
+
 export default function VolunteerOnboardingPage() {
   const { user, refreshUser } = useAuth()
   const router = useRouter()
@@ -225,120 +250,68 @@ export default function VolunteerOnboardingPage() {
   }
 
   const renderWelcome = () => (
-    <div className="space-y-6">
-      <div className="text-center">
-        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-200/50">
-          <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <div className="space-y-3">
+      <div className="flex items-center gap-4">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shrink-0 shadow-lg shadow-brand-200/50">
+          <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
           </svg>
         </div>
-        <h2 className="font-tanker heading-3xl text-text">Begin Your Journey</h2>
-        <p className="text-sm text-text-secondary mt-2 max-w-md mx-auto leading-relaxed">
-          Let&apos;s build your travel identity so hosts can find the perfect match for you.
-        </p>
+        <div>
+          <h2 className="font-tanker heading-2xl text-text">Begin Your Journey</h2>
+          <p className="text-xs text-text-secondary">Build your travel identity and find the perfect host match.</p>
+        </div>
+        {user && (user.name || user.email) && (
+          <div className="ml-auto flex items-center gap-2 bg-brand-50 rounded-xl px-3 py-1.5 border border-brand-100">
+            <Avatar className="w-6 h-6 ring-1 ring-brand-200">
+              <AvatarImage src={user.avatar} />
+              <AvatarFallback className="bg-brand-100 text-brand-700 text-[10px]">{user.name?.charAt(0) || "?"}</AvatarFallback>
+            </Avatar>
+            <span className="text-[11px] font-medium text-brand-700 truncate max-w-[100px]">{user.name}</span>
+          </div>
+        )}
       </div>
 
-      <div className="bg-gradient-to-br from-brand-50 to-mint-50 rounded-2xl border border-brand-100 p-5 space-y-3">
-        <p className="label-sm text-brand-700 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-slow-pulse" />
-          We&apos;ll help you build
-        </p>
-        <div className="grid grid-cols-2 gap-2">
+      <div className="bg-gradient-to-br from-brand-50 to-mint-50 rounded-xl border border-brand-100 p-3">
+        <p className="text-[10px] font-semibold text-brand-700 uppercase tracking-wider mb-2">We&apos;ll help you build</p>
+        <div className="grid grid-cols-3 gap-1.5">
           {[
-            { icon: "👤", label: "Your profile" },
-            { icon: "💪", label: "Skills & talents" },
-            { icon: "🎨", label: "Hobbies & proof" },
-            { icon: "🗺️", label: "Travel preferences" },
-            { icon: "📅", label: "Availability" },
-            { icon: "🛡️", label: "Safety info" },
-          ].map(({ icon, label }) => (
-            <div key={label} className="flex items-center gap-2.5 text-sm text-text bg-white/70 rounded-xl px-3 py-2.5 border border-brand-100/50">
-              <span className="text-lg">{icon}</span>
+            ["👤", "Profile"], ["💪", "Skills"], ["🎨", "Hobbies"],
+            ["🗺️", "Travel"], ["📅", "Dates"], ["🛡️", "Safety"],
+          ].map(([icon, label]) => (
+            <div key={label} className="flex items-center gap-1.5 text-xs text-text bg-white/70 rounded-lg px-2 py-1.5 border border-brand-100/50">
+              <span>{icon}</span>
               <span className="font-medium">{label}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {user && (user.name || user.email || user.avatar) && (
-        <div className="bg-white rounded-2xl border border-border p-4 flex items-center gap-3 shadow-sm">
-          <Avatar className="w-12 h-12 ring-2 ring-brand-100">
-            <AvatarImage src={user.avatar} />
-            <AvatarFallback className="bg-brand-100 text-brand-700 text-base">{user.name?.charAt(0) || "?"}</AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-text truncate">{user.name}</p>
-            <p className="text-xs text-text-muted truncate">{user.email}</p>
-          </div>
-          <Badge variant="primary" size="sm">Connected</Badge>
-        </div>
-      )}
-
-      <div className="text-center">
-        <p className="text-xs text-text-muted">You can always update your profile later in settings.</p>
-      </div>
+      <p className="text-[10px] text-text-muted text-center">You can always update your profile later in settings.</p>
     </div>
   )
 
   const renderBasicDetails = () => (
-    <div className="space-y-5">
+    <div className="space-y-3">
       <PhotoUpload
         value={form.profilePhoto}
         onChange={v => update("profilePhoto", v)}
-        helperText="A friendly photo helps hosts recognize and trust you faster."
+        helperText="A friendly photo helps hosts recognize you."
       />
 
-      <Separator />
-
-      <div className="grid grid-cols-2 gap-3">
-        <Input
-          label="Full name"
-          id="fullName"
-          value={form.fullName}
-          onChange={e => update("fullName", e.target.value)}
-          placeholder="Your name"
-        />
-        <Input
-          label="Age"
-          type="number"
-          id="age"
-          value={form.age}
-          onChange={e => update("age", e.target.value)}
-          placeholder="e.g. 24"
-        />
+      <div className="grid grid-cols-2 gap-2.5">
+        <Input label="Full name" id="fullName" value={form.fullName} onChange={e => update("fullName", e.target.value)} placeholder="Your name" />
+        <Input label="Age" type="number" id="age" value={form.age} onChange={e => update("age", e.target.value)} placeholder="e.g. 24" />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <SearchableSelect
-          label="City"
-          options={indianCityOptions.map(c => ({ value: c, label: c }))}
-          value={form.city}
-          onChange={v => update("city", v)}
-          placeholder="Search city..."
-        />
-        <Input
-          label="Country"
-          id="country"
-          value={form.country}
-          onChange={e => update("country", e.target.value)}
-        />
+      <div className="grid grid-cols-2 gap-2.5">
+        <SearchableSelect label="City" options={indianCityOptions.map(c => ({ value: c, label: c }))} value={form.city} onChange={v => update("city", v)} placeholder="Search city..." />
+        <Input label="Country" id="country" value={form.country} onChange={e => update("country", e.target.value)} />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <SearchableSelect
-          label="Gender (optional)"
-          options={genderOptions}
-          value={form.gender}
-          onChange={v => update("gender", v)}
-          placeholder="Select"
-        />
-        <SearchableSelect
-          label="Qualification"
-          options={qualificationOptions}
-          value={form.qualification}
-          onChange={v => update("qualification", v)}
-          placeholder="Select"
-        />
+      <div className="grid grid-cols-2 gap-2.5">
+        <SearchableSelect label="Gender (optional)" options={genderOptions} value={form.gender} onChange={v => update("gender", v)} placeholder="Select" />
+        <SearchableSelect label="Qualification" options={qualificationOptions} value={form.qualification} onChange={v => update("qualification", v)} placeholder="Select" />
       </div>
 
       <ChipInput
@@ -347,13 +320,14 @@ export default function VolunteerOnboardingPage() {
         selected={form.languages}
         onChange={v => update("languages", v)}
         searchPlaceholder="Search languages..."
-        helperText="We only use this to match you with suitable hosts."
+        helperText="Used to match you with suitable hosts."
+        dense
       />
     </div>
   )
 
   const renderSkills = () => (
-    <div className="space-y-5">
+    <div className="space-y-3">
       <ChipInput
         label="What can you help with?"
         options={skillOptions}
@@ -361,7 +335,8 @@ export default function VolunteerOnboardingPage() {
         onChange={v => update("skills", v)}
         searchPlaceholder="Search skills..."
         popularTags={popularSkills}
-        helperText="Popular among hosts — select the ones you're confident using on a trip."
+        helperText="Popular among hosts."
+        iconMap={skillIcons}
       />
 
       <ChipInput
@@ -371,10 +346,11 @@ export default function VolunteerOnboardingPage() {
         onChange={v => update("talentAreas", v)}
         searchable={false}
         columns={3}
+        dense
       />
 
       <Input
-        label="Add any other skill (optional)"
+        label="Any other skill (optional)"
         id="otherSkill"
         value={form.otherSkill}
         onChange={e => update("otherSkill", e.target.value)}
@@ -385,9 +361,8 @@ export default function VolunteerOnboardingPage() {
 
   const renderHobbies = () => {
     const showProofSection = !!form.hobbyRepresentation
-
     return (
-      <div className="space-y-5">
+      <div className="space-y-3">
         <ChipInput
           label="What do you love doing?"
           options={hobbyOptions}
@@ -395,83 +370,58 @@ export default function VolunteerOnboardingPage() {
           onChange={v => update("hobbies", v)}
           searchPlaceholder="Search hobbies..."
           helperText="Select the hobbies that make you, you."
+          iconMap={hobbyIcons}
         />
 
-        <div className="space-y-2">
-          <label className="block text-xs font-semibold text-text uppercase tracking-wider">
-            How would you like to show your hobby?
-          </label>
-          <div className="grid grid-cols-3 gap-2">
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-text uppercase tracking-wider">How to show your hobby?</label>
+          <div className="grid grid-cols-3 gap-1.5">
             {hobbyRepresentationOptions.map(opt => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => update("hobbyRepresentation", opt.value)}
-                className={`flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition-all duration-200 ${
+                className={`flex flex-col items-center gap-0.5 rounded-lg border py-2 text-center transition-all ${
                   form.hobbyRepresentation === opt.value
-                    ? "border-brand-500 bg-brand-50 ring-2 ring-brand-100 shadow-sm"
-                    : "border-gray-100 hover:border-gray-200 hover:shadow-sm hover:-translate-y-0.5"
+                    ? "border-brand-500 bg-brand-50 ring-1 ring-brand-200"
+                    : "border-gray-100 hover:border-gray-200"
                 }`}
               >
-                <span className="text-lg">{opt.icon}</span>
-                <span className={`text-xs font-medium ${
+                <span className="text-base">{opt.icon}</span>
+                <span className={`text-[10px] font-medium ${
                   form.hobbyRepresentation === opt.value ? "text-brand-700" : "text-text-secondary"
-                }`}>
-                  {opt.label}
-                </span>
+                }`}>{opt.label}</span>
               </button>
             ))}
           </div>
         </div>
 
         {showProofSection && (
-          <div className="bg-gradient-to-br from-brand-50/50 to-mint-50/50 rounded-xl p-4 space-y-3 border border-brand-100/50">
-            <p className="text-xs font-semibold text-text uppercase tracking-wider flex items-center gap-1.5">
+          <div className="bg-gradient-to-br from-brand-50/50 to-mint-50/50 rounded-lg p-3 space-y-2 border border-brand-100/50">
+            <p className="text-[10px] font-semibold text-text uppercase tracking-wider flex items-center gap-1">
               <span className="text-brand-500">✦</span> Share your proof
             </p>
             {["text", "mixed"].includes(form.hobbyRepresentation) && (
-              <Textarea
-                label="Short description"
-                id="hobbyDesc"
-                value={form.hobbyDescription}
-                onChange={e => update("hobbyDescription", e.target.value)}
-                placeholder="Tell hosts what you enjoy and how you express it..."
-                rows={3}
-              />
+              <Textarea label="Short description" id="hobbyDesc" value={form.hobbyDescription} onChange={e => update("hobbyDescription", e.target.value)} placeholder="Tell hosts what you enjoy..." rows={2} />
             )}
             {["photo", "mixed"].includes(form.hobbyRepresentation) && (
-              <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center">
-                <p className="text-sm text-gray-400">Upload a photo</p>
-                <p className="text-xs text-gray-300 mt-1">Coming soon</p>
-              </div>
+              <div className="border border-dashed border-gray-200 rounded-lg p-3 text-center"><p className="text-xs text-gray-400">Upload a photo — Coming soon</p></div>
             )}
             {["video", "mixed"].includes(form.hobbyRepresentation) && (
-              <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center">
-                <p className="text-sm text-gray-400">Upload a video</p>
-                <p className="text-xs text-gray-300 mt-1">Coming soon</p>
-              </div>
+              <div className="border border-dashed border-gray-200 rounded-lg p-3 text-center"><p className="text-xs text-gray-400">Upload a video — Coming soon</p></div>
             )}
             {["audio", "mixed"].includes(form.hobbyRepresentation) && (
-              <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center">
-                <p className="text-sm text-gray-400">Record audio</p>
-                <p className="text-xs text-gray-300 mt-1">Coming soon</p>
-              </div>
+              <div className="border border-dashed border-gray-200 rounded-lg p-3 text-center"><p className="text-xs text-gray-400">Record audio — Coming soon</p></div>
             )}
             {["portfolio", "mixed"].includes(form.hobbyRepresentation) && (
-              <Input
-                label="Portfolio link"
-                id="portfolio"
-                value={form.hobbyProofUrl}
-                onChange={e => update("hobbyProofUrl", e.target.value)}
-                placeholder="https://..."
-              />
+              <Input label="Portfolio link" id="portfolio" value={form.hobbyProofUrl} onChange={e => update("hobbyProofUrl", e.target.value)} placeholder="https://..." />
             )}
           </div>
         )}
 
         <SectionFAQ
           items={[
-            { question: "What is profile proof?", answer: "Profile proof is any example of your work or hobby — a photo you took, a video you made, a song you recorded, or a link to your portfolio. Hosts love seeing real examples!" },
+            { question: "What is profile proof?", answer: "Any example of your work or hobby — a photo, video, recording, or portfolio link. Hosts love seeing real examples!" },
           ]}
         />
       </div>
@@ -479,243 +429,130 @@ export default function VolunteerOnboardingPage() {
   }
 
   const renderTravelPrefs = () => (
-    <div className="space-y-5">
+    <div className="space-y-3">
       <ChipInput
         label="Preferred destinations in India"
         options={destinationOptions}
         selected={form.preferredDestinations}
         onChange={v => update("preferredDestinations", v)}
         searchPlaceholder="Search destinations..."
+        iconMap={destIcons}
       />
 
-      <CardSelect
-        label="Travel type"
-        options={travelTypeOptions}
-        selected={form.travelType}
-        onChange={v => update("travelType", v as any)}
-      />
+      <CardSelect label="Travel type" options={travelTypeOptions} selected={form.travelType} onChange={v => update("travelType", v as any)} />
 
-      <CardSelect
-        label="Preferred environment"
-        options={environmentOptions.map(e => ({ value: e.toLowerCase(), label: e }))}
-        selected={form.preferredEnvironment}
-        onChange={v => update("preferredEnvironment", v as any)}
-        multi
-        columns={3}
-      />
+      <div className="grid grid-cols-2 gap-2.5">
+        <CardSelect label="Environment" options={environmentOptions.map(e => ({ value: e.toLowerCase(), label: e }))} selected={form.preferredEnvironment} onChange={v => update("preferredEnvironment", v as any)} multi columns={2} />
+        <CardSelect label="Stay type" options={stayTypeOptions.map(s => ({ value: s.toLowerCase(), label: s }))} selected={form.preferredStayType} onChange={v => update("preferredStayType", v as any)} multi columns={2} />
+      </div>
 
-      <CardSelect
-        label="Preferred stay type"
-        options={stayTypeOptions.map(s => ({ value: s.toLowerCase(), label: s }))}
-        selected={form.preferredStayType}
-        onChange={v => update("preferredStayType", v as any)}
-        multi
-        columns={3}
-      />
-
-      <div className="grid grid-cols-2 gap-3">
-        <CardSelect
-          label="Trip duration"
-          options={tripDurationOptions}
-          selected={form.tripDuration}
-          onChange={v => update("tripDuration", v as any)}
-          columns={2}
-        />
-        <CardSelect
-          label="Solo or group?"
-          options={soloGroupOptions.map(s => ({ value: s.value, label: s.label }))}
-          selected={form.soloOrGroup}
-          onChange={v => update("soloOrGroup", v as any)}
-          columns={2}
-        />
+      <div className="grid grid-cols-2 gap-2.5">
+        <CardSelect label="Trip duration" options={tripDurationOptions} selected={form.tripDuration} onChange={v => update("tripDuration", v as any)} columns={2} />
+        <CardSelect label="Solo or group?" options={soloGroupOptions.map(s => ({ value: s.value, label: s.label }))} selected={form.soloOrGroup} onChange={v => update("soloOrGroup", v as any)} columns={2} />
       </div>
 
       <SectionFAQ
         items={[
-          { question: "Why do we ask for travel preferences?", answer: "The more specific you are here, the better your matches will be. Hosts look for volunteers who genuinely want to visit their region." },
+          { question: "Why ask for travel preferences?", answer: "The more specific you are, the better your matches. Hosts look for volunteers who genuinely want to visit their region." },
         ]}
       />
     </div>
   )
 
   const renderAvailability = () => (
-    <div className="space-y-5">
-      <div className="grid grid-cols-2 gap-3">
-        <Input
-          label="Available from"
-          type="date"
-          id="availStart"
-          value={form.availabilityStart}
-          onChange={e => update("availabilityStart", e.target.value)}
-        />
-        <Input
-          label="Available until"
-          type="date"
-          id="availEnd"
-          value={form.availabilityEnd}
-          onChange={e => update("availabilityEnd", e.target.value)}
-        />
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-2.5">
+        <Input label="Available from" type="date" id="availStart" value={form.availabilityStart} onChange={e => update("availabilityStart", e.target.value)} />
+        <Input label="Available until" type="date" id="availEnd" value={form.availabilityEnd} onChange={e => update("availabilityEnd", e.target.value)} />
       </div>
 
-      <SearchableSelect
-        label="Travel style"
-        options={travelStyleOptions}
-        value={form.travelStyle}
-        onChange={v => update("travelStyle", v)}
-        placeholder="How do you like to travel?"
-      />
+      <SearchableSelect label="Travel style" options={travelStyleOptions} value={form.travelStyle} onChange={v => update("travelStyle", v)} placeholder="How do you like to travel?" />
 
-      <CardSelect
-        label="Experience level"
-        options={experienceLevelOptions}
-        selected={form.experienceLevel}
-        onChange={v => update("experienceLevel", v as any)}
-      />
+      <div className="grid grid-cols-2 gap-2.5">
+        <CardSelect label="Experience" options={experienceLevelOptions} selected={form.experienceLevel} onChange={v => update("experienceLevel", v as any)} columns={2} />
+        <CardSelect label="Comfort level" options={comfortLevelOptions} selected={form.comfortLevel} onChange={v => update("comfortLevel", v as any)} columns={2} />
+      </div>
 
-      <div className="flex items-center justify-between rounded-xl border-2 border-gray-100 p-4 bg-white shadow-sm">
+      <div className="flex items-center justify-between rounded-lg border border-gray-100 p-3 bg-white">
         <div>
-          <p className="text-sm font-medium text-gray-900">Remote work while traveling?</p>
-          <p className="text-xs text-gray-500">Do you work remotely while you volunteer?</p>
+          <p className="text-xs font-medium text-gray-900">Remote work while traveling?</p>
+          <p className="text-[10px] text-gray-500">Do you work remotely during volunteering?</p>
         </div>
-        <div className="flex gap-1.5">
-          <button
-            type="button"
-            onClick={() => update("remoteWork", true)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              form.remoteWork === true
-                ? "bg-brand-100 text-brand-700 border border-brand-300 shadow-sm"
-                : "bg-gray-50 text-gray-500 border border-gray-200"
-            }`}
-          >
-            Yes
-          </button>
-          <button
-            type="button"
-            onClick={() => update("remoteWork", false)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              form.remoteWork === false
-                ? "bg-brand-100 text-brand-700 border border-brand-300 shadow-sm"
-                : "bg-gray-50 text-gray-500 border border-gray-200"
-            }`}
-          >
-            No
-          </button>
+        <div className="flex gap-1">
+          {["Yes", "No"].map(opt => (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => update("remoteWork", opt === "Yes")}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
+                (opt === "Yes" ? form.remoteWork === true : form.remoteWork === false)
+                  ? "bg-brand-100 text-brand-700 border border-brand-300"
+                  : "bg-gray-50 text-gray-500 border border-gray-200"
+              }`}
+            >
+              {opt}
+            </button>
+          ))}
         </div>
       </div>
-
-      <CardSelect
-        label="Comfort level with new places"
-        options={comfortLevelOptions}
-        selected={form.comfortLevel}
-        onChange={v => update("comfortLevel", v as any)}
-      />
 
       <SectionFAQ
         items={[
-          { question: "Why do we ask for travel dates?", answer: "Hosts need to know when you&apos;re available to plan their schedules. Flexible dates give you more matches." },
+          { question: "Why ask for travel dates?", answer: "Hosts need to know when you're free to plan schedules. Flexible dates give you more matches." },
         ]}
       />
     </div>
   )
 
   const renderSafety = () => (
-    <div className="space-y-5">
-      <div className="p-4 rounded-xl bg-amber-50 border border-amber-100 shadow-sm">
-        <div className="flex items-start gap-2">
-          <span className="text-lg">🛡️</span>
-          <div className="text-xs text-amber-800 leading-relaxed">
-            <p className="font-medium mb-0.5">Your safety matters</p>
-            Emergency contact details are only used for safety and shared with hosts only after your application is accepted.
-          </div>
+    <div className="space-y-3">
+      <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-50 border border-amber-100">
+        <span className="text-base">🛡️</span>
+        <div className="text-[11px] text-amber-800 leading-relaxed">
+          <p className="font-medium">Your safety matters</p>
+          Emergency contact details are only shared with hosts after your application is accepted.
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Input
-          label="Emergency contact name"
-          id="emergencyName"
-          value={form.emergencyName}
-          onChange={e => update("emergencyName", e.target.value)}
-          placeholder="Full name"
-        />
-        <Input
-          label="Emergency contact phone"
-          id="emergencyPhone"
-          type="tel"
-          value={form.emergencyPhone}
-          onChange={e => update("emergencyPhone", e.target.value)}
-          placeholder="+91-XXXXXXXXXX"
-        />
+      <div className="grid grid-cols-2 gap-2.5">
+        <Input label="Emergency contact name" id="emergencyName" value={form.emergencyName} onChange={e => update("emergencyName", e.target.value)} placeholder="Full name" />
+        <Input label="Emergency contact phone" id="emergencyPhone" type="tel" value={form.emergencyPhone} onChange={e => update("emergencyPhone", e.target.value)} placeholder="+91-XXXXXXXXXX" />
       </div>
 
-      <SearchableSelect
-        label="Relationship"
-        options={relationshipOptions}
-        value={form.emergencyRelation}
-        onChange={v => update("emergencyRelation", v)}
-        placeholder="Select relationship"
-      />
+      <SearchableSelect label="Relationship" options={relationshipOptions} value={form.emergencyRelation} onChange={v => update("emergencyRelation", v)} placeholder="Select relationship" />
 
-      <details className="group rounded-xl border border-gray-100 bg-white">
-        <summary className="text-xs font-medium text-gray-500 cursor-pointer hover:text-gray-700 transition-colors px-4 py-3">
+      <details className="group rounded-lg border border-gray-100 bg-white">
+        <summary className="text-[11px] font-medium text-gray-500 cursor-pointer hover:text-gray-700 transition-colors px-3 py-2">
           Optional emergency details
         </summary>
-        <div className="px-4 pb-4 space-y-3">
-          <Textarea
-            label="Emergency notes"
-            id="emergencyNotes"
-            value={form.emergencyNotes}
-            onChange={e => update("emergencyNotes", e.target.value)}
-            placeholder="Any special instructions for emergencies?"
-            rows={2}
-          />
-          <Textarea
-            label="Medical considerations"
-            id="medical"
-            value={form.medicalConsiderations}
-            onChange={e => update("medicalConsiderations", e.target.value)}
-            placeholder="Allergies, conditions, medications..."
-            rows={2}
-          />
-          <Input
-            label="Special requirements"
-            id="special"
-            value={form.specialRequirements}
-            onChange={e => update("specialRequirements", e.target.value)}
-            placeholder="Dietary, accessibility, etc."
-          />
+        <div className="px-3 pb-3 space-y-2">
+          <Textarea label="Notes" id="emergencyNotes" value={form.emergencyNotes} onChange={e => update("emergencyNotes", e.target.value)} placeholder="Special instructions?" rows={1} />
+          <Textarea label="Medical" id="medical" value={form.medicalConsiderations} onChange={e => update("medicalConsiderations", e.target.value)} placeholder="Allergies, conditions..." rows={1} />
+          <Input label="Special requirements" id="special" value={form.specialRequirements} onChange={e => update("specialRequirements", e.target.value)} placeholder="Dietary, accessibility, etc." />
         </div>
       </details>
 
-      <div className="space-y-3 pt-2">
-        <label className="flex items-start gap-3 cursor-pointer group">
-          <input
-            type="checkbox"
-            checked={form.communityGuidelinesAgreed}
-            onChange={e => update("communityGuidelinesAgreed", e.target.checked)}
-            className="mt-0.5 w-4 h-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
-          />
-          <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
-            I agree to follow Voluntree&apos;s community guidelines and treat all hosts and volunteers with respect.
-          </span>
-        </label>
-        <label className="flex items-start gap-3 cursor-pointer group">
-          <input
-            type="checkbox"
-            checked={form.respectfulConductAgreed}
-            onChange={e => update("respectfulConductAgreed", e.target.checked)}
-            className="mt-0.5 w-4 h-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
-          />
-          <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
-            I commit to respectful, responsible conduct during my volunteer stays.
-          </span>
-        </label>
+      <div className="space-y-2">
+        {[
+          { key: "communityGuidelinesAgreed", label: "I agree to follow Voluntree's community guidelines and treat all hosts and volunteers with respect." },
+          { key: "respectfulConductAgreed", label: "I commit to respectful, responsible conduct during my volunteer stays." },
+        ].map(({ key, label }) => (
+          <label key={key} className="flex items-start gap-2 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={form[key as keyof OnboardingForm] as boolean}
+              onChange={e => update(key as keyof OnboardingForm, e.target.checked)}
+              className="mt-0.5 w-3.5 h-3.5 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+            />
+            <span className="text-[11px] text-gray-600 group-hover:text-gray-900 transition-colors leading-relaxed">{label}</span>
+          </label>
+        ))}
       </div>
 
       <SectionFAQ
         items={[
-          { question: "Why is emergency contact needed?", answer: "We only share this with hosts after your application is confirmed. It's a standard safety practice for all volunteer platforms." },
-          { question: "How will hosts see my profile?", answer: "Hosts will see your skills, hobbies, and preferences. Emergency contact is never shown on your public profile." },
+          { question: "Why is emergency contact needed?", answer: "Standard safety practice. Only shared with hosts after application is confirmed." },
+          { question: "How will hosts see my profile?", answer: "Skills, hobbies, and preferences are visible. Emergency contact is never on your public profile." },
         ]}
       />
     </div>
@@ -733,137 +570,108 @@ export default function VolunteerOnboardingPage() {
     const completenessColor = completeness >= 80 ? "text-brand-600" : completeness >= 50 ? "text-amber-600" : "text-text-muted"
 
     return (
-      <div className="space-y-5">
-        <div className="bg-gradient-to-br from-brand-50 to-mint-50 rounded-2xl border border-brand-100 p-5">
-          <div className="flex items-center justify-between mb-3">
+      <div className="space-y-3">
+        <div className="bg-gradient-to-br from-brand-50 to-mint-50 rounded-xl border border-brand-100 p-4">
+          <div className="flex items-center justify-between mb-2">
             <div>
-              <h3 className="font-bold text-text">Profile completeness</h3>
-              <p className="text-xs text-text-secondary">Here&apos;s how your profile looks to hosts</p>
+              <h3 className="text-sm font-bold text-text">Profile completeness</h3>
+              <p className="text-[10px] text-text-secondary">How your profile looks to hosts</p>
             </div>
             <div className="text-right">
-              <span className={`text-3xl font-bold ${completenessColor}`}>{completeness}%</span>
-              {completeness >= 80 && <p className="text-xs font-medium text-brand-600">Looks great!</p>}
+              <span className={`text-2xl font-bold ${completenessColor}`}>{completeness}%</span>
+              {completeness >= 80 && <p className="text-[10px] font-medium text-brand-600">Looks great!</p>}
             </div>
           </div>
-          <Progress value={completeness} className="h-2.5" />
+          <Progress value={completeness} className="h-2" />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-white rounded-xl border border-border p-4 space-y-2 shadow-sm">
+        <div className="grid grid-cols-2 gap-2">
+          <div className="bg-white rounded-lg border border-border p-3 space-y-1.5">
             <div className="flex items-center gap-2">
-              <Avatar className="w-10 h-10 ring-2 ring-brand-100">
+              <Avatar className="w-8 h-8 ring-1 ring-brand-100">
                 <AvatarImage src={form.profilePhoto || user?.avatar} />
-                <AvatarFallback className="bg-brand-100 text-brand-700 text-sm">{(form.fullName || user?.name || "?").charAt(0)}</AvatarFallback>
+                <AvatarFallback className="bg-brand-100 text-brand-700 text-[10px]">{(form.fullName || user?.name || "?").charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-text truncate">{form.fullName || user?.name}</p>
-                <p className="text-xs text-text-muted truncate">{form.city || form.country}</p>
+                <p className="text-xs font-semibold text-text truncate">{form.fullName || user?.name}</p>
+                <p className="text-[10px] text-text-muted truncate">{form.city || form.country}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-border p-4 space-y-1 shadow-sm">
-            <p className="text-xs text-text-muted">Languages</p>
+          <div className="bg-white rounded-lg border border-border p-3 space-y-1">
+            <p className="text-[10px] text-text-muted">Languages</p>
             <div className="flex flex-wrap gap-1">
               {form.languages.length > 0 ? form.languages.slice(0, 3).map(l => (
                 <Badge key={l} variant="primary" size="sm">{l}</Badge>
-              )) : <span className="text-xs text-text-muted italic">Not set</span>}
-              {form.languages.length > 3 && (
-                <Badge variant="outline" size="sm">+{form.languages.length - 3}</Badge>
-              )}
+              )) : <span className="text-[10px] text-text-muted italic">Not set</span>}
+              {form.languages.length > 3 && <Badge variant="outline" size="sm">+{form.languages.length - 3}</Badge>}
             </div>
           </div>
         </div>
 
-        {form.skills.length > 0 && (
-          <div className="bg-white rounded-xl border border-border p-4 space-y-2 shadow-sm">
-            <p className="text-xs font-semibold text-text flex items-center gap-1.5">
-              <span>💪</span> Skills
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {form.skills.map(s => (
-                <Badge key={s} variant="primary" size="sm">{s}</Badge>
-              ))}
+        <div className="grid grid-cols-2 gap-2">
+          {form.skills.length > 0 && (
+            <div className="bg-white rounded-lg border border-border p-3 space-y-1.5">
+              <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>💪</span> Skills</p>
+              <div className="flex flex-wrap gap-1">
+                {form.skills.slice(0, 4).map(s => <Badge key={s} variant="primary" size="sm">{s}</Badge>)}
+                {form.skills.length > 4 && <Badge variant="outline" size="sm">+{form.skills.length - 4}</Badge>}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {form.hobbies.length > 0 && (
+            <div className="bg-white rounded-lg border border-border p-3 space-y-1.5">
+              <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>🎨</span> Hobbies</p>
+              <div className="flex flex-wrap gap-1">
+                {form.hobbies.slice(0, 4).map(h => <Badge key={h} variant="purple" size="sm">{h}</Badge>)}
+                {form.hobbies.length > 4 && <Badge variant="outline" size="sm">+{form.hobbies.length - 4}</Badge>}
+              </div>
+            </div>
+          )}
+        </div>
 
         {(form.preferredDestinations.length > 0 || form.travelType) && (
-          <div className="bg-white rounded-xl border border-border p-4 space-y-2 shadow-sm">
-            <p className="text-xs font-semibold text-text flex items-center gap-1.5">
-              <span>🗺️</span> Travel preferences
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {form.preferredDestinations.slice(0, 4).map(d => (
-                <Badge key={d} variant="info" size="sm">{d}</Badge>
-              ))}
-              {form.preferredDestinations.length > 4 && (
-                <Badge variant="outline" size="sm">+{form.preferredDestinations.length - 4}</Badge>
-              )}
-              {form.travelType && (
-                <Badge variant="secondary" size="sm">
-                  {travelTypeOptions.find(t => t.value === form.travelType)?.label || form.travelType}
-                </Badge>
-              )}
+          <div className="bg-white rounded-lg border border-border p-3 space-y-1.5">
+            <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>🗺️</span> Travel</p>
+            <div className="flex flex-wrap gap-1">
+              {form.preferredDestinations.slice(0, 4).map(d => <Badge key={d} variant="info" size="sm">{d}</Badge>)}
+              {form.preferredDestinations.length > 4 && <Badge variant="outline" size="sm">+{form.preferredDestinations.length - 4}</Badge>}
+              {form.travelType && <Badge variant="secondary" size="sm">{travelTypeOptions.find(t => t.value === form.travelType)?.label || form.travelType}</Badge>}
             </div>
-          </div>
-        )}
-
-        {form.hobbies.length > 0 && (
-          <div className="bg-white rounded-xl border border-border p-4 space-y-2 shadow-sm">
-            <p className="text-xs font-semibold text-text flex items-center gap-1.5">
-              <span>🎨</span> Hobbies
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {form.hobbies.map(h => (
-                <Badge key={h} variant="purple" size="sm">{h}</Badge>
-              ))}
-            </div>
-            {form.hobbyRepresentation && (
-              <p className="text-xs text-text-muted mt-1">
-                Proof: {hobbyRepresentationOptions.find(o => o.value === form.hobbyRepresentation)?.label || form.hobbyRepresentation}
-              </p>
-            )}
           </div>
         )}
 
         {form.availabilityStart && (
-          <div className="bg-white rounded-xl border border-border p-4 space-y-1 shadow-sm">
-            <p className="text-xs font-semibold text-text flex items-center gap-1.5">
-              <span>📅</span> Availability
-            </p>
-            <p className="text-sm text-text">
-              {form.availabilityStart}{form.availabilityEnd ? ` → ${form.availabilityEnd}` : ""}
-            </p>
+          <div className="bg-white rounded-lg border border-border p-3">
+            <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>📅</span> Availability</p>
+            <p className="text-xs text-text mt-0.5">{form.availabilityStart}{form.availabilityEnd ? ` → ${form.availabilityEnd}` : ""}</p>
           </div>
         )}
 
         {suggestions.length > 0 && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2">
-            <p className="text-xs font-semibold text-amber-800 flex items-center gap-1.5">
-              <span>💡</span> Tips to improve
-            </p>
-            <div className="flex flex-wrap gap-1.5">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <p className="text-[10px] font-semibold text-amber-800 flex items-center gap-1"><span>💡</span> Tips</p>
+            <div className="flex flex-wrap gap-1 mt-1">
               {suggestions.map(s => (
-                <span key={s} className="text-xs text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">
-                  {s}
-                </span>
+                <span key={s} className="text-[10px] text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded-full border border-amber-200">{s}</span>
               ))}
             </div>
           </div>
         )}
+
+        <div className="flex justify-center pt-1">
+          <Button onClick={handleSubmit} loading={loading} size="lg" className="w-full sm:w-auto">
+            Complete Profile
+          </Button>
+        </div>
       </div>
     )
   }
 
   const stepLabels = [
-    "Welcome",
-    "Basic Details",
-    "Skills & Talents",
-    "Hobbies & Proof",
-    "Travel Preferences",
-    "Availability",
-    "Safety",
-    "Review",
+    "Welcome", "Basic Details", "Skills & Talents", "Hobbies & Proof",
+    "Travel Preferences", "Availability", "Safety", "Review",
   ]
 
   const getContinueLabel = () => {
@@ -892,23 +700,15 @@ export default function VolunteerOnboardingPage() {
       <StepLayout
         title={stepLabels[step]}
         subtitle={
-          step === 0
-            ? "Tell us a little about you so we can match you with the right opportunities."
-            : step === 1
-            ? "Help hosts get to know the real you."
-            : step === 2
-            ? "Share what you can bring to a volunteer experience."
-            : step === 3
-            ? "Show hosts what makes you unique."
-            : step === 4
-            ? "Help us find the right kind of stay for your travel style."
-            : step === 5
-            ? "Let hosts know when you're free to travel."
-            : step === 6
-            ? "This information helps keep your journey safe."
-            : step === 7
-            ? "Take one final look before you complete your profile."
-            : undefined
+          step === 0 ? "Tell us about you so we can match you with the right opportunities."
+          : step === 1 ? "Help hosts get to know the real you."
+          : step === 2 ? "Share what you can bring to a volunteer experience."
+          : step === 3 ? "Show hosts what makes you unique."
+          : step === 4 ? "Help us find the right stay for your travel style."
+          : step === 5 ? "Let hosts know when you're free to travel."
+          : step === 6 ? "This information helps keep your journey safe."
+          : step === 7 ? "Take one final look before you complete your profile."
+          : undefined
         }
         currentStep={step}
         totalSteps={TOTAL_STEPS}
@@ -921,19 +721,6 @@ export default function VolunteerOnboardingPage() {
         hideBack={step === 0}
       >
         {renderStep()}
-
-        {step === TOTAL_STEPS - 1 && (
-          <div className="flex justify-center mt-6">
-            <Button
-              onClick={handleSubmit}
-              loading={loading}
-              size="lg"
-              className="w-full sm:w-auto"
-            >
-              Complete Profile
-            </Button>
-          </div>
-        )}
       </StepLayout>
     </Providers>
   )
