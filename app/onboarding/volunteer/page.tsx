@@ -15,7 +15,6 @@ import { db } from "@/lib/store"
 import { StepLayout } from "@/components/onboarding/StepLayout"
 import { ChipInput } from "@/components/onboarding/ChipInput"
 import { CardSelect } from "@/components/onboarding/CardSelect"
-import { RichCardSelect } from "@/components/onboarding/RichCardSelect"
 import { PhotoUpload } from "@/components/onboarding/PhotoUpload"
 import { SearchableSelect } from "@/components/onboarding/SearchableSelect"
 import { SectionFAQ } from "@/components/onboarding/SectionFAQ"
@@ -179,7 +178,6 @@ export default function VolunteerOnboardingPage() {
         : undefined,
       profilePhoto: form.profilePhoto || undefined,
       profileCompleteness: completeness,
-
       qualification: form.qualification || undefined,
       talentAreas: form.talentAreas,
       hobbies: form.hobbies,
@@ -226,29 +224,28 @@ export default function VolunteerOnboardingPage() {
     }
   }
 
-  // SCREEN 1: WELCOME
   const renderWelcome = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-200">
+        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-200/50">
           <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
           </svg>
         </div>
-        <h2 className="font-tanker heading-2xl text-text">Welcome to Voluntree!</h2>
+        <h2 className="font-tanker heading-3xl text-text">Begin Your Journey</h2>
         <p className="text-sm text-text-secondary mt-2 max-w-md mx-auto leading-relaxed">
-          Your profile helps hosts get to know you and find the perfect match for your volunteer journey.
+          Let&apos;s build your travel identity so hosts can find the perfect match for you.
         </p>
       </div>
 
       <div className="bg-gradient-to-br from-brand-50 to-mint-50 rounded-2xl border border-brand-100 p-5 space-y-3">
         <p className="label-sm text-brand-700 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-brand-500" />
+          <span className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-slow-pulse" />
           We&apos;ll help you build
         </p>
         <div className="grid grid-cols-2 gap-2">
           {[
-            { icon: "📋", label: "Basic details" },
+            { icon: "👤", label: "Your profile" },
             { icon: "💪", label: "Skills & talents" },
             { icon: "🎨", label: "Hobbies & proof" },
             { icon: "🗺️", label: "Travel preferences" },
@@ -264,7 +261,7 @@ export default function VolunteerOnboardingPage() {
       </div>
 
       {user && (user.name || user.email || user.avatar) && (
-        <div className="bg-white rounded-2xl border border-border p-4 flex items-center gap-3 card-hover">
+        <div className="bg-white rounded-2xl border border-border p-4 flex items-center gap-3 shadow-sm">
           <Avatar className="w-12 h-12 ring-2 ring-brand-100">
             <AvatarImage src={user.avatar} />
             <AvatarFallback className="bg-brand-100 text-brand-700 text-base">{user.name?.charAt(0) || "?"}</AvatarFallback>
@@ -283,7 +280,6 @@ export default function VolunteerOnboardingPage() {
     </div>
   )
 
-  // SCREEN 2: BASIC DETAILS
   const renderBasicDetails = () => (
     <div className="space-y-5">
       <PhotoUpload
@@ -296,14 +292,14 @@ export default function VolunteerOnboardingPage() {
 
       <div className="grid grid-cols-2 gap-3">
         <Input
-          label="👤 Full name"
+          label="Full name"
           id="fullName"
           value={form.fullName}
           onChange={e => update("fullName", e.target.value)}
           placeholder="Your name"
         />
         <Input
-          label="🎂 Age"
+          label="Age"
           type="number"
           id="age"
           value={form.age}
@@ -314,14 +310,14 @@ export default function VolunteerOnboardingPage() {
 
       <div className="grid grid-cols-2 gap-3">
         <SearchableSelect
-          label="📍 City"
+          label="City"
           options={indianCityOptions.map(c => ({ value: c, label: c }))}
           value={form.city}
           onChange={v => update("city", v)}
           placeholder="Search city..."
         />
         <Input
-          label="🌍 Country"
+          label="Country"
           id="country"
           value={form.country}
           onChange={e => update("country", e.target.value)}
@@ -330,14 +326,14 @@ export default function VolunteerOnboardingPage() {
 
       <div className="grid grid-cols-2 gap-3">
         <SearchableSelect
-          label="⚧️ Gender (optional)"
+          label="Gender (optional)"
           options={genderOptions}
           value={form.gender}
           onChange={v => update("gender", v)}
           placeholder="Select"
         />
         <SearchableSelect
-          label="🎓 Qualification"
+          label="Qualification"
           options={qualificationOptions}
           value={form.qualification}
           onChange={v => update("qualification", v)}
@@ -346,7 +342,7 @@ export default function VolunteerOnboardingPage() {
       </div>
 
       <ChipInput
-        label="🗣️ Languages you speak"
+        label="Languages you speak"
         options={languageOptions}
         selected={form.languages}
         onChange={v => update("languages", v)}
@@ -356,7 +352,6 @@ export default function VolunteerOnboardingPage() {
     </div>
   )
 
-  // SCREEN 3: SKILLS AND TALENTS
   const renderSkills = () => (
     <div className="space-y-5">
       <ChipInput
@@ -388,7 +383,6 @@ export default function VolunteerOnboardingPage() {
     </div>
   )
 
-  // SCREEN 4: HOBBIES AND CREATIVE PROOF
   const renderHobbies = () => {
     const showProofSection = !!form.hobbyRepresentation
 
@@ -404,7 +398,7 @@ export default function VolunteerOnboardingPage() {
         />
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-xs font-semibold text-text uppercase tracking-wider">
             How would you like to show your hobby?
           </label>
           <div className="grid grid-cols-3 gap-2">
@@ -413,10 +407,10 @@ export default function VolunteerOnboardingPage() {
                 key={opt.value}
                 type="button"
                 onClick={() => update("hobbyRepresentation", opt.value)}
-                className={`flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition-all ${
+                className={`flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition-all duration-200 ${
                   form.hobbyRepresentation === opt.value
-                    ? "border-brand-500 bg-brand-50 ring-2 ring-brand-100"
-                    : "border-gray-100 hover:border-gray-200"
+                    ? "border-brand-500 bg-brand-50 ring-2 ring-brand-100 shadow-sm"
+                    : "border-gray-100 hover:border-gray-200 hover:shadow-sm hover:-translate-y-0.5"
                 }`}
               >
                 <span className="text-lg">{opt.icon}</span>
@@ -431,8 +425,10 @@ export default function VolunteerOnboardingPage() {
         </div>
 
         {showProofSection && (
-          <div className="bg-gray-50 rounded-xl p-4 space-y-3 border border-gray-100">
-            <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Share your proof</p>
+          <div className="bg-gradient-to-br from-brand-50/50 to-mint-50/50 rounded-xl p-4 space-y-3 border border-brand-100/50">
+            <p className="text-xs font-semibold text-text uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-brand-500">✦</span> Share your proof
+            </p>
             {["text", "mixed"].includes(form.hobbyRepresentation) && (
               <Textarea
                 label="Short description"
@@ -445,19 +441,19 @@ export default function VolunteerOnboardingPage() {
             )}
             {["photo", "mixed"].includes(form.hobbyRepresentation) && (
               <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center">
-                <p className="text-sm text-gray-400">📸 Upload a photo</p>
+                <p className="text-sm text-gray-400">Upload a photo</p>
                 <p className="text-xs text-gray-300 mt-1">Coming soon</p>
               </div>
             )}
             {["video", "mixed"].includes(form.hobbyRepresentation) && (
               <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center">
-                <p className="text-sm text-gray-400">🎥 Upload a video</p>
+                <p className="text-sm text-gray-400">Upload a video</p>
                 <p className="text-xs text-gray-300 mt-1">Coming soon</p>
               </div>
             )}
             {["audio", "mixed"].includes(form.hobbyRepresentation) && (
               <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center">
-                <p className="text-sm text-gray-400">🎙️ Record audio</p>
+                <p className="text-sm text-gray-400">Record audio</p>
                 <p className="text-xs text-gray-300 mt-1">Coming soon</p>
               </div>
             )}
@@ -482,7 +478,6 @@ export default function VolunteerOnboardingPage() {
     )
   }
 
-  // SCREEN 5: TRAVEL PREFERENCES
   const renderTravelPrefs = () => (
     <div className="space-y-5">
       <ChipInput
@@ -543,7 +538,6 @@ export default function VolunteerOnboardingPage() {
     </div>
   )
 
-  // SCREEN 6: AVAILABILITY AND TRAVEL STYLE
   const renderAvailability = () => (
     <div className="space-y-5">
       <div className="grid grid-cols-2 gap-3">
@@ -578,7 +572,7 @@ export default function VolunteerOnboardingPage() {
         onChange={v => update("experienceLevel", v as any)}
       />
 
-      <div className="flex items-center justify-between rounded-xl border-2 border-gray-100 p-4">
+      <div className="flex items-center justify-between rounded-xl border-2 border-gray-100 p-4 bg-white shadow-sm">
         <div>
           <p className="text-sm font-medium text-gray-900">Remote work while traveling?</p>
           <p className="text-xs text-gray-500">Do you work remotely while you volunteer?</p>
@@ -589,7 +583,7 @@ export default function VolunteerOnboardingPage() {
             onClick={() => update("remoteWork", true)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               form.remoteWork === true
-                ? "bg-brand-100 text-brand-700 border border-brand-300"
+                ? "bg-brand-100 text-brand-700 border border-brand-300 shadow-sm"
                 : "bg-gray-50 text-gray-500 border border-gray-200"
             }`}
           >
@@ -600,7 +594,7 @@ export default function VolunteerOnboardingPage() {
             onClick={() => update("remoteWork", false)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               form.remoteWork === false
-                ? "bg-brand-100 text-brand-700 border border-brand-300"
+                ? "bg-brand-100 text-brand-700 border border-brand-300 shadow-sm"
                 : "bg-gray-50 text-gray-500 border border-gray-200"
             }`}
           >
@@ -618,16 +612,15 @@ export default function VolunteerOnboardingPage() {
 
       <SectionFAQ
         items={[
-          { question: "Why do we ask for travel dates?", answer: "Hosts need to know when you're available to plan their schedules. Flexible dates give you more matches." },
+          { question: "Why do we ask for travel dates?", answer: "Hosts need to know when you&apos;re available to plan their schedules. Flexible dates give you more matches." },
         ]}
       />
     </div>
   )
 
-  // SCREEN 7: SAFETY AND EMERGENCY CONTACT
   const renderSafety = () => (
     <div className="space-y-5">
-      <div className="p-4 rounded-xl bg-amber-50 border border-amber-100">
+      <div className="p-4 rounded-xl bg-amber-50 border border-amber-100 shadow-sm">
         <div className="flex items-start gap-2">
           <span className="text-lg">🛡️</span>
           <div className="text-xs text-amber-800 leading-relaxed">
@@ -663,11 +656,11 @@ export default function VolunteerOnboardingPage() {
         placeholder="Select relationship"
       />
 
-      <details className="group">
-        <summary className="text-xs font-medium text-gray-500 cursor-pointer hover:text-gray-700 transition-colors">
+      <details className="group rounded-xl border border-gray-100 bg-white">
+        <summary className="text-xs font-medium text-gray-500 cursor-pointer hover:text-gray-700 transition-colors px-4 py-3">
           Optional emergency details
         </summary>
-        <div className="mt-3 space-y-3">
+        <div className="px-4 pb-4 space-y-3">
           <Textarea
             label="Emergency notes"
             id="emergencyNotes"
@@ -695,25 +688,25 @@ export default function VolunteerOnboardingPage() {
       </details>
 
       <div className="space-y-3 pt-2">
-        <label className="flex items-start gap-3 cursor-pointer">
+        <label className="flex items-start gap-3 cursor-pointer group">
           <input
             type="checkbox"
             checked={form.communityGuidelinesAgreed}
             onChange={e => update("communityGuidelinesAgreed", e.target.checked)}
             className="mt-0.5 w-4 h-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
           />
-          <span className="text-sm text-gray-600">
-            I agree to follow Voluntree's community guidelines and treat all hosts and volunteers with respect.
+          <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
+            I agree to follow Voluntree&apos;s community guidelines and treat all hosts and volunteers with respect.
           </span>
         </label>
-        <label className="flex items-start gap-3 cursor-pointer">
+        <label className="flex items-start gap-3 cursor-pointer group">
           <input
             type="checkbox"
             checked={form.respectfulConductAgreed}
             onChange={e => update("respectfulConductAgreed", e.target.checked)}
             className="mt-0.5 w-4 h-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
           />
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
             I commit to respectful, responsible conduct during my volunteer stays.
           </span>
         </label>
@@ -728,7 +721,6 @@ export default function VolunteerOnboardingPage() {
     </div>
   )
 
-  // SCREEN 8: REVIEW AND COMPLETE
   const renderReview = () => {
     const suggestions: string[] = []
     if (!form.skills.length) suggestions.push("Add more skills")
@@ -738,7 +730,7 @@ export default function VolunteerOnboardingPage() {
     if (!form.hobbyDescription && form.hobbies.length > 0) suggestions.push("Complete your bio")
     if (!form.emergencyName) suggestions.push("Add emergency contact")
 
-    const completenessColor = completeness >= 80 ? "text-green-600" : completeness >= 50 ? "text-amber-600" : "text-text-muted"
+    const completenessColor = completeness >= 80 ? "text-brand-600" : completeness >= 50 ? "text-amber-600" : "text-text-muted"
 
     return (
       <div className="space-y-5">
@@ -750,14 +742,14 @@ export default function VolunteerOnboardingPage() {
             </div>
             <div className="text-right">
               <span className={`text-3xl font-bold ${completenessColor}`}>{completeness}%</span>
-              {completeness >= 80 && <p className="text-xs font-medium text-green-600">🌟 Looks great!</p>}
+              {completeness >= 80 && <p className="text-xs font-medium text-brand-600">Looks great!</p>}
             </div>
           </div>
           <Progress value={completeness} className="h-2.5" />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-white rounded-xl border border-border p-4 space-y-2">
+          <div className="bg-white rounded-xl border border-border p-4 space-y-2 shadow-sm">
             <div className="flex items-center gap-2">
               <Avatar className="w-10 h-10 ring-2 ring-brand-100">
                 <AvatarImage src={form.profilePhoto || user?.avatar} />
@@ -769,7 +761,7 @@ export default function VolunteerOnboardingPage() {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-border p-4 space-y-1">
+          <div className="bg-white rounded-xl border border-border p-4 space-y-1 shadow-sm">
             <p className="text-xs text-text-muted">Languages</p>
             <div className="flex flex-wrap gap-1">
               {form.languages.length > 0 ? form.languages.slice(0, 3).map(l => (
@@ -783,7 +775,7 @@ export default function VolunteerOnboardingPage() {
         </div>
 
         {form.skills.length > 0 && (
-          <div className="bg-white rounded-xl border border-border p-4 space-y-2">
+          <div className="bg-white rounded-xl border border-border p-4 space-y-2 shadow-sm">
             <p className="text-xs font-semibold text-text flex items-center gap-1.5">
               <span>💪</span> Skills
             </p>
@@ -796,7 +788,7 @@ export default function VolunteerOnboardingPage() {
         )}
 
         {(form.preferredDestinations.length > 0 || form.travelType) && (
-          <div className="bg-white rounded-xl border border-border p-4 space-y-2">
+          <div className="bg-white rounded-xl border border-border p-4 space-y-2 shadow-sm">
             <p className="text-xs font-semibold text-text flex items-center gap-1.5">
               <span>🗺️</span> Travel preferences
             </p>
@@ -817,7 +809,7 @@ export default function VolunteerOnboardingPage() {
         )}
 
         {form.hobbies.length > 0 && (
-          <div className="bg-white rounded-xl border border-border p-4 space-y-2">
+          <div className="bg-white rounded-xl border border-border p-4 space-y-2 shadow-sm">
             <p className="text-xs font-semibold text-text flex items-center gap-1.5">
               <span>🎨</span> Hobbies
             </p>
@@ -835,7 +827,7 @@ export default function VolunteerOnboardingPage() {
         )}
 
         {form.availabilityStart && (
-          <div className="bg-white rounded-xl border border-border p-4 space-y-1">
+          <div className="bg-white rounded-xl border border-border p-4 space-y-1 shadow-sm">
             <p className="text-xs font-semibold text-text flex items-center gap-1.5">
               <span>📅</span> Availability
             </p>
@@ -902,8 +894,16 @@ export default function VolunteerOnboardingPage() {
         subtitle={
           step === 0
             ? "Tell us a little about you so we can match you with the right opportunities."
+            : step === 1
+            ? "Help hosts get to know the real you."
+            : step === 2
+            ? "Share what you can bring to a volunteer experience."
+            : step === 3
+            ? "Show hosts what makes you unique."
             : step === 4
             ? "Help us find the right kind of stay for your travel style."
+            : step === 5
+            ? "Let hosts know when you're free to travel."
             : step === 6
             ? "This information helps keep your journey safe."
             : step === 7
@@ -923,7 +923,7 @@ export default function VolunteerOnboardingPage() {
         {renderStep()}
 
         {step === TOTAL_STEPS - 1 && (
-          <div className="flex justify-center mt-2">
+          <div className="flex justify-center mt-6">
             <Button
               onClick={handleSubmit}
               loading={loading}

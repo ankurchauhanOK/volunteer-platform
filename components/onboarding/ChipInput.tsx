@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef, useCallback } from "react"
 import { cn } from "@/lib/utils"
+import { animateChip } from "@/lib/motion"
 
 interface ChipInputProps {
   label: string
@@ -29,6 +30,12 @@ export function ChipInput({
   columns = 2,
 }: ChipInputProps) {
   const [search, setSearch] = useState("")
+  const chipRefs = useRef<Map<string, HTMLButtonElement>>(new Map())
+
+  const setChipRef = useCallback((value: string, el: HTMLButtonElement | null) => {
+    if (el) chipRefs.current.set(value, el)
+    else chipRefs.current.delete(value)
+  }, [])
 
   const filtered = useMemo(
     () => (search ? options.filter(o => o.toLowerCase().includes(search.toLowerCase())) : options),
@@ -36,6 +43,8 @@ export function ChipInput({
   )
 
   const handleToggle = (value: string) => {
+    const el = chipRefs.current.get(value)
+    if (el && !selected.includes(value)) animateChip(el)
     if (selected.includes(value)) {
       onChange(selected.filter(v => v !== value))
     } else {
@@ -58,7 +67,7 @@ export function ChipInput({
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder={searchPlaceholder}
-            className="w-full rounded-xl border-2 border-gray-200 pl-9 pr-4 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+            className="w-full rounded-xl border-2 border-gray-200 pl-9 pr-4 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
           />
         </div>
       )}
@@ -70,10 +79,11 @@ export function ChipInput({
               key={tag}
               type="button"
               onClick={() => handleToggle(tag)}
+              ref={el => setChipRef(tag, el)}
               className={cn(
-                "px-2 py-0.5 rounded-full text-xs font-medium border transition-all",
+                "px-2.5 py-1 rounded-full text-xs font-medium border transition-all",
                 selected.includes(tag)
-                  ? "bg-brand-100 border-brand-300 text-brand-700"
+                  ? "bg-brand-100 border-brand-300 text-brand-700 shadow-sm"
                   : "bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100",
               )}
             >
@@ -87,6 +97,7 @@ export function ChipInput({
         {filtered.map(option => (
           <button
             key={option}
+            ref={el => setChipRef(option, el)}
             type="button"
             onClick={() => handleToggle(option)}
             className={cn(
