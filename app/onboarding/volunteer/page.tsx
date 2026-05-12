@@ -251,7 +251,8 @@ export default function VolunteerOnboardingPage() {
 
   const renderWelcome = () => (
     <div className="space-y-3">
-      <div className="flex items-center gap-4">
+      <div className="bg-gradient-to-br from-brand-50 to-mint-50 rounded-2xl border border-brand-100 p-5 shadow-sm">
+        <div className="flex items-center gap-4">
         <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shrink-0 shadow-lg shadow-brand-200/50">
           <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
@@ -288,12 +289,14 @@ export default function VolunteerOnboardingPage() {
       </div>
 
       <p className="text-[10px] text-text-muted text-center">You can always update your profile later in settings.</p>
+      </div>
     </div>
   )
 
   const renderBasicDetails = () => (
     <div className="space-y-3">
-      <PhotoUpload
+      <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+        <PhotoUpload
         value={form.profilePhoto}
         onChange={v => update("profilePhoto", v)}
         helperText="A friendly photo helps hosts recognize you."
@@ -323,12 +326,14 @@ export default function VolunteerOnboardingPage() {
         helperText="Used to match you with suitable hosts."
         dense
       />
+      </div>
     </div>
   )
 
   const renderSkills = () => (
     <div className="space-y-3">
-      <ChipInput
+      <div className="bg-brand-50 rounded-2xl border border-brand-100 p-5 shadow-sm">
+        <ChipInput
         label="What can you help with?"
         options={skillOptions}
         selected={form.skills}
@@ -356,6 +361,7 @@ export default function VolunteerOnboardingPage() {
         onChange={e => update("otherSkill", e.target.value)}
         placeholder="e.g. sign language, permaculture, surfing..."
       />
+      </div>
     </div>
   )
 
@@ -363,7 +369,8 @@ export default function VolunteerOnboardingPage() {
     const showProofSection = !!form.hobbyRepresentation
     return (
       <div className="space-y-3">
-        <ChipInput
+        <div className="bg-cream rounded-2xl border border-earth-100 p-5 shadow-sm">
+          <ChipInput
           label="What do you love doing?"
           options={hobbyOptions}
           selected={form.hobbies}
@@ -424,13 +431,15 @@ export default function VolunteerOnboardingPage() {
             { question: "What is profile proof?", answer: "Any example of your work or hobby — a photo, video, recording, or portfolio link. Hosts love seeing real examples!" },
           ]}
         />
+        </div>
       </div>
     )
   }
 
   const renderTravelPrefs = () => (
     <div className="space-y-3">
-      <ChipInput
+      <div className="bg-earth-50 rounded-2xl border border-earth-100 p-5 shadow-sm">
+        <ChipInput
         label="Preferred destinations in India"
         options={destinationOptions}
         selected={form.preferredDestinations}
@@ -456,15 +465,17 @@ export default function VolunteerOnboardingPage() {
           { question: "Why ask for travel preferences?", answer: "The more specific you are, the better your matches. Hosts look for volunteers who genuinely want to visit their region." },
         ]}
       />
+      </div>
     </div>
   )
 
   const renderAvailability = () => (
     <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-2.5">
-        <Input label="Available from" type="date" id="availStart" value={form.availabilityStart} onChange={e => update("availabilityStart", e.target.value)} />
-        <Input label="Available until" type="date" id="availEnd" value={form.availabilityEnd} onChange={e => update("availabilityEnd", e.target.value)} />
-      </div>
+      <div className="bg-ocean-50 rounded-2xl border border-ocean-100 p-5 shadow-sm">
+        <div className="grid grid-cols-2 gap-2.5">
+          <Input label="Available from" type="date" id="availStart" value={form.availabilityStart} onChange={e => update("availabilityStart", e.target.value)} />
+          <Input label="Available until" type="date" id="availEnd" value={form.availabilityEnd} onChange={e => update("availabilityEnd", e.target.value)} />
+        </div>
 
       <SearchableSelect label="Travel style" options={travelStyleOptions} value={form.travelStyle} onChange={v => update("travelStyle", v)} placeholder="How do you like to travel?" />
 
@@ -501,12 +512,14 @@ export default function VolunteerOnboardingPage() {
           { question: "Why ask for travel dates?", answer: "Hosts need to know when you're free to plan schedules. Flexible dates give you more matches." },
         ]}
       />
+      </div>
     </div>
   )
 
   const renderSafety = () => (
     <div className="space-y-3">
-      <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-50 border border-amber-100">
+      <div className="bg-warm-50 rounded-2xl border border-warm-100 p-5 shadow-sm">
+        <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-50 border border-amber-100">
         <span className="text-base">🛡️</span>
         <div className="text-[11px] text-amber-800 leading-relaxed">
           <p className="font-medium">Your safety matters</p>
@@ -555,6 +568,7 @@ export default function VolunteerOnboardingPage() {
           { question: "How will hosts see my profile?", answer: "Skills, hobbies, and preferences are visible. Emergency contact is never on your public profile." },
         ]}
       />
+      </div>
     </div>
   )
 
@@ -719,6 +733,7 @@ export default function VolunteerOnboardingPage() {
         continueDisabled={getContinueDisabled()}
         loading={loading}
         hideBack={step === 0}
+        dashboard
       >
         {renderStep()}
       </StepLayout>

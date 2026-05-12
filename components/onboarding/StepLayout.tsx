@@ -18,6 +18,7 @@ interface StepLayoutProps {
   loading?: boolean
   hideBack?: boolean
   helperPanel?: ReactNode
+  dashboard?: boolean
   children: ReactNode
 }
 
@@ -34,6 +35,7 @@ export function StepLayout({
   loading = false,
   hideBack = false,
   helperPanel,
+  dashboard = false,
   children,
 }: StepLayoutProps) {
   const stepLabels = ["Welcome", "Basic Details", "Skills & Talents", "Hobbies & Proof", "Travel Preferences", "Availability", "Safety", "Review"]
@@ -73,20 +75,34 @@ export function StepLayout({
                 </div>
               </div>
               <div className="lg:col-span-7 xl:col-span-8" ref={contentRef}>
-                <div className="bg-white rounded-2xl border border-border p-5 sm:p-6 shadow-sm">
-                  {children}
-                </div>
+                {dashboard ? (
+                  children
+                ) : (
+                  <div className="bg-white rounded-2xl border border-border p-5 sm:p-6 shadow-sm">
+                    {children}
+                  </div>
+                )}
               </div>
             </>
           ) : (
             <div className="lg:col-span-10 lg:col-start-2" ref={contentRef}>
-              <div className="bg-white rounded-2xl border border-border p-5 sm:p-6 shadow-sm">
-                <div className="mb-4">
-                  <h1 className="font-tanker heading-2xl text-text">{title}</h1>
-                  {subtitle && <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">{subtitle}</p>}
+              {dashboard ? (
+                <>
+                  <div className="mb-4">
+                    <h1 className="font-tanker heading-2xl text-text">{title}</h1>
+                    {subtitle && <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">{subtitle}</p>}
+                  </div>
+                  {children}
+                </>
+              ) : (
+                <div className="bg-white rounded-2xl border border-border p-5 sm:p-6 shadow-sm">
+                  <div className="mb-4">
+                    <h1 className="font-tanker heading-2xl text-text">{title}</h1>
+                    {subtitle && <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">{subtitle}</p>}
+                  </div>
+                  {children}
                 </div>
-                {children}
-              </div>
+              )}
             </div>
           )}
         </div>
