@@ -21,9 +21,9 @@ import { SectionFAQ } from "@/components/onboarding/SectionFAQ"
 import {
   skillOptions, popularSkills, talentAreaOptions, hobbyOptions,
   hobbyRepresentationOptions, destinationOptions, travelTypeOptions,
-  environmentOptions, stayTypeOptions, tripDurationOptions,
+  environmentOptions, stayTypeOptions,
   soloGroupOptions, travelStyleOptions, experienceLevelOptions,
-  comfortLevelOptions, relationshipOptions, genderOptions,
+  relationshipOptions, genderOptions,
   qualificationOptions, languageOptions, indianCityOptions,
 } from "@/lib/utils"
 
@@ -50,14 +50,10 @@ interface OnboardingForm {
   travelType: string
   preferredEnvironment: string[]
   preferredStayType: string[]
-  tripDuration: string
   soloOrGroup: string
-  availabilityStart: string
-  availabilityEnd: string
   travelStyle: string
   experienceLevel: string
   remoteWork: boolean
-  comfortLevel: string
   emergencyName: string
   emergencyPhone: string
   emergencyRelation: string
@@ -75,9 +71,8 @@ const defaultForm: OnboardingForm = {
   skills: [], talentAreas: [], otherSkill: "",
   hobbies: [], hobbyRepresentation: "", hobbyDescription: "", hobbyProofUrl: "",
   preferredDestinations: [], travelType: "", preferredEnvironment: [],
-  preferredStayType: [], tripDuration: "", soloOrGroup: "",
-  availabilityStart: "", availabilityEnd: "", travelStyle: "",
-  experienceLevel: "", remoteWork: false, comfortLevel: "",
+  preferredStayType: [], soloOrGroup: "",
+  travelStyle: "", experienceLevel: "", remoteWork: false,
   emergencyName: "", emergencyPhone: "", emergencyRelation: "",
   emergencyNotes: "", medicalConsiderations: "", specialRequirements: "",
   communityGuidelinesAgreed: false, respectfulConductAgreed: false,
@@ -89,8 +84,8 @@ function calcCompleteness(form: OnboardingForm): number {
     form.languages.length > 0, form.qualification,
     form.skills.length > 0, form.talentAreas.length > 0,
     form.hobbies.length > 0, form.preferredDestinations.length > 0,
-    form.travelType, form.tripDuration, form.availabilityStart,
-    form.travelStyle, form.experienceLevel, form.emergencyName,
+    form.travelType, form.travelStyle,
+    form.experienceLevel, form.emergencyName,
     form.emergencyPhone, form.communityGuidelinesAgreed,
   ]
   const filled = fields.filter(Boolean).length
@@ -194,8 +189,6 @@ export default function VolunteerOnboardingPage() {
       skills: form.skills,
       interests: form.hobbies,
       preferredDestinations: form.preferredDestinations,
-      availabilityStart: form.availabilityStart || undefined,
-      availabilityEnd: form.availabilityEnd || undefined,
       travelStyle: form.travelStyle || undefined,
       travelExperience: form.experienceLevel || undefined,
       emergencyContact: form.emergencyName
@@ -212,11 +205,8 @@ export default function VolunteerOnboardingPage() {
       travelType: form.travelType || undefined,
       preferredEnvironment: form.preferredEnvironment,
       preferredStayType: form.preferredStayType,
-      tripDuration: form.tripDuration || undefined,
-      soloOrGroup: form.soloOrGroup || undefined,
       experienceLevel: form.experienceLevel || undefined,
       remoteWork: form.remoteWork || undefined,
-      comfortLevel: form.comfortLevel || undefined,
       emergencyNotes: form.emergencyNotes || undefined,
       medicalConsiderations: form.medicalConsiderations || undefined,
       specialRequirements: form.specialRequirements || undefined,
@@ -454,10 +444,7 @@ export default function VolunteerOnboardingPage() {
         <CardSelect label="Stay type" options={stayTypeOptions.map(s => ({ value: s.toLowerCase(), label: s }))} selected={form.preferredStayType} onChange={v => update("preferredStayType", v as any)} multi columns={2} />
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5">
-        <CardSelect label="Trip duration" options={tripDurationOptions} selected={form.tripDuration} onChange={v => update("tripDuration", v as any)} columns={2} />
-        <CardSelect label="Solo or group?" options={soloGroupOptions.map(s => ({ value: s.value, label: s.label }))} selected={form.soloOrGroup} onChange={v => update("soloOrGroup", v as any)} columns={2} />
-      </div>
+      <CardSelect label="Solo or group?" options={soloGroupOptions.map(s => ({ value: s.value, label: s.label }))} selected={form.soloOrGroup} onChange={v => update("soloOrGroup", v as any)} columns={2} />
 
       <SectionFAQ
         items={[
@@ -471,17 +458,9 @@ export default function VolunteerOnboardingPage() {
   const renderAvailability = () => (
     <div className="space-y-3">
       <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
-        <div className="grid grid-cols-2 gap-2.5">
-          <Input label="Available from" type="date" id="availStart" value={form.availabilityStart} onChange={e => update("availabilityStart", e.target.value)} />
-          <Input label="Available until" type="date" id="availEnd" value={form.availabilityEnd} onChange={e => update("availabilityEnd", e.target.value)} />
-        </div>
+        <SearchableSelect label="Travel style" options={travelStyleOptions} value={form.travelStyle} onChange={v => update("travelStyle", v)} placeholder="How do you like to travel?" />
 
-      <SearchableSelect label="Travel style" options={travelStyleOptions} value={form.travelStyle} onChange={v => update("travelStyle", v)} placeholder="How do you like to travel?" />
-
-      <div className="grid grid-cols-2 gap-2.5">
         <CardSelect label="Experience" options={experienceLevelOptions} selected={form.experienceLevel} onChange={v => update("experienceLevel", v as any)} columns={2} />
-        <CardSelect label="Comfort level" options={comfortLevelOptions} selected={form.comfortLevel} onChange={v => update("comfortLevel", v as any)} columns={2} />
-      </div>
 
       <div className="flex items-center justify-between rounded-lg border border-border p-3 bg-white">
         <div>
@@ -506,11 +485,6 @@ export default function VolunteerOnboardingPage() {
         </div>
       </div>
 
-      <SectionFAQ
-        items={[
-          { question: "Why ask for travel dates?", answer: "Hosts need to know when you're free to plan schedules. Flexible dates give you more matches." },
-        ]}
-      />
       </div>
     </div>
   )
@@ -576,7 +550,6 @@ export default function VolunteerOnboardingPage() {
     if (!form.skills.length) suggestions.push("Add more skills")
     if (!form.hobbies.length) suggestions.push("Add hobbies")
     if (!form.hobbyRepresentation) suggestions.push("Upload proof of your hobby")
-    if (!form.availabilityStart) suggestions.push("Set your travel dates")
     if (!form.hobbyDescription && form.hobbies.length > 0) suggestions.push("Complete your bio")
     if (!form.emergencyName) suggestions.push("Add emergency contact")
 
@@ -652,13 +625,6 @@ export default function VolunteerOnboardingPage() {
               {form.preferredDestinations.length > 4 && <Badge variant="outline" size="sm">+{form.preferredDestinations.length - 4}</Badge>}
               {form.travelType && <Badge variant="secondary" size="sm">{travelTypeOptions.find(t => t.value === form.travelType)?.label || form.travelType}</Badge>}
             </div>
-          </div>
-        )}
-
-        {form.availabilityStart && (
-          <div className="bg-white rounded-lg border border-border p-3">
-            <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>📅</span> Availability</p>
-            <p className="text-xs text-text mt-0.5">{form.availabilityStart}{form.availabilityEnd ? ` → ${form.availabilityEnd}` : ""}</p>
           </div>
         )}
 
