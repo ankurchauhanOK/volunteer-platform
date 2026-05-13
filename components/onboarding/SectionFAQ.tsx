@@ -8,6 +8,7 @@ import { HelpCircle, Shield, Info, Lightbulb, AlertCircle } from "lucide-react"
 interface FAQ {
   question: string
   answer: string
+  icon?: string
 }
 
 interface SectionFAQProps {
@@ -62,7 +63,7 @@ export function SectionFAQ({ items }: SectionFAQProps) {
               openIndex === i ? "text-brand-700" : "text-text-secondary hover:text-text"
             )}
           >
-            {getIcon(item.question)}
+            {item.icon ? <span className="text-sm">{item.icon}</span> : getIcon(item.question)}
             <span className="flex-1">{item.question}</span>
             <svg
               className={cn("w-3 h-3 text-brand-400 transition-transform duration-200 shrink-0", openIndex === i && "rotate-180")}

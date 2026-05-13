@@ -417,7 +417,7 @@ export default function VolunteerOnboardingPage() {
 
         <SectionFAQ
           items={[
-            { question: "What is profile proof?", answer: "Any example of your work or hobby — a photo, video, recording, or portfolio link. Hosts love seeing real examples!" },
+            { question: "📸 What is profile proof?", answer: "Any example of your work or hobby — a photo, video, recording, or portfolio link. Hosts love seeing real examples!" },
           ]}
         />
         </div>
@@ -437,18 +437,18 @@ export default function VolunteerOnboardingPage() {
         iconMap={destIcons}
       />
 
-      <CardSelect label="Travel type" options={travelTypeOptions} selected={form.travelType} onChange={v => update("travelType", v as any)} />
+      <CardSelect label="🗺️ Travel type" options={travelTypeOptions} selected={form.travelType} onChange={v => update("travelType", v as any)} />
 
       <div className="grid grid-cols-2 gap-2.5">
-        <CardSelect label="Environment" options={environmentOptions.map(e => ({ value: e.toLowerCase(), label: e }))} selected={form.preferredEnvironment} onChange={v => update("preferredEnvironment", v as any)} multi columns={2} />
-        <CardSelect label="Stay type" options={stayTypeOptions.map(s => ({ value: s.toLowerCase(), label: s }))} selected={form.preferredStayType} onChange={v => update("preferredStayType", v as any)} multi columns={2} />
+        <CardSelect label="🌿 Environment" options={environmentOptions.map(e => ({ value: e.toLowerCase(), label: e }))} selected={form.preferredEnvironment} onChange={v => update("preferredEnvironment", v as any)} multi columns={2} />
+        <CardSelect label="🏠 Stay type" options={stayTypeOptions.map(s => ({ value: s.toLowerCase(), label: s }))} selected={form.preferredStayType} onChange={v => update("preferredStayType", v as any)} multi columns={2} />
       </div>
 
-      <CardSelect label="Solo or group?" options={soloGroupOptions.map(s => ({ value: s.value, label: s.label }))} selected={form.soloOrGroup} onChange={v => update("soloOrGroup", v as any)} columns={2} />
+      <CardSelect label="👤 Solo or group?" options={soloGroupOptions.map(s => ({ value: s.value, label: s.label }))} selected={form.soloOrGroup} onChange={v => update("soloOrGroup", v as any)} columns={2} />
 
       <SectionFAQ
         items={[
-          { question: "Why ask for travel preferences?", answer: "The more specific you are, the better your matches. Hosts look for volunteers who genuinely want to visit their region." },
+          { question: "🤔 Why ask for travel preferences?", answer: "The more specific you are, the better your matches. Hosts look for volunteers who genuinely want to visit their region." },
         ]}
       />
       </div>
@@ -537,8 +537,8 @@ export default function VolunteerOnboardingPage() {
 
       <SectionFAQ
         items={[
-          { question: "Why is emergency contact needed?", answer: "Standard safety practice. Only shared with hosts after application is confirmed." },
-          { question: "How will hosts see my profile?", answer: "Skills, hobbies, and preferences are visible. Emergency contact is never on your public profile." },
+          { question: "🛡️ Why is emergency contact needed?", answer: "Standard safety practice. Only shared with hosts after application is confirmed." },
+          { question: "👁️ How will hosts see my profile?", answer: "Skills, hobbies, and preferences are visible. Emergency contact is never on your public profile." },
         ]}
       />
       </div>
