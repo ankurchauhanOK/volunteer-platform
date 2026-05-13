@@ -63,7 +63,7 @@ export function RichCardSelect({
   return (
     <div className="space-y-3">
       {label && <label className="text-sm font-semibold text-text">{label}</label>}
-      <div className={cn("grid gap-3", columns === 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-2 sm:grid-cols-3")}>
+      <div className={cn("grid gap-2.5", columns === 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-2 sm:grid-cols-3")}>
         {options.map(option => (
           <button
             key={option.value}
@@ -73,7 +73,7 @@ export function RichCardSelect({
             className={cn(
               "relative flex flex-col items-start gap-1.5 rounded-xl border-2 p-4 text-left transition-all duration-200",
               isSelected(option.value)
-                ? "border-brand-500 bg-brand-50 ring-2 ring-brand-100 shadow-sm"
+                ? "border-brand-500 bg-brand-50 shadow-sm"
                 : "border-border bg-white hover:border-brand-200 hover:shadow-sm hover:-translate-y-0.5",
             )}
           >

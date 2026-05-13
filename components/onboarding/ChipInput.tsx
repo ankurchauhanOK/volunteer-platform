@@ -91,9 +91,9 @@ export function ChipInput({
               onClick={() => handleToggle(tag)}
               ref={el => setChipRef(tag, el)}
               className={cn(
-                "px-2 py-0.5 rounded-full text-[11px] font-medium border transition-all",
+                "px-2 py-0.5 rounded-full text-[11px] font-medium border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
                 selected.includes(tag)
-                  ? "bg-brand-100 border-brand-300 text-brand-700 shadow-sm"
+                  ? "bg-brand-50 border-brand-200 text-brand-700"
                   : "bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100",
               )}
             >
@@ -111,11 +111,11 @@ export function ChipInput({
             type="button"
             onClick={() => handleToggle(option)}
             className={cn(
-              "rounded-full border transition-all duration-150 inline-flex items-center gap-1",
+              "rounded-full border transition-all duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
               dense || columns === 3 ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs",
               selected.includes(option)
-                ? "bg-brand-100 border-brand-300 text-brand-700 font-medium shadow-sm"
-                : "bg-white border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50",
+                ? "bg-brand-50 border-brand-200 text-brand-700 font-medium"
+                : "bg-white border-border text-text-secondary hover:border-gray-300",
             )}
           >
             {iconMap?.[option] && <span className="text-xs">{iconMap[option]}</span>}

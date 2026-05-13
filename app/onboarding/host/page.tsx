@@ -181,17 +181,21 @@ export default function HostOnboardingPage() {
 
   const renderHostType = () => (
     <div className="space-y-3">
-      <RichCardSelect
-        label="What type of host are you?"
-        options={hostTypeCards}
-        selected={form.hostType}
-        onChange={v => update("hostType", v as string)}
-      />
-      <SectionFAQ
-        items={[
-          { question: "Can I change my host type later?", answer: "Yes! Change anytime from profile settings. This just helps volunteers understand your experience." },
-        ]}
-      />
+      <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+        <div className="space-y-3">
+          <RichCardSelect
+            label="What type of host are you?"
+            options={hostTypeCards}
+            selected={form.hostType}
+            onChange={v => update("hostType", v as string)}
+          />
+          <SectionFAQ
+            items={[
+              { question: "Can I change my host type later?", answer: "Yes! Change anytime from profile settings. This just helps volunteers understand your experience." },
+            ]}
+          />
+        </div>
+      </div>
     </div>
   )
 
@@ -430,6 +434,7 @@ export default function HostOnboardingPage() {
         continueDisabled={step === 1 ? !form.businessName : step === 0 ? !form.hostType : false}
         loading={loading}
         hideBack={step === 0}
+        dashboard={step === 0}
       >
         {renderStep()}
       </StepLayout>

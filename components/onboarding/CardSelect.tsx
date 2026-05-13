@@ -71,8 +71,8 @@ export function CardSelect({
             className={cn(
               "relative flex flex-col items-center justify-center gap-1 rounded-xl border-2 p-3 sm:p-4 text-center transition-all duration-200",
               isSelected(option.value)
-                ? "border-brand-500 bg-brand-50 ring-2 ring-brand-100 shadow-sm"
-                : "border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm hover:-translate-y-0.5",
+                ? "border-brand-500 bg-brand-50 shadow-sm"
+                : "border-border bg-white hover:border-gray-200 hover:shadow-sm hover:-translate-y-0.5",
             )}
           >
             {option.icon && <span className="text-xl sm:text-2xl">{option.icon}</span>}
