@@ -73,8 +73,8 @@ export function RichCardSelect({
             className={cn(
               "relative flex flex-col items-start gap-1.5 rounded-xl border-2 p-4 text-left transition-all duration-200",
               isSelected(option.value)
-                ? "border-brand-500 bg-brand-50 shadow-sm"
-                : "border-border bg-white hover:border-brand-200 hover:shadow-sm hover:-translate-y-0.5",
+                ? "border-sb-500 bg-sb-50 shadow-sm"
+                : "border-border bg-white hover:border-sb-200 hover:shadow-sm hover:-translate-y-0.5",
             )}
           >
             {option.icon && (
@@ -83,7 +83,7 @@ export function RichCardSelect({
             <div className="space-y-0.5 w-full">
               <span className={cn(
                 "text-sm font-semibold block",
-                isSelected(option.value) ? "text-brand-700" : "text-text",
+                isSelected(option.value) ? "text-sb-700" : "text-text",
               )}>
                 {option.label}
               </span>
@@ -99,7 +99,7 @@ export function RichCardSelect({
               )}
             </div>
             {isSelected(option.value) && (
-              <div className="check-icon absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-brand-500 flex items-center justify-center">
+              <div className="check-icon absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-sb-500 flex items-center justify-center">
                 <Check className="w-3 h-3 text-white" strokeWidth={3} />
               </div>
             )}

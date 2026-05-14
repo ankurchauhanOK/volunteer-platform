@@ -241,36 +241,36 @@ export default function VolunteerOnboardingPage() {
 
   const renderWelcome = () => (
     <div className="space-y-3">
-      <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+      <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
         <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shrink-0 shadow-lg shadow-brand-200/50">
+        <div className="w-14 h-14 rounded-xl bg-sb-500 flex items-center justify-center shrink-0 ">
           <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
           </svg>
         </div>
         <div>
-          <h2 className="font-tanker heading-2xl text-text">Begin Your Journey</h2>
+          <h2 className="font-sans font-semibold text-2xl text-text">Begin Your Journey</h2>
           <p className="text-xs text-text-secondary">Build your travel identity and find the perfect host match.</p>
         </div>
         {user && (user.name || user.email) && (
-          <div className="ml-auto flex items-center gap-2 bg-brand-50 rounded-xl px-3 py-1.5 border border-brand-100">
-            <Avatar className="w-6 h-6 ring-1 ring-brand-200">
+          <div className="ml-auto flex items-center gap-2 bg-sb-50 rounded-xl px-3 py-1.5 border border-sb-200">
+            <Avatar className="w-6 h-6 ring-1 ring-sb-200">
               <AvatarImage src={user.avatar} />
-              <AvatarFallback className="bg-brand-100 text-brand-700 text-[10px]">{user.name?.charAt(0) || "?"}</AvatarFallback>
+              <AvatarFallback className="bg-sb-100 text-sb-700 text-[10px]">{user.name?.charAt(0) || "?"}</AvatarFallback>
             </Avatar>
-            <span className="text-[11px] font-medium text-brand-700 truncate max-w-[100px]">{user.name}</span>
+            <span className="text-[11px] font-medium text-sb-700 truncate max-w-[100px]">{user.name}</span>
           </div>
         )}
       </div>
 
-      <div className="bg-brand-50 rounded-xl border border-brand-100 p-3">
-        <p className="text-[10px] font-semibold text-brand-700 uppercase tracking-wider mb-2">We&apos;ll help you build</p>
+      <div className="bg-sb-50 rounded-xl border border-sb-200 p-3">
+        <p className="text-[10px] font-semibold text-sb-700 uppercase tracking-wider mb-2">We&apos;ll help you build</p>
         <div className="grid grid-cols-3 gap-1.5">
           {[
             ["👤", "Profile"], ["💪", "Skills"], ["🎨", "Hobbies"],
             ["🗺️", "Travel"], ["📅", "Dates"], ["🛡️", "Safety"],
           ].map(([icon, label]) => (
-            <div key={label} className="flex items-center gap-1.5 text-xs text-text bg-white/70 rounded-lg px-2 py-1.5 border border-brand-100/50">
+            <div key={label} className="flex items-center gap-1.5 text-xs text-text bg-white/70 rounded-lg px-2 py-1.5 border border-sb-200/50">
               <span>{icon}</span>
               <span className="font-medium">{label}</span>
             </div>
@@ -285,7 +285,7 @@ export default function VolunteerOnboardingPage() {
 
   const renderBasicDetails = () => (
     <div className="space-y-3">
-      <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+      <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
         <PhotoUpload
         value={form.profilePhoto}
         onChange={v => update("profilePhoto", v)}
@@ -322,7 +322,7 @@ export default function VolunteerOnboardingPage() {
 
   const renderSkills = () => (
     <div className="space-y-3">
-      <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+      <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
         <ChipInput
         label="What can you help with?"
         options={skillOptions}
@@ -358,7 +358,7 @@ export default function VolunteerOnboardingPage() {
     const showProofSection = !!form.hobbyRepresentation
     return (
       <div className="space-y-3">
-        <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+        <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
           <ChipInput
           label="What do you love doing?"
           options={hobbyOptions}
@@ -377,15 +377,15 @@ export default function VolunteerOnboardingPage() {
                 key={opt.value}
                 type="button"
                 onClick={() => update("hobbyRepresentation", opt.value)}
-                className={`flex flex-col items-center gap-0.5 rounded-lg border py-2 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
+                className={`flex flex-col items-center gap-0.5 rounded-lg border py-2 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-500 ${
                   form.hobbyRepresentation === opt.value
-                    ? "border-brand-200 bg-brand-50"
+                    ? "border-sb-200 bg-sb-50"
                     : "border-border hover:border-gray-200"
                 }`}
               >
                 <span className="text-base">{opt.icon}</span>
                 <span className={`text-[10px] font-medium ${
-                  form.hobbyRepresentation === opt.value ? "text-brand-700" : "text-text-secondary"
+                  form.hobbyRepresentation === opt.value ? "text-sb-700" : "text-text-secondary"
                 }`}>{opt.label}</span>
               </button>
             ))}
@@ -393,9 +393,9 @@ export default function VolunteerOnboardingPage() {
         </div>
 
         {showProofSection && (
-          <div className="bg-gradient-to-br from-brand-50/50 to-mint-50/50 rounded-lg p-3 space-y-2 border border-brand-100/50">
+          <div className="bg-sb-50 rounded-lg p-3 space-y-2 border border-sb-200/50">
             <p className="text-[10px] font-semibold text-text uppercase tracking-wider flex items-center gap-1">
-              <span className="text-brand-500">✦</span> Share your proof
+              <span className="text-sb-500">✦</span> Share your proof
             </p>
             {["text", "mixed"].includes(form.hobbyRepresentation) && (
               <Textarea label="Short description" id="hobbyDesc" value={form.hobbyDescription} onChange={e => update("hobbyDescription", e.target.value)} placeholder="Tell hosts what you enjoy..." rows={2} />
@@ -427,7 +427,7 @@ export default function VolunteerOnboardingPage() {
 
   const renderTravelPrefs = () => (
     <div className="space-y-3">
-      <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+      <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
         <ChipInput
         label="Preferred destinations in India"
         options={destinationOptions}
@@ -457,7 +457,7 @@ export default function VolunteerOnboardingPage() {
 
   const renderAvailability = () => (
     <div className="space-y-3">
-      <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+      <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
         <SearchableSelect label="Travel style" options={travelStyleOptions} value={form.travelStyle} onChange={v => update("travelStyle", v)} placeholder="How do you like to travel?" />
 
         <CardSelect label="Experience" options={experienceLevelOptions} selected={form.experienceLevel} onChange={v => update("experienceLevel", v as any)} columns={2} />
@@ -473,9 +473,9 @@ export default function VolunteerOnboardingPage() {
               key={opt}
               type="button"
               onClick={() => update("remoteWork", opt === "Yes")}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-500 ${
                 (opt === "Yes" ? form.remoteWork === true : form.remoteWork === false)
-                  ? "bg-brand-50 text-brand-700 border border-brand-200"
+                  ? "bg-sb-50 text-sb-700 border border-sb-200"
                   : "bg-gray-50 text-gray-500 border border-gray-200"
               }`}
             >
@@ -491,7 +491,7 @@ export default function VolunteerOnboardingPage() {
 
   const renderSafety = () => (
     <div className="space-y-3">
-      <div className="bg-white rounded-2xl border border-border p-5 shadow-sm">
+      <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
         <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-50 border border-amber-100">
         <span className="text-base">🛡️</span>
         <div className="text-[11px] text-amber-800 leading-relaxed">
@@ -508,7 +508,7 @@ export default function VolunteerOnboardingPage() {
       <SearchableSelect label="Relationship" options={relationshipOptions} value={form.emergencyRelation} onChange={v => update("emergencyRelation", v)} placeholder="Select relationship" />
 
       <details className="group rounded-lg border border-border bg-white">
-        <summary className="text-[11px] font-medium text-text-secondary cursor-pointer hover:text-text transition-colors px-3 py-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
+        <summary className="text-[11px] font-medium text-text-secondary cursor-pointer hover:text-text transition-colors px-3 py-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-500">
           Optional emergency details
         </summary>
         <div className="px-3 pb-3 space-y-2">
@@ -528,7 +528,7 @@ export default function VolunteerOnboardingPage() {
               type="checkbox"
               checked={form[key as keyof OnboardingForm] as boolean}
               onChange={e => update(key as keyof OnboardingForm, e.target.checked)}
-              className="mt-0.5 w-3.5 h-3.5 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+              className="mt-0.5 w-3.5 h-3.5 rounded border-gray-300 text-sb-600 focus:ring-sb-500"
             />
             <span className="text-[11px] text-gray-600 group-hover:text-gray-900 transition-colors leading-relaxed">{label}</span>
           </label>
@@ -553,7 +553,7 @@ export default function VolunteerOnboardingPage() {
     if (!form.hobbyDescription && form.hobbies.length > 0) suggestions.push("Complete your bio")
     if (!form.emergencyName) suggestions.push("Add emergency contact")
 
-    const completenessColor = completeness >= 80 ? "text-brand-600" : completeness >= 50 ? "text-amber-600" : "text-text-muted"
+    const completenessColor = completeness >= 80 ? "text-sb-600" : completeness >= 50 ? "text-amber-600" : "text-text-muted"
 
     return (
       <div className="space-y-3">
@@ -565,18 +565,18 @@ export default function VolunteerOnboardingPage() {
             </div>
             <div className="text-right">
               <span className={`text-2xl font-bold ${completenessColor}`}>{completeness}%</span>
-              {completeness >= 80 && <p className="text-[10px] font-medium text-brand-600">Looks great!</p>}
+              {completeness >= 80 && <p className="text-[10px] font-medium text-sb-600">Looks great!</p>}
             </div>
           </div>
           <Progress value={completeness} className="h-2" />
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <div className="bg-white rounded-lg border border-border p-3 space-y-1.5">
+          <div className="bg-white rounded-xl border border-border p-3 space-y-1.5">
             <div className="flex items-center gap-2">
-              <Avatar className="w-8 h-8 ring-1 ring-brand-100">
+              <Avatar className="w-8 h-8 ring-1 ring-sb-100">
                 <AvatarImage src={form.profilePhoto || user?.avatar} />
-                <AvatarFallback className="bg-brand-100 text-brand-700 text-[10px]">{(form.fullName || user?.name || "?").charAt(0)}</AvatarFallback>
+                <AvatarFallback className="bg-sb-100 text-sb-700 text-[10px]">{(form.fullName || user?.name || "?").charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="min-w-0">
                 <p className="text-xs font-semibold text-text truncate">{form.fullName || user?.name}</p>
@@ -584,7 +584,7 @@ export default function VolunteerOnboardingPage() {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg border border-border p-3 space-y-1">
+          <div className="bg-white rounded-xl border border-border p-3 space-y-1">
             <p className="text-[10px] text-text-muted">Languages</p>
             <div className="flex flex-wrap gap-1">
               {form.languages.length > 0 ? form.languages.slice(0, 3).map(l => (
@@ -597,7 +597,7 @@ export default function VolunteerOnboardingPage() {
 
         <div className="grid grid-cols-2 gap-2">
           {form.skills.length > 0 && (
-            <div className="bg-white rounded-lg border border-border p-3 space-y-1.5">
+            <div className="bg-white rounded-xl border border-border p-3 space-y-1.5">
               <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>💪</span> Skills</p>
               <div className="flex flex-wrap gap-1">
                 {form.skills.slice(0, 4).map(s => <Badge key={s} variant="primary" size="sm">{s}</Badge>)}
@@ -607,7 +607,7 @@ export default function VolunteerOnboardingPage() {
           )}
 
           {form.hobbies.length > 0 && (
-            <div className="bg-white rounded-lg border border-border p-3 space-y-1.5">
+            <div className="bg-white rounded-xl border border-border p-3 space-y-1.5">
               <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>🎨</span> Hobbies</p>
               <div className="flex flex-wrap gap-1">
                 {form.hobbies.slice(0, 4).map(h => <Badge key={h} variant="purple" size="sm">{h}</Badge>)}
@@ -618,7 +618,7 @@ export default function VolunteerOnboardingPage() {
         </div>
 
         {(form.preferredDestinations.length > 0 || form.travelType) && (
-          <div className="bg-white rounded-lg border border-border p-3 space-y-1.5">
+          <div className="bg-white rounded-xl border border-border p-3 space-y-1.5">
             <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>🗺️</span> Travel</p>
             <div className="flex flex-wrap gap-1">
               {form.preferredDestinations.slice(0, 4).map(d => <Badge key={d} variant="info" size="sm">{d}</Badge>)}
@@ -629,7 +629,7 @@ export default function VolunteerOnboardingPage() {
         )}
 
         {suggestions.length > 0 && (
-          <div className="bg-white border border-border rounded-lg p-3">
+          <div className="bg-white border border-border rounded-xl p-3">
             <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>💡</span> Tips</p>
             <div className="flex flex-wrap gap-1 mt-1">
               {suggestions.map(s => (
@@ -640,7 +640,7 @@ export default function VolunteerOnboardingPage() {
         )}
 
         <div className="flex justify-center pt-1">
-          <Button onClick={handleSubmit} loading={loading} size="lg" className="w-full sm:w-auto">
+          <Button onClick={handleSubmit} loading={loading} size="lg" className="w-full sm:w-auto bg-sb-500 text-white rounded-full">
             Complete Profile
           </Button>
         </div>

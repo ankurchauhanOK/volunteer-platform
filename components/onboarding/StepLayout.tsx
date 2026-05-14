@@ -43,20 +43,20 @@ export function StepLayout({
   const progressPercent = ((currentStep + 1) / totalSteps) * 100
 
   return (
-    <div className="min-h-screen bg-beige">
+    <div className="min-h-screen bg-cream">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         <div className="flex items-center justify-center gap-2 mb-5">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-sb-500 flex items-center justify-center shadow-sm">
             <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
             </svg>
           </div>
-          <span className="font-tanker text-lg text-text tracking-normal">Voluntree</span>
+          <span className="font-sans text-lg text-text tracking-normal">Voluntree</span>
         </div>
 
         <div className="mb-4">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="label-sm text-brand-600">
+            <span className="label-sm text-sb-600">
               Step {currentStep + 1} of {totalSteps}
             </span>
             <span className="text-xs text-text-muted">{stepLabels[currentStep] || `Step ${currentStep + 1}`}</span>
@@ -68,8 +68,8 @@ export function StepLayout({
           {helperPanel ? (
             <>
               <div className="lg:col-span-5 xl:col-span-4 space-y-3">
-                <div className="bg-white rounded-2xl border border-border p-5 lg:sticky lg:top-20 shadow-sm">
-                  <h1 className="font-tanker heading-2xl text-text">{title}</h1>
+                <div className="bg-white rounded-xl border border-border p-5 lg:sticky lg:top-20 shadow-[0_0_0.5px_rgba(0,0,0,0.14),0_1px_1px_rgba(0,0,0,0.24)]">
+                  <h1 className="font-sans heading-2xl text-text">{title}</h1>
                   {subtitle && <p className="text-xs text-text-secondary mt-2 leading-relaxed">{subtitle}</p>}
                   {helperPanel}
                 </div>
@@ -78,7 +78,7 @@ export function StepLayout({
                 {dashboard ? (
                   children
                 ) : (
-                  <div className="bg-white rounded-2xl border border-border p-5 sm:p-6 shadow-sm">
+                  <div className="bg-white rounded-xl border border-border p-5 sm:p-6 shadow-[0_0_0.5px_rgba(0,0,0,0.14),0_1px_1px_rgba(0,0,0,0.24)]">
                     {children}
                   </div>
                 )}
@@ -89,15 +89,15 @@ export function StepLayout({
               {dashboard ? (
                 <>
                   <div className="mb-4">
-                    <h1 className="font-tanker heading-2xl text-text">{title}</h1>
+                    <h1 className="font-sans heading-2xl text-text">{title}</h1>
                     {subtitle && <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">{subtitle}</p>}
                   </div>
                   {children}
                 </>
               ) : (
-                <div className="bg-white rounded-2xl border border-border p-5 sm:p-6 shadow-sm">
+                <div className="bg-white rounded-xl border border-border p-5 sm:p-6 shadow-[0_0_0.5px_rgba(0,0,0,0.14),0_1px_1px_rgba(0,0,0,0.24)]">
                   <div className="mb-4">
-                    <h1 className="font-tanker heading-2xl text-text">{title}</h1>
+                    <h1 className="font-sans heading-2xl text-text">{title}</h1>
                     {subtitle && <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">{subtitle}</p>}
                   </div>
                   {children}

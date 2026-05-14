@@ -52,7 +52,7 @@ export function SearchableSelect({
         onClick={() => setOpen(!open)}
         className={cn(
           "w-full rounded-xl border-2 px-4 py-2.5 text-sm text-left transition-all bg-white",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:border-brand-500",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-500 focus-visible:border-sb-500",
           error ? "border-red-300" : "border-border hover:border-gray-300",
         )}
       >
@@ -74,7 +74,7 @@ export function SearchableSelect({
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Type to search..."
-              className="w-full rounded-lg border border-border px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-100"
+              className="w-full rounded-lg border border-border px-3 py-2 text-sm outline-none focus:border-sb-500 focus:ring-1 focus:ring-sb-100"
               autoFocus
             />
           </div>
@@ -89,8 +89,8 @@ export function SearchableSelect({
                   setSearch("")
                 }}
                 className={cn(
-                  "w-full text-left px-4 py-2.5 text-sm transition-colors focus-visible:outline-none focus-visible:bg-brand-50",
-                  value === option.value ? "bg-brand-50 text-brand-700 font-medium" : "text-text-secondary hover:bg-brand-50",
+                  "w-full text-left px-4 py-2.5 text-sm transition-colors focus-visible:outline-none focus-visible:bg-sb-50",
+                  value === option.value ? "bg-sb-50 text-sb-700 font-medium" : "text-text-secondary hover:bg-sb-50",
                 )}
               >
                 {option.label}

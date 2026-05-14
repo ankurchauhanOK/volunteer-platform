@@ -76,7 +76,7 @@ export function ChipInput({
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder={searchPlaceholder}
-            className="w-full rounded-lg border border-gray-200 pl-8 pr-3 py-1.5 text-xs outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-100 transition-all"
+            className="w-full rounded-lg border border-gray-200 pl-8 pr-3 py-1.5 text-xs outline-none focus:border-sb-500 focus:ring-1 focus:ring-sb-100 transition-all"
           />
         </div>
       )}
@@ -90,10 +90,10 @@ export function ChipInput({
               type="button"
               onClick={() => handleToggle(tag)}
               ref={el => setChipRef(tag, el)}
-              className={cn(
-                "px-2 py-0.5 rounded-full text-[11px] font-medium border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
+                className={cn(
+                "px-2 py-0.5 rounded-full text-[11px] font-medium border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-500",
                 selected.includes(tag)
-                  ? "bg-brand-50 border-brand-200 text-brand-700"
+                  ? "bg-sb-50 border-sb-200 text-sb-700"
                   : "bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100",
               )}
             >
@@ -111,10 +111,10 @@ export function ChipInput({
             type="button"
             onClick={() => handleToggle(option)}
             className={cn(
-              "rounded-full border transition-all duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
+              "rounded-full border transition-all duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-500",
               dense || columns === 3 ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs",
               selected.includes(option)
-                ? "bg-brand-50 border-brand-200 text-brand-700 font-medium"
+                ? "bg-sb-50 border-sb-200 text-sb-700 font-medium"
                 : "bg-white border-border text-text-secondary hover:border-gray-300",
             )}
           >

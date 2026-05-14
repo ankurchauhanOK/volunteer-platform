@@ -48,13 +48,13 @@ export function ProfileCompleteness({
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-tanker text-xl text-text">Profile completeness</h4>
-        <span className="font-tanker text-2xl text-brand-600">{percentage}%</span>
+        <h4 className="font-sans font-semibold text-xl text-text">Profile completeness</h4>
+        <span className="font-sans font-semibold text-2xl text-sb-600">{percentage}%</span>
       </div>
 
       <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-brand-400 to-brand-600 rounded-full transition-all duration-700 ease-out"
+          className="h-full bg-sb-500 rounded-full transition-all duration-700 ease-out"
           style={{ width: `${percentage}%` }}
         />
       </div>

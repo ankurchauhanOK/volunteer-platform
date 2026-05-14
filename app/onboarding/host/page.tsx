@@ -217,8 +217,8 @@ export default function HostOnboardingPage() {
 
   const renderPhotos = () => (
     <div className="space-y-3">
-      <div className="bg-gradient-to-br from-brand-50 to-ocean-50 rounded-lg p-3 border border-brand-100">
-        <p className="text-xs text-brand-700">Great photos help volunteers trust your place.</p>
+      <div className="bg-sb-50 rounded-lg p-3 border border-sb-200">
+        <p className="text-xs text-sb-700">Great photos help volunteers trust your place.</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -254,7 +254,7 @@ export default function HostOnboardingPage() {
             id="state"
             value={form.state}
             onChange={e => update("state", e.target.value)}
-            className="w-full rounded-lg border border-gray-200 px-3 py-1.5 text-xs outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-100 bg-white transition-all"
+            className="w-full rounded-lg border border-gray-200 px-3 py-1.5 text-xs outline-none focus:border-sb-500 focus:ring-1 focus:ring-sb-100 bg-white transition-all"
           >
             <option value="">Select state</option>
             {stateOptions.map(s => (<option key={s} value={s}>{s}</option>))}
@@ -269,7 +269,7 @@ export default function HostOnboardingPage() {
             <button key={f} type="button" onClick={() => toggleFacility(f)}
               className={`px-2.5 py-1 rounded-full text-[11px] border transition-all capitalize ${
                 form.facilities.includes(f)
-                  ? "bg-brand-100 border-brand-300 text-brand-700 font-medium"
+                  ? "bg-sb-100 border-sb-300 text-sb-700 font-medium"
                   : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
               }`}>
               {f}
@@ -364,7 +364,7 @@ export default function HostOnboardingPage() {
           </div>
         )}
 
-        <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg border border-border p-3 space-y-2 text-xs">
+        <div className="bg-white rounded-lg border border-border p-3 space-y-2 text-xs">
           <div className="flex items-center justify-between">
             <span className="font-medium text-text">Profile summary</span>
             {hostTitle && <Badge variant="info" size="sm">{hostTitle.label}</Badge>}

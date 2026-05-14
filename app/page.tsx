@@ -285,7 +285,7 @@ export default function HomePage() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/auth/select-role">
-              <Button size="lg" variant="warm" className="px-8">
+              <Button size="lg" variant="default" className="px-8">
                 Get Started Free <ArrowRight className="h-4 w-4 ml-1" />
               </Button>
             </Link>

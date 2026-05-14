@@ -5,22 +5,21 @@ import { cn } from "@/lib/utils"
 import { Loader2 } from "lucide-react"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl font-tanker transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] tracking-normal",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-sans transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95 tracking-tight",
   {
     variants: {
       variant: {
-        default: "bg-brand-500 text-white hover:bg-brand-600 shadow-sm hover:shadow-md",
-        destructive: "bg-red-500 text-white hover:bg-red-600 shadow-sm",
-        outline: "border-2 border-brand-200 bg-white text-brand-700 hover:bg-brand-50 hover:border-brand-300",
-        secondary: "bg-brand-100 text-brand-800 hover:bg-brand-200",
-        ghost: "text-text-secondary hover:bg-gray-100 hover:text-text",
-        link: "text-brand-600 underline-offset-4 hover:underline",
-        warm: "bg-warm-200 text-warm-400 hover:bg-warm-300 shadow-sm",
+        default: "bg-sb-500 text-white hover:bg-sb-600 shadow-sm",
+        destructive: "bg-red-600 text-white hover:bg-red-700 shadow-sm",
+        outline: "border border-sb-500 bg-transparent text-sb-600 hover:bg-sb-50",
+        secondary: "bg-sb-100 text-sb-800 hover:bg-sb-200",
+        ghost: "text-text-secondary hover:bg-ceramic hover:text-text",
+        link: "text-sb-600 underline-offset-4 hover:underline",
       },
       size: {
-        sm: "h-9 px-3 text-sm",
-        md: "h-10 px-5 text-base",
-        lg: "h-12 px-8 text-lg",
+        sm: "h-8 px-4 text-sm",
+        md: "h-10 px-5 text-sm font-medium",
+        lg: "h-12 px-8 text-base font-semibold",
         icon: "h-10 w-10",
       },
     },

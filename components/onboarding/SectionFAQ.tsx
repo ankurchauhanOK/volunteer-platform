@@ -26,7 +26,7 @@ const iconMap: Record<string, typeof HelpCircle> = {
 function getIcon(question: string) {
   const key = Object.keys(iconMap).find(k => question.toLowerCase().includes(k))
   const Icon = key ? iconMap[key] : HelpCircle
-  return <Icon className="w-3.5 h-3.5 text-brand-500 shrink-0" />
+  return <Icon className="w-3.5 h-3.5 text-sb-500 shrink-0" />
 }
 
 export function SectionFAQ({ items }: SectionFAQProps) {
@@ -54,19 +54,19 @@ export function SectionFAQ({ items }: SectionFAQProps) {
   return (
     <div className="space-y-1">
       {items.map((item, i) => (
-        <div key={i} className="rounded-xl border border-brand-100/50 bg-brand-50/30 overflow-hidden">
+          <div key={i} className="rounded-xl border border-border bg-white overflow-hidden">
           <button
             type="button"
             onClick={() => setOpenIndex(openIndex === i ? null : i)}
             className={cn(
               "w-full flex items-center gap-2 px-3 py-2 text-left text-xs font-medium transition-colors",
-              openIndex === i ? "text-brand-700" : "text-text-secondary hover:text-text"
+              openIndex === i ? "text-sb-700" : "text-text-secondary hover:text-text"
             )}
           >
             {item.icon ? <span className="text-sm">{item.icon}</span> : getIcon(item.question)}
             <span className="flex-1">{item.question}</span>
             <svg
-              className={cn("w-3 h-3 text-brand-400 transition-transform duration-200 shrink-0", openIndex === i && "rotate-180")}
+              className={cn("w-3 h-3 text-sb-400 transition-transform duration-200 shrink-0", openIndex === i && "rotate-180")}
               fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
