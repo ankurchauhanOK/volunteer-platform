@@ -137,15 +137,15 @@ export default function VolunteerProfileSetupPage() {
     setLoading(true)
     save(form)
     // Small delay for UX feel
-    setTimeout(() => {
-      setLoading(false)
-      router.push("/onboarding/volunteer")
-    }, 400)
+      setTimeout(() => {
+        setLoading(false)
+        router.push("/onboarding/volunteer/interests")
+      }, 400)
   }
 
   const handleSaveLater = () => {
     save(form)
-    router.push("/onboarding/volunteer")
+    router.push("/onboarding/volunteer/interests")
   }
 
   const handleBirthdayChange = (part: "day" | "month" | "year", value: string) => {

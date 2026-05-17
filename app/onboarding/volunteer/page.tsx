@@ -144,7 +144,7 @@ export default function VolunteerOnboardingPage() {
   useEffect(() => {
     if (user) {
       // Prefill from profile setup localStorage if available
-      let setupData: { firstName?: string; photos?: string[] } = {}
+      let setupData: { firstName?: string; photos?: string[]; interests?: string[] } = {}
       if (typeof window !== "undefined") {
         const setup = localStorage.getItem("vt_profile_setup")
         if (setup) {
@@ -157,6 +157,7 @@ export default function VolunteerOnboardingPage() {
         ...prev,
         fullName: prev.fullName || user.name || setupData.firstName || "",
         profilePhoto: prev.profilePhoto || user.avatar || setupData.photos?.[0] || "",
+        hobbies: prev.hobbies.length > 0 ? prev.hobbies : (setupData.interests || []),
       }))
     }
   }, [user])
