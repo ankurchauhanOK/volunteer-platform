@@ -5,16 +5,9 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
-import { Textarea } from "@/components/ui/Textarea"
 import { Progress } from "@/components/ui/Progress"
 import { PhotoGridUpload } from "@/components/onboarding/PhotoGridUpload"
-import { ChipInput } from "@/components/onboarding/ChipInput"
 import { cn } from "@/lib/utils"
-import {
-  genderOptions,
-  languageOptions,
-  interestOptions,
-} from "@/lib/utils"
 
 // Map gender options to display labels for pills
 const genderPills = [
@@ -36,13 +29,6 @@ const travelStyleOptions = [
   { value: "open", label: "I'm open to anything" },
 ]
 
-const interestIcons: Record<string, string> = {
-  trekking: "🏔️", photography: "📸", yoga: "🧘", cooking: "🍳",
-  music: "🎵", art: "🎨", reading: "📖", writing: "✍️",
-  dancing: "💃", sports: "⚽", meditation: "🧘", "film making": "🎬",
-  "bird watching": "🐦", rafting: "🛶",
-}
-
 interface ProfileSetupForm {
   firstName: string
   email: string
@@ -53,11 +39,6 @@ interface ProfileSetupForm {
   showGenderOnProfile: boolean
   travelExperience: string
   travelStyle: string
-  bio: string
-  languages: string[]
-  interests: string[]
-  instagram: string
-  linkedin: string
   photos: string[]
 }
 
@@ -71,11 +52,6 @@ const defaultForm: ProfileSetupForm = {
   showGenderOnProfile: true,
   travelExperience: "",
   travelStyle: "",
-  bio: "",
-  languages: [],
-  interests: [],
-  instagram: "",
-  linkedin: "",
   photos: [],
 }
 
@@ -305,7 +281,6 @@ export default function VolunteerProfileSetupPage() {
                         type="button"
                         onClick={() => {
                           if (g.value === "more") {
-                            // For "more", show a simple dropdown or just set it
                             update("gender", "prefer-not")
                           } else {
                             update("gender", g.value)
@@ -395,76 +370,6 @@ export default function VolunteerProfileSetupPage() {
                   {errors.travelStyle && (
                     <p className="text-xs text-error-text">{errors.travelStyle}</p>
                   )}
-                </div>
-
-                {/* Optional Section Divider */}
-                <div className="flex items-center gap-4">
-                  <div className="flex-1 h-px bg-border" />
-                  <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-                    Optional
-                  </span>
-                  <div className="flex-1 h-px bg-border" />
-                </div>
-
-                {/* Section: Bio */}
-                <div className="space-y-3">
-                  <Textarea
-                    label="Personal bio"
-                    id="bio"
-                    value={form.bio}
-                    onChange={(e) => update("bio", e.target.value)}
-                    placeholder="Tell hosts a little about yourself, your passions, and what drives you to volunteer..."
-                    rows={4}
-                  />
-                </div>
-
-                {/* Section: Languages */}
-                <div className="space-y-3">
-                  <ChipInput
-                    label="Languages you speak"
-                    options={languageOptions}
-                    selected={form.languages}
-                    onChange={(v) => update("languages", v)}
-                    searchPlaceholder="Search languages..."
-                    helperText="Used to match you with suitable hosts."
-                    dense
-                  />
-                </div>
-
-                {/* Section: Interests */}
-                <div className="space-y-3">
-                  <ChipInput
-                    label="Interests"
-                    options={interestOptions}
-                    selected={form.interests}
-                    onChange={(v) => update("interests", v)}
-                    searchPlaceholder="Search interests..."
-                    helperText="What do you love doing on your travels?"
-                    iconMap={interestIcons}
-                  />
-                </div>
-
-                {/* Section: Social Links */}
-                <div className="space-y-4">
-                  <h3 className="text-xs font-semibold text-text uppercase tracking-wider">
-                    Social links
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <Input
-                      label="Instagram"
-                      id="instagram"
-                      value={form.instagram}
-                      onChange={(e) => update("instagram", e.target.value)}
-                      placeholder="@username"
-                    />
-                    <Input
-                      label="LinkedIn"
-                      id="linkedin"
-                      value={form.linkedin}
-                      onChange={(e) => update("linkedin", e.target.value)}
-                      placeholder="linkedin.com/in/username"
-                    />
-                  </div>
                 </div>
               </div>
             </div>
