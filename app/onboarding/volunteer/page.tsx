@@ -143,10 +143,20 @@ export default function VolunteerOnboardingPage() {
 
   useEffect(() => {
     if (user) {
+      // Prefill from profile setup localStorage if available
+      let setupData: { firstName?: string; photos?: string[] } = {}
+      if (typeof window !== "undefined") {
+        const setup = localStorage.getItem("vt_profile_setup")
+        if (setup) {
+          try {
+            setupData = JSON.parse(setup)
+          } catch {}
+        }
+      }
       setForm(prev => ({
         ...prev,
-        fullName: prev.fullName || user.name || "",
-        profilePhoto: prev.profilePhoto || user.avatar || "",
+        fullName: prev.fullName || user.name || setupData.firstName || "",
+        profilePhoto: prev.profilePhoto || user.avatar || setupData.photos?.[0] || "",
       }))
     }
   }, [user])
