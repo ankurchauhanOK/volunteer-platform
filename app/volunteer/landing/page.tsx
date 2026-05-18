@@ -10,8 +10,7 @@ import { Menu, X, ChevronDown, ArrowRight } from "lucide-react"
 gsap.registerPlugin(ScrollTrigger)
 
 /* ================================================================
-   SCENE ASSETS
-   Pexels free stock video URLs — replace with custom footage later
+   SCENE ASSETS — Pexels free cinematic video loops
    ================================================================ */
 const SCENES = [
   {
@@ -36,34 +35,22 @@ const SCENES = [
   },
 ]
 
-const SCENE_FALLBACKS = [
-  "bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900",
-  "bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-950",
-  "bg-gradient-to-br from-amber-950/60 via-slate-900 to-slate-950",
-  "bg-gradient-to-br from-orange-950/50 via-amber-950/30 to-slate-950",
-  "bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-950",
-]
-
-/* ================================================================
-   MAIN PAGE
-   ================================================================ */
 export default function VolunteerLandingPage() {
   const [navScrolled, setNavScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [currentScene, setCurrentScene] = useState(0)
 
   /* ---------- Hero refs ---------- */
-  const heroContainerRef = useRef<HTMLDivElement>(null)
+  const heroRef = useRef<HTMLDivElement>(null)
   const windowRef = useRef<HTMLDivElement>(null)
-  const innerShadowRef = useRef<HTMLDivElement>(null)
-  const textRef = useRef<HTMLDivElement>(null)
-  const textInnerRef = useRef<HTMLDivElement>(null)
-  const scrollCueRef = useRef<HTMLDivElement>(null)
+  const textTopLeftRef = useRef<HTMLDivElement>(null)
+  const textBottomRightRef = useRef<HTMLDivElement>(null)
+  const textBottomLeftRef = useRef<HTMLDivElement>(null)
+  const bottomBarRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
-  const currentSceneRef = useRef(0)
 
   /* ---------- Section refs ---------- */
   const introRef = useRef<HTMLDivElement>(null)
-  const introBgRef = useRef<HTMLDivElement>(null)
   const valuesRef = useRef<HTMLDivElement>(null)
   const journeyRef = useRef<HTMLDivElement>(null)
   const destinationsRef = useRef<HTMLDivElement>(null)
@@ -71,152 +58,75 @@ export default function VolunteerLandingPage() {
   const communityRef = useRef<HTMLDivElement>(null)
   const contactRef = useRef<HTMLDivElement>(null)
 
+  /* ---------- Scene rotation ---------- */
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentScene((prev) => {
+        const next = (prev + 1) % SCENES.length
+        videoRefs.current[next]?.play().catch(() => {})
+        return next
+      })
+    }, 12000)
+
+    videoRefs.current[0]?.play().catch(() => {})
+
+    return () => clearInterval(interval)
+  }, [])
+
   /* ---------- Nav scroll detection ---------- */
   useEffect(() => {
     const handleScroll = () => {
-      setNavScrolled(window.scrollY > window.innerHeight * 1.2)
+      setNavScrolled(window.scrollY > window.innerHeight * 0.8)
     }
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  /* ---------- Scene rotation ---------- */
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const prev = currentSceneRef.current
-      const next = (prev + 1) % SCENES.length
-
-      if (videoRefs.current[prev]) {
-        gsap.to(videoRefs.current[prev], {
-          opacity: 0,
-          duration: 2,
-          ease: "power2.inOut",
-        })
-      }
-      if (videoRefs.current[next]) {
-        gsap.to(videoRefs.current[next], {
-          opacity: 1,
-          duration: 2,
-          ease: "power2.inOut",
-        })
-        videoRefs.current[next]?.play().catch(() => {})
-      }
-
-      currentSceneRef.current = next
-    }, 8000)
-
-    // Autoplay first scene on desktop only
-    const timer = setTimeout(() => {
-      if (typeof window !== "undefined" && window.innerWidth >= 768) {
-        videoRefs.current[0]?.play().catch(() => {})
-      }
-    }, 800)
-
-    return () => {
-      clearInterval(interval)
-      clearTimeout(timer)
-    }
-  }, [])
-
   /* ---------- GSAP scroll animations ---------- */
   useEffect(() => {
-    let bounceTween: gsap.core.Tween | null = null
-
-    if (scrollCueRef.current) {
-      bounceTween = gsap.to(
-        scrollCueRef.current.querySelector(".scroll-chevron"),
-        {
-          y: 8,
-          duration: 1.5,
-          repeat: -1,
-          yoyo: true,
-          ease: "power1.inOut",
-        }
-      )
-    }
-
     const mm = gsap.matchMedia()
 
-    /* ---- Desktop: full cinematic experience ---- */
+    /* ---- Desktop: pinned hero with subtle zoom ---- */
     mm.add("(min-width: 768px)", () => {
       const ctx = gsap.context(() => {
-        /* Hero pinned timeline */
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: heroContainerRef.current,
+            trigger: heroRef.current,
             start: "top top",
-            end: "+=200%",
+            end: "+=150%",
             pin: true,
-            scrub: 1.2,
-            onUpdate: (self) => {
-              /* Intro background transition driven by hero progress */
-              if (introBgRef.current) {
-                const progress = Math.max(0, (self.progress - 0.7) / 0.3)
-                introBgRef.current.style.opacity = String(Math.min(1, progress))
-              }
-            },
+            scrub: 1.5,
           },
         })
 
-        /* Scroll cue fades at 15% */
-        tl.to(scrollCueRef.current, { opacity: 0, duration: 0.1 }, 0.15)
-
-        /* Window zooms to fullscreen (20% – 70%) */
-        tl.fromTo(
-          windowRef.current,
-          {
-            width: "65vw",
-            height: "calc(65vw * 0.5625)",
-            borderRadius: "24px",
-            borderWidth: "16px",
-          },
-          {
-            width: "100vw",
-            height: "100vh",
-            borderRadius: "0px",
-            borderWidth: "0px",
-            duration: 0.5,
-            ease: "power2.inOut",
-          },
-          0.2
-        )
-
-        /* Inner shadow fades */
-        tl.to(innerShadowRef.current, { opacity: 0, duration: 0.2 }, 0.35)
-
-        /* Text drifts toward bottom-left */
+        /* Window subtly zooms and brightens */
         tl.to(
-          textInnerRef.current,
-          {
-            xPercent: -35,
-            yPercent: 50,
-            duration: 0.5,
-            ease: "power2.out",
-          },
+          windowRef.current,
+          { scale: 1.08, duration: 0.6, ease: "power2.out" },
+          0
+        )
+
+        /* Top-left text fades first */
+        tl.to(textTopLeftRef.current, { opacity: 0, y: -30, duration: 0.25 }, 0.1)
+
+        /* Bottom-right text fades */
+        tl.to(
+          textBottomRightRef.current,
+          { opacity: 0, y: 30, duration: 0.25 },
+          0.15
+        )
+
+        /* Bottom-left text fades */
+        tl.to(
+          textBottomLeftRef.current,
+          { opacity: 0, y: 20, duration: 0.2 },
           0.2
         )
 
-        /* Text lines fade staggered */
-        const textLines = textRef.current?.querySelectorAll(".hero-line")
-        if (textLines) {
-          tl.to(
-            textLines,
-            {
-              opacity: 0,
-              stagger: 0.04,
-              duration: 0.2,
-              ease: "power2.out",
-            },
-            0.3
-          )
-        }
+        /* Bottom bar fades */
+        tl.to(bottomBarRef.current, { opacity: 0, duration: 0.15 }, 0.25)
 
-        const supportEls = textRef.current?.querySelectorAll(".hero-support")
-        if (supportEls) {
-          tl.to(supportEls, { opacity: 0, duration: 0.15 }, 0.25)
-        }
-
-        /* Section reveal helper */
+        /* Section reveals */
         const revealSection = (
           ref: React.RefObject<HTMLDivElement | null>,
           childSelector: string,
@@ -254,24 +164,14 @@ export default function VolunteerLandingPage() {
       return () => ctx.revert()
     })
 
-    /* ---- Mobile: lighter cinematic ---- */
+    /* ---- Mobile: no pin, simple fades ---- */
     mm.add("(max-width: 767px)", () => {
       const ctx = gsap.context(() => {
-        gsap.to(scrollCueRef.current, {
+        gsap.to(textTopLeftRef.current, {
           opacity: 0,
+          y: -20,
           scrollTrigger: {
-            trigger: heroContainerRef.current,
-            start: "top top",
-            end: "+=30%",
-            scrub: true,
-          },
-        })
-
-        gsap.to(textInnerRef.current, {
-          opacity: 0,
-          y: 30,
-          scrollTrigger: {
-            trigger: heroContainerRef.current,
+            trigger: heroRef.current,
             start: "top top",
             end: "+=40%",
             scrub: true,
@@ -315,10 +215,7 @@ export default function VolunteerLandingPage() {
       return () => ctx.revert()
     })
 
-    return () => {
-      bounceTween?.kill()
-      mm.revert()
-    }
+    return () => mm.revert()
   }, [])
 
   const navLinks = [
@@ -327,13 +224,10 @@ export default function VolunteerLandingPage() {
     { href: "/about", label: "About" },
   ]
 
-  const textShadow =
-    "0 2px 40px rgba(0,0,0,0.5), 0 1px 10px rgba(0,0,0,0.3)"
-
   return (
-    <div className="relative">
+    <div className="relative bg-cream">
       {/* ============================================================
-          NAVIGATION
+          NAVIGATION — minimal, transparent on hero
           ============================================================ */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -342,17 +236,15 @@ export default function VolunteerLandingPage() {
             : "bg-transparent"
         }`}
       >
-        <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2.5">
+        <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between px-5 md:px-8">
+          <Link href="/" className="flex items-center gap-2">
             <div
-              className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors duration-500 ${
-                navScrolled
-                  ? "bg-sb-500"
-                  : "bg-white/10 backdrop-blur-sm"
+              className={`flex h-7 w-7 items-center justify-center rounded-md transition-colors duration-500 ${
+                navScrolled ? "bg-sb-500" : "bg-white/10"
               }`}
             >
               <svg
-                className="h-4 w-4 text-white"
+                className="h-3.5 w-3.5 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -366,7 +258,7 @@ export default function VolunteerLandingPage() {
               </svg>
             </div>
             <span
-              className={`font-tanker text-lg tracking-tight transition-colors duration-500 ${
+              className={`font-tanker text-base tracking-tight transition-colors duration-500 ${
                 navScrolled ? "text-text" : "text-white"
               }`}
             >
@@ -374,15 +266,15 @@ export default function VolunteerLandingPage() {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-10">
+          <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm transition-colors duration-300 ${
+                className={`text-xs transition-colors duration-300 ${
                   navScrolled
                     ? "text-text-secondary hover:text-text"
-                    : "text-white/70 hover:text-white"
+                    : "text-white/60 hover:text-white"
                 }`}
               >
                 {link.label}
@@ -390,54 +282,38 @@ export default function VolunteerLandingPage() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
             <Link href="/auth/login">
               <Button
                 variant="ghost"
                 size="sm"
                 className={
                   navScrolled
-                    ? ""
-                    : "text-white/80 hover:text-white hover:bg-white/10"
+                    ? "text-xs h-8"
+                    : "text-white/70 hover:text-white hover:bg-white/10 text-xs h-8"
                 }
               >
                 Sign in
               </Button>
             </Link>
-            <Link href="/auth/select-role">
-              <Button
-                size="sm"
-                className={
-                  navScrolled
-                    ? ""
-                    : "bg-white text-sb-900 hover:bg-white/90 rounded-full"
-                }
-              >
-                Get Started
-              </Button>
-            </Link>
           </div>
 
           <button
-            className={`md:hidden transition-colors duration-500 ${
+            className={`md:hidden transition-colors ${
               navScrolled ? "text-text" : "text-white"
             }`}
             onClick={() => setMobileOpen(!mobileOpen)}
           >
-            {mobileOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
         {mobileOpen && (
           <div
-            className={`border-t p-4 md:hidden animate-fade-in ${
+            className={`border-t p-4 md:hidden ${
               navScrolled
                 ? "bg-cream/95 backdrop-blur-md border-border"
-                : "bg-sb-900/95 backdrop-blur-md border-white/10"
+                : "bg-sb-900/95 border-white/10"
             }`}
           >
             <nav className="flex flex-col gap-3">
@@ -445,7 +321,7 @@ export default function VolunteerLandingPage() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`text-sm py-1 ${
+                  className={`text-sm ${
                     navScrolled ? "text-text-secondary" : "text-white/70"
                   }`}
                   onClick={() => setMobileOpen(false)}
@@ -454,19 +330,13 @@ export default function VolunteerLandingPage() {
                 </Link>
               ))}
               <div className="pt-2 flex flex-col gap-2">
-                <Link
-                  href="/auth/login"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <Button variant="outline" className="w-full">
+                <Link href="/auth/login" onClick={() => setMobileOpen(false)}>
+                  <Button variant="outline" className="w-full text-xs">
                     Sign in
                   </Button>
                 </Link>
-                <Link
-                  href="/auth/select-role"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <Button className="w-full">Get Started</Button>
+                <Link href="/auth/select-role" onClick={() => setMobileOpen(false)}>
+                  <Button className="w-full text-xs">Get Started</Button>
                 </Link>
               </div>
             </nav>
@@ -475,154 +345,277 @@ export default function VolunteerLandingPage() {
       </header>
 
       {/* ============================================================
-          CINEMATIC HERO
+          CINEMATIC HERO — Editorial composition matching Jesko exactly
           ============================================================ */}
       <section
-        ref={heroContainerRef}
-        className="relative bg-sb-900 overflow-hidden"
-        style={{ height: "100vh" }}
+        ref={heroRef}
+        className="relative h-screen w-full overflow-hidden"
+        style={{ background: "#0f0f0f" }}
       >
-        {/* ----- Travel Window ----- */}
+        {/* Ambient background wall texture */}
         <div
-          ref={windowRef}
-          className="absolute left-1/2 -translate-x-1/2 overflow-hidden will-change-transform
-            top-[8vh] w-[92vw] h-[50vh] rounded-2xl
-            md:top-1/2 md:-translate-y-1/2 md:w-[65vw] md:h-auto md:max-h-[70vh] md:rounded-3xl"
+          className="absolute inset-0"
           style={{
-            border: "16px solid rgba(15, 30, 25, 0.85)",
-            boxShadow:
-              "0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)",
+            background:
+              "radial-gradient(ellipse at 50% 40%, #1a1a1a 0%, #0f0f0f 60%, #0a0a0a 100%)",
+          }}
+        />
+
+        {/* Subtle wall light falloff from window */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vh] pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(60,60,60,0.15) 0%, transparent 70%)",
+          }}
+        />
+
+        {/* ----- TOP LEFT: "We are explorers" ----- */}
+        <div
+          ref={textTopLeftRef}
+          className="absolute z-20 will-change-transform"
+          style={{
+            top: "12%",
+            left: "5%",
+            maxWidth: "45vw",
           }}
         >
-          {/* Inner shadow */}
-          <div
-            ref={innerShadowRef}
-            className="absolute inset-0 pointer-events-none z-10"
-            style={{ boxShadow: "inset 0 0 80px rgba(0,0,0,0.6)" }}
-          />
-
-          {/* Video scenes */}
-          {SCENES.map((scene, i) => (
-            <div key={i} className="absolute inset-0">
-              {/* CSS gradient fallback — always visible if video fails */}
-              <div
-                className={`absolute inset-0 ${SCENE_FALLBACKS[i]}`}
-              />
-              <video
-                ref={(el) => {
-                  videoRefs.current[i] = el
-                }}
-                src={scene.src}
-                muted
-                loop
-                playsInline
-                preload={i === 0 ? "metadata" : "none"}
-                className={`absolute inset-0 w-full h-full object-cover ${
-                  i === 0 ? "opacity-100" : "opacity-0"
-                }`}
-                onLoadedData={() => {
-                  if (i === 0 && typeof window !== "undefined" && window.innerWidth >= 768) {
-                    videoRefs.current[0]?.play().catch(() => {})
-                  }
-                }}
-              />
-            </div>
-          ))}
-
-          {/* Atmospheric overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-sb-900/80 via-transparent to-sb-900/50 z-10 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-b from-sb-900/50 via-transparent to-sb-900/80 z-10 pointer-events-none" />
-          <div className="absolute inset-0 vignette-overlay z-10 pointer-events-none" />
-          <div className="absolute inset-0 fog-layer z-10 pointer-events-none" />
-          <div className="absolute inset-0 light-leak z-10 pointer-events-none" />
+          <h1
+            className="font-tanker text-white leading-[0.9] tracking-tight"
+            style={{
+              fontSize: "clamp(3rem, 8vw, 8rem)",
+              textShadow: "0 4px 30px rgba(0,0,0,0.6)",
+            }}
+          >
+            We are
+            <br />
+            explorers
+          </h1>
         </div>
 
-        {/* ----- Text Overlay ----- */}
+        {/* ----- CENTER: Train Window ----- */}
         <div
-          ref={textRef}
-          className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none px-4"
+          ref={windowRef}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 will-change-transform"
         >
-          <div ref={textInnerRef} className="text-center">
-            <h1
-              className="hero-line font-tanker text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] text-white leading-[0.95] tracking-tight"
-              style={{ textShadow }}
+          {/* Outer wall shadow */}
+          <div
+            className="absolute -inset-10 md:-inset-16 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, transparent 70%)",
+              filter: "blur(40px)",
+            }}
+          />
+
+          {/* Outer frame — thick dark metal */}
+          <div
+            className="relative p-4 md:p-6 rounded-[36px] md:rounded-[48px]"
+            style={{
+              background:
+                "linear-gradient(180deg, #3a3a3a 0%, #252525 30%, #1a1a1a 70%, #0f0f0f 100%)",
+              boxShadow:
+                "0 50px 100px rgba(0,0,0,0.8), 0 25px 50px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.12)",
+            }}
+          >
+            {/* Middle frame — lighter metal ring */}
+            <div
+              className="p-2.5 md:p-3.5 rounded-[32px] md:rounded-[40px]"
+              style={{
+                background:
+                  "linear-gradient(180deg, #555 0%, #3a3a3a 50%, #2a2a2a 100%)",
+                boxShadow:
+                  "inset 0 2px 8px rgba(0,0,0,0.5), 0 1px 2px rgba(255,255,255,0.08)",
+              }}
             >
-              We are movement
-            </h1>
-            <h1
-              className="hero-line font-tanker text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] text-sb-400 leading-[0.95] tracking-tight"
-              style={{ textShadow }}
-            >
-              We are impact
-            </h1>
-            <h1
-              className="hero-line font-tanker text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white/90 leading-[1.1] tracking-tight pt-2 md:pt-4"
-              style={{ textShadow }}
-            >
-              Your freedom to travel,
-              <br className="hidden sm:block" />
-              learn, and contribute
-            </h1>
-            <p
-              className="hero-support mt-8 md:mt-12 text-sm sm:text-base text-white/60 max-w-md mx-auto leading-relaxed"
-              style={{ textShadow: "0 1px 20px rgba(0,0,0,0.5)" }}
-            >
-              Travel across India. Share your skills. Build meaningful
-              experiences with trusted hosts who welcome you as family.
-            </p>
-            <div className="hero-support mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 pointer-events-auto">
-              <Link href="/auth/select-role">
-                <Button
-                  size="lg"
-                  className="bg-white text-sb-900 hover:bg-white/90 rounded-full px-8 h-11 text-sm font-semibold transition-all duration-200 active:scale-95"
+              {/* Inner frame — glossy highlight */}
+              <div
+                className="p-1 md:p-1.5 rounded-[28px] md:rounded-[36px]"
+                style={{
+                  background:
+                    "linear-gradient(180deg, #777 0%, #555 20%, #444 80%, #333 100%)",
+                  boxShadow:
+                    "inset 0 1px 3px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
+                {/* Glass pane */}
+                <div
+                  className="relative w-[72vw] max-w-[380px] h-[55vh] max-h-[520px] md:w-[28vw] md:max-w-[420px] md:h-[72vh] md:max-h-[680px] overflow-hidden"
+                  style={{
+                    borderRadius: "24px",
+                    background: "#050505",
+                    boxShadow:
+                      "inset 0 0 60px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,0.5)",
+                  }}
                 >
-                  Start Your Journey{" "}
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </Link>
-              <Link href="/opportunities">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white/20 text-white hover:bg-white/10 rounded-full px-8 h-11 text-sm transition-all duration-200 active:scale-95"
-                >
-                  Browse Opportunities
-                </Button>
-              </Link>
+                  {/* Scenery video layers */}
+                  {SCENES.map((scene, i) => (
+                    <video
+                      key={i}
+                      ref={(el) => {
+                        videoRefs.current[i] = el
+                      }}
+                      src={scene.src}
+                      muted
+                      loop
+                      playsInline
+                      preload={i === 0 ? "metadata" : "none"}
+                      className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms]"
+                      style={{
+                        opacity: i === currentScene ? 1 : 0,
+                        transform: "scale(1.45)",
+                        animation: "trainPan 30s linear infinite",
+                      }}
+                    />
+                  ))}
+
+                  {/* Glass reflection overlay */}
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 35%, rgba(255,255,255,0.02) 100%)",
+                    }}
+                  />
+
+                  {/* Inner shadow for recessed depth */}
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      borderRadius: "24px",
+                      boxShadow:
+                        "inset 0 0 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.25)",
+                    }}
+                  />
+
+                  {/* Voluntree watermark inside glass */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span
+                      className="font-tanker text-white/15 tracking-[0.2em]"
+                      style={{ fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)" }}
+                    >
+                      Voluntree
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* ----- Scroll Cue ----- */}
+        {/* ----- BOTTOM RIGHT: "We chase wonder" ----- */}
         <div
-          ref={scrollCueRef}
-          className="absolute bottom-6 sm:bottom-10 left-0 right-0 flex flex-col items-center gap-2 z-30"
+          ref={textBottomRightRef}
+          className="absolute z-20 text-right will-change-transform"
+          style={{
+            bottom: "22%",
+            right: "4%",
+            maxWidth: "50vw",
+          }}
         >
-          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
-            Scroll to explore
-          </span>
-          <div className="scroll-chevron">
-            <ChevronDown className="h-5 w-5 text-white/40" />
+          <h1
+            className="font-tanker text-white leading-[0.9] tracking-tight"
+            style={{
+              fontSize: "clamp(2.8rem, 7.5vw, 7.5rem)",
+              textShadow: "0 4px 30px rgba(0,0,0,0.6)",
+            }}
+          >
+            We chase
+            <br />
+            wonder
+          </h1>
+        </div>
+
+        {/* ----- BOTTOM LEFT: Supporting text ----- */}
+        <div
+          ref={textBottomLeftRef}
+          className="absolute z-20 will-change-transform"
+          style={{
+            bottom: "18%",
+            left: "5%",
+            maxWidth: "280px",
+          }}
+        >
+          <h2
+            className="font-tanker text-white leading-[1.05] tracking-tight mb-4"
+            style={{
+              fontSize: "clamp(1.4rem, 2.5vw, 2.2rem)",
+              textShadow: "0 2px 20px rgba(0,0,0,0.5)",
+            }}
+          >
+            Your
+            <br />
+            freedom to
+            <br />
+            travel
+          </h2>
+          <div
+            className="w-10 h-px mb-4"
+            style={{ background: "rgba(255,255,255,0.3)" }}
+          />
+          <p
+            className="text-white/50 leading-relaxed"
+            style={{
+              fontSize: "clamp(0.75rem, 1vw, 0.875rem)",
+              textShadow: "0 1px 10px rgba(0,0,0,0.4)",
+            }}
+          >
+            Every journey is designed around discovery — so you can focus on
+            what truly matters, while the world opens itself to you.
+          </p>
+        </div>
+
+        {/* ----- BOTTOM BAR: Scroll cue + CTA ----- */}
+        <div
+          ref={bottomBarRef}
+          className="absolute z-20 w-full px-5 md:px-8"
+          style={{ bottom: "5%" }}
+        >
+          <div className="relative flex items-end justify-between">
+            {/* Left: empty for composition balance */}
+            <div className="hidden md:block w-32" />
+
+            {/* Center: minimal pill CTA */}
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-0">
+              <Link href="/auth/select-role">
+                <Button
+                  size="sm"
+                  className="bg-white text-black hover:bg-white/90 rounded-full px-6 h-9 text-xs font-semibold transition-all duration-200 active:scale-95"
+                >
+                  Start Your Journey{" "}
+                  <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+                </Button>
+              </Link>
+            </div>
+
+            {/* Right: scroll indicator line */}
+            <div className="hidden md:flex items-center gap-4 pb-1">
+              <div className="flex items-center gap-1.5">
+                <ChevronDown className="h-3.5 w-3.5 text-white/30" />
+                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">
+                  Scroll down
+                </span>
+              </div>
+              <div
+                className="w-16 h-px"
+                style={{ background: "rgba(255,255,255,0.15)" }}
+              />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">
+                To start the journey
+              </span>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ============================================================
           INTRO / TRUST SECTION
-          Desktop: overlaps pinned hero, bg transitions from transparent → cream
-          Mobile: normal flow, opaque cream
           ============================================================ */}
       <section
         ref={introRef}
-        className="relative py-24 sm:py-32 md:py-40 lg:py-52 md:-mt-[100vh]"
+        className="relative py-24 sm:py-32 md:py-40 lg:py-52 bg-cream"
       >
-        {/* Background layer — transparent on desktop initially, opaque on mobile */}
-        <div
-          ref={introBgRef}
-          className="absolute inset-0 bg-cream md:opacity-0"
-        />
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 md:pt-[50vh]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
             <span className="reveal-item label-sm text-sb-500 mb-6 block">
               VOLUNTREE

@@ -278,6 +278,16 @@ body {
   background: linear-gradient(135deg, transparent 70%, rgba(203, 162, 88, 0.03) 100%);
 }
 
+/* === TRAIN WINDOW CINEMATIC PAN === */
+@keyframes trainPan {
+  0% {
+    transform: scale(1.45) translateX(12%);
+  }
+  100% {
+    transform: scale(1.45) translateX(-12%);
+  }
+}
+
 /* Ensure smooth rendering */
 * {
   -webkit-font-smoothing: antialiased;
