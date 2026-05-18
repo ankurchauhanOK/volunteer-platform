@@ -9,14 +9,61 @@ import { Menu, X, ChevronDown, ArrowRight } from "lucide-react"
 
 gsap.registerPlugin(ScrollTrigger)
 
+/* ================================================================
+   SCENE ASSETS
+   Pexels free stock video URLs — replace with custom footage later
+   ================================================================ */
+const SCENES = [
+  {
+    src: "https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_25fps.mp4",
+    label: "Mountains",
+  },
+  {
+    src: "https://videos.pexels.com/video-files/1536322/1536322-hd_1920_1080_30fps.mp4",
+    label: "Forest",
+  },
+  {
+    src: "https://videos.pexels.com/video-files/4109928/4109928-hd_1920_1080_24fps.mp4",
+    label: "Village",
+  },
+  {
+    src: "https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_25fps.mp4",
+    label: "Desert",
+  },
+  {
+    src: "https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_25fps.mp4",
+    label: "Train",
+  },
+]
+
+const SCENE_FALLBACKS = [
+  "bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900",
+  "bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-950",
+  "bg-gradient-to-br from-amber-950/60 via-slate-900 to-slate-950",
+  "bg-gradient-to-br from-orange-950/50 via-amber-950/30 to-slate-950",
+  "bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-950",
+]
+
+/* ================================================================
+   MAIN PAGE
+   ================================================================ */
 export default function VolunteerLandingPage() {
   const [navScrolled, setNavScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const heroRef = useRef<HTMLDivElement>(null)
-  const heroTextRef = useRef<HTMLDivElement>(null)
+  /* ---------- Hero refs ---------- */
+  const heroContainerRef = useRef<HTMLDivElement>(null)
+  const windowRef = useRef<HTMLDivElement>(null)
+  const innerShadowRef = useRef<HTMLDivElement>(null)
+  const textRef = useRef<HTMLDivElement>(null)
+  const textInnerRef = useRef<HTMLDivElement>(null)
   const scrollCueRef = useRef<HTMLDivElement>(null)
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
+  const currentSceneRef = useRef(0)
+
+  /* ---------- Section refs ---------- */
   const introRef = useRef<HTMLDivElement>(null)
+  const introBgRef = useRef<HTMLDivElement>(null)
   const valuesRef = useRef<HTMLDivElement>(null)
   const journeyRef = useRef<HTMLDivElement>(null)
   const destinationsRef = useRef<HTMLDivElement>(null)
@@ -24,109 +71,253 @@ export default function VolunteerLandingPage() {
   const communityRef = useRef<HTMLDivElement>(null)
   const contactRef = useRef<HTMLDivElement>(null)
 
+  /* ---------- Nav scroll detection ---------- */
   useEffect(() => {
     const handleScroll = () => {
-      setNavScrolled(window.scrollY > window.innerHeight * 0.9)
+      setNavScrolled(window.scrollY > window.innerHeight * 1.2)
     }
     window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-    const ctx = gsap.context(() => {
-      // Hero entrance animation
-      if (heroTextRef.current) {
-        const lines = heroTextRef.current.querySelectorAll(".hero-line")
-        gsap.fromTo(
-          lines,
-          { opacity: 0, y: 80 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.4,
-            stagger: 0.2,
-            ease: "power3.out",
-            delay: 0.3,
-          }
-        )
+  /* ---------- Scene rotation ---------- */
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const prev = currentSceneRef.current
+      const next = (prev + 1) % SCENES.length
 
-        const support = heroTextRef.current.querySelector(".hero-support")
-        if (support) {
-          gsap.fromTo(
-            support,
-            { opacity: 0, y: 40 },
-            { opacity: 1, y: 0, duration: 1.2, ease: "power2.out", delay: 1.2 }
-          )
-        }
+      if (videoRefs.current[prev]) {
+        gsap.to(videoRefs.current[prev], {
+          opacity: 0,
+          duration: 2,
+          ease: "power2.inOut",
+        })
+      }
+      if (videoRefs.current[next]) {
+        gsap.to(videoRefs.current[next], {
+          opacity: 1,
+          duration: 2,
+          ease: "power2.inOut",
+        })
+        videoRefs.current[next]?.play().catch(() => {})
       }
 
-      if (scrollCueRef.current) {
-        gsap.fromTo(
-          scrollCueRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 1, delay: 1.8, ease: "power2.out" }
-        )
-        gsap.to(scrollCueRef.current.querySelector(".scroll-chevron"), {
+      currentSceneRef.current = next
+    }, 8000)
+
+    // Autoplay first scene on desktop only
+    const timer = setTimeout(() => {
+      if (typeof window !== "undefined" && window.innerWidth >= 768) {
+        videoRefs.current[0]?.play().catch(() => {})
+      }
+    }, 800)
+
+    return () => {
+      clearInterval(interval)
+      clearTimeout(timer)
+    }
+  }, [])
+
+  /* ---------- GSAP scroll animations ---------- */
+  useEffect(() => {
+    let bounceTween: gsap.core.Tween | null = null
+
+    if (scrollCueRef.current) {
+      bounceTween = gsap.to(
+        scrollCueRef.current.querySelector(".scroll-chevron"),
+        {
           y: 8,
           duration: 1.5,
           repeat: -1,
           yoyo: true,
           ease: "power1.inOut",
-        })
-      }
-
-      // Section reveal helper
-      const revealSection = (
-        ref: React.RefObject<HTMLDivElement | null>,
-        childSelector: string,
-        stagger = 0.12
-      ) => {
-        if (!ref.current) return
-        const children = ref.current.querySelectorAll(childSelector)
-        gsap.fromTo(
-          children,
-          { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.1,
-            stagger,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: ref.current,
-              start: "top 82%",
-              toggleActions: "play none none none",
-            },
-          }
-        )
-      }
-
-      revealSection(introRef, ".reveal-item", 0.15)
-      revealSection(valuesRef, ".reveal-item", 0.12)
-      revealSection(journeyRef, ".reveal-item", 0.15)
-      revealSection(destinationsRef, ".reveal-item", 0.1)
-      revealSection(trustRef, ".reveal-item", 0.12)
-      revealSection(communityRef, ".reveal-item", 0.08)
-      revealSection(contactRef, ".reveal-item", 0.15)
-
-      // Parallax on hero background glow
-      if (heroRef.current) {
-        const glow = heroRef.current.querySelector(".hero-glow")
-        if (glow) {
-          gsap.to(glow, {
-            y: 100,
-            ease: "none",
-            scrollTrigger: {
-              trigger: heroRef.current,
-              start: "top top",
-              end: "bottom top",
-              scrub: 1,
-            },
-          })
         }
-      }
+      )
+    }
+
+    const mm = gsap.matchMedia()
+
+    /* ---- Desktop: full cinematic experience ---- */
+    mm.add("(min-width: 768px)", () => {
+      const ctx = gsap.context(() => {
+        /* Hero pinned timeline */
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: heroContainerRef.current,
+            start: "top top",
+            end: "+=200%",
+            pin: true,
+            scrub: 1.2,
+            onUpdate: (self) => {
+              /* Intro background transition driven by hero progress */
+              if (introBgRef.current) {
+                const progress = Math.max(0, (self.progress - 0.7) / 0.3)
+                introBgRef.current.style.opacity = String(Math.min(1, progress))
+              }
+            },
+          },
+        })
+
+        /* Scroll cue fades at 15% */
+        tl.to(scrollCueRef.current, { opacity: 0, duration: 0.1 }, 0.15)
+
+        /* Window zooms to fullscreen (20% – 70%) */
+        tl.fromTo(
+          windowRef.current,
+          {
+            width: "65vw",
+            height: "calc(65vw * 0.5625)",
+            borderRadius: "24px",
+            borderWidth: "16px",
+          },
+          {
+            width: "100vw",
+            height: "100vh",
+            borderRadius: "0px",
+            borderWidth: "0px",
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          0.2
+        )
+
+        /* Inner shadow fades */
+        tl.to(innerShadowRef.current, { opacity: 0, duration: 0.2 }, 0.35)
+
+        /* Text drifts toward bottom-left */
+        tl.to(
+          textInnerRef.current,
+          {
+            xPercent: -35,
+            yPercent: 50,
+            duration: 0.5,
+            ease: "power2.out",
+          },
+          0.2
+        )
+
+        /* Text lines fade staggered */
+        const textLines = textRef.current?.querySelectorAll(".hero-line")
+        if (textLines) {
+          tl.to(
+            textLines,
+            {
+              opacity: 0,
+              stagger: 0.04,
+              duration: 0.2,
+              ease: "power2.out",
+            },
+            0.3
+          )
+        }
+
+        const supportEls = textRef.current?.querySelectorAll(".hero-support")
+        if (supportEls) {
+          tl.to(supportEls, { opacity: 0, duration: 0.15 }, 0.25)
+        }
+
+        /* Section reveal helper */
+        const revealSection = (
+          ref: React.RefObject<HTMLDivElement | null>,
+          childSelector: string,
+          stagger = 0.12
+        ) => {
+          if (!ref.current) return
+          const children = ref.current.querySelectorAll(childSelector)
+          gsap.fromTo(
+            children,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1.1,
+              stagger,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: ref.current,
+                start: "top 82%",
+                toggleActions: "play none none none",
+              },
+            }
+          )
+        }
+
+        revealSection(introRef, ".reveal-item", 0.15)
+        revealSection(valuesRef, ".reveal-item", 0.12)
+        revealSection(journeyRef, ".reveal-item", 0.15)
+        revealSection(destinationsRef, ".reveal-item", 0.1)
+        revealSection(trustRef, ".reveal-item", 0.12)
+        revealSection(communityRef, ".reveal-item", 0.08)
+        revealSection(contactRef, ".reveal-item", 0.15)
+      })
+
+      return () => ctx.revert()
+    })
+
+    /* ---- Mobile: lighter cinematic ---- */
+    mm.add("(max-width: 767px)", () => {
+      const ctx = gsap.context(() => {
+        gsap.to(scrollCueRef.current, {
+          opacity: 0,
+          scrollTrigger: {
+            trigger: heroContainerRef.current,
+            start: "top top",
+            end: "+=30%",
+            scrub: true,
+          },
+        })
+
+        gsap.to(textInnerRef.current, {
+          opacity: 0,
+          y: 30,
+          scrollTrigger: {
+            trigger: heroContainerRef.current,
+            start: "top top",
+            end: "+=40%",
+            scrub: true,
+          },
+        })
+
+        const revealSection = (
+          ref: React.RefObject<HTMLDivElement | null>,
+          childSelector: string,
+          stagger = 0.12
+        ) => {
+          if (!ref.current) return
+          const children = ref.current.querySelectorAll(childSelector)
+          gsap.fromTo(
+            children,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1.1,
+              stagger,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: ref.current,
+                start: "top 85%",
+                toggleActions: "play none none none",
+              },
+            }
+          )
+        }
+
+        revealSection(introRef, ".reveal-item", 0.15)
+        revealSection(valuesRef, ".reveal-item", 0.12)
+        revealSection(journeyRef, ".reveal-item", 0.15)
+        revealSection(destinationsRef, ".reveal-item", 0.1)
+        revealSection(trustRef, ".reveal-item", 0.12)
+        revealSection(communityRef, ".reveal-item", 0.08)
+        revealSection(contactRef, ".reveal-item", 0.15)
+      })
+
+      return () => ctx.revert()
     })
 
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-      ctx.revert()
+      bounceTween?.kill()
+      mm.revert()
     }
   }, [])
 
@@ -136,9 +327,14 @@ export default function VolunteerLandingPage() {
     { href: "/about", label: "About" },
   ]
 
+  const textShadow =
+    "0 2px 40px rgba(0,0,0,0.5), 0 1px 10px rgba(0,0,0,0.3)"
+
   return (
-    <div className="relative bg-cream">
-      {/* Navigation */}
+    <div className="relative">
+      {/* ============================================================
+          NAVIGATION
+          ============================================================ */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           navScrolled
@@ -150,7 +346,9 @@ export default function VolunteerLandingPage() {
           <Link href="/" className="flex items-center gap-2.5">
             <div
               className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors duration-500 ${
-                navScrolled ? "bg-sb-500" : "bg-white/10 backdrop-blur-sm"
+                navScrolled
+                  ? "bg-sb-500"
+                  : "bg-white/10 backdrop-blur-sm"
               }`}
             >
               <svg
@@ -197,7 +395,11 @@ export default function VolunteerLandingPage() {
               <Button
                 variant="ghost"
                 size="sm"
-                className={navScrolled ? "" : "text-white/80 hover:text-white hover:bg-white/10"}
+                className={
+                  navScrolled
+                    ? ""
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }
               >
                 Sign in
               </Button>
@@ -222,7 +424,11 @@ export default function VolunteerLandingPage() {
             }`}
             onClick={() => setMobileOpen(!mobileOpen)}
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </div>
 
@@ -248,12 +454,18 @@ export default function VolunteerLandingPage() {
                 </Link>
               ))}
               <div className="pt-2 flex flex-col gap-2">
-                <Link href="/auth/login" onClick={() => setMobileOpen(false)}>
+                <Link
+                  href="/auth/login"
+                  onClick={() => setMobileOpen(false)}
+                >
                   <Button variant="outline" className="w-full">
                     Sign in
                   </Button>
                 </Link>
-                <Link href="/auth/select-role" onClick={() => setMobileOpen(false)}>
+                <Link
+                  href="/auth/select-role"
+                  onClick={() => setMobileOpen(false)}
+                >
                   <Button className="w-full">Get Started</Button>
                 </Link>
               </div>
@@ -262,63 +474,129 @@ export default function VolunteerLandingPage() {
         )}
       </header>
 
-      {/* ===== HERO SECTION ===== */}
+      {/* ============================================================
+          CINEMATIC HERO
+          ============================================================ */}
       <section
-        ref={heroRef}
-        className="relative min-h-screen bg-sb-900 flex flex-col items-center justify-center overflow-hidden"
+        ref={heroContainerRef}
+        className="relative bg-sb-900 overflow-hidden"
+        style={{ height: "100vh" }}
       >
-        {/* Subtle radial glow behind text */}
-        <div className="hero-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full bg-sb-700/30 blur-[120px] pointer-events-none" />
-
+        {/* ----- Travel Window ----- */}
         <div
-          ref={heroTextRef}
-          className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center pt-20"
+          ref={windowRef}
+          className="absolute left-1/2 -translate-x-1/2 overflow-hidden will-change-transform
+            top-[8vh] w-[92vw] h-[50vh] rounded-2xl
+            md:top-1/2 md:-translate-y-1/2 md:w-[65vw] md:h-auto md:max-h-[70vh] md:rounded-3xl"
+          style={{
+            border: "16px solid rgba(15, 30, 25, 0.85)",
+            boxShadow:
+              "0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)",
+          }}
         >
-          <div className="space-y-2 md:space-y-3">
-            <h1 className="hero-line font-tanker text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] xl:text-[9rem] text-white leading-[0.95] tracking-tight">
+          {/* Inner shadow */}
+          <div
+            ref={innerShadowRef}
+            className="absolute inset-0 pointer-events-none z-10"
+            style={{ boxShadow: "inset 0 0 80px rgba(0,0,0,0.6)" }}
+          />
+
+          {/* Video scenes */}
+          {SCENES.map((scene, i) => (
+            <div key={i} className="absolute inset-0">
+              {/* CSS gradient fallback — always visible if video fails */}
+              <div
+                className={`absolute inset-0 ${SCENE_FALLBACKS[i]}`}
+              />
+              <video
+                ref={(el) => {
+                  videoRefs.current[i] = el
+                }}
+                src={scene.src}
+                muted
+                loop
+                playsInline
+                preload={i === 0 ? "metadata" : "none"}
+                className={`absolute inset-0 w-full h-full object-cover ${
+                  i === 0 ? "opacity-100" : "opacity-0"
+                }`}
+                onLoadedData={() => {
+                  if (i === 0 && typeof window !== "undefined" && window.innerWidth >= 768) {
+                    videoRefs.current[0]?.play().catch(() => {})
+                  }
+                }}
+              />
+            </div>
+          ))}
+
+          {/* Atmospheric overlays */}
+          <div className="absolute inset-0 bg-gradient-to-t from-sb-900/80 via-transparent to-sb-900/50 z-10 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-sb-900/50 via-transparent to-sb-900/80 z-10 pointer-events-none" />
+          <div className="absolute inset-0 vignette-overlay z-10 pointer-events-none" />
+          <div className="absolute inset-0 fog-layer z-10 pointer-events-none" />
+          <div className="absolute inset-0 light-leak z-10 pointer-events-none" />
+        </div>
+
+        {/* ----- Text Overlay ----- */}
+        <div
+          ref={textRef}
+          className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none px-4"
+        >
+          <div ref={textInnerRef} className="text-center">
+            <h1
+              className="hero-line font-tanker text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] text-white leading-[0.95] tracking-tight"
+              style={{ textShadow }}
+            >
               We are movement
             </h1>
-            <h1 className="hero-line font-tanker text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] xl:text-[9rem] text-sb-400 leading-[0.95] tracking-tight">
+            <h1
+              className="hero-line font-tanker text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7rem] text-sb-400 leading-[0.95] tracking-tight"
+              style={{ textShadow }}
+            >
               We are impact
             </h1>
-            <h1 className="hero-line font-tanker text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white/90 leading-[1.1] tracking-tight pt-2 md:pt-4">
+            <h1
+              className="hero-line font-tanker text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white/90 leading-[1.1] tracking-tight pt-2 md:pt-4"
+              style={{ textShadow }}
+            >
               Your freedom to travel,
               <br className="hidden sm:block" />
-              <span className="sm:hidden"> </span>
               learn, and contribute
             </h1>
-          </div>
-
-          <p className="hero-support mt-10 md:mt-14 text-sm sm:text-base text-white/50 max-w-md mx-auto leading-relaxed">
-            Travel across India. Share your skills. Build meaningful experiences
-            with trusted hosts who welcome you as family.
-          </p>
-
-          <div className="hero-support mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/auth/select-role">
-              <Button
-                size="lg"
-                className="bg-white text-sb-900 hover:bg-white/90 rounded-full px-8 h-12 text-sm font-semibold transition-all duration-200 active:scale-95"
-              >
-                Start Your Journey <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-            <Link href="/opportunities">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/20 text-white hover:bg-white/10 rounded-full px-8 h-12 text-sm transition-all duration-200 active:scale-95"
-              >
-                Browse Opportunities
-              </Button>
-            </Link>
+            <p
+              className="hero-support mt-8 md:mt-12 text-sm sm:text-base text-white/60 max-w-md mx-auto leading-relaxed"
+              style={{ textShadow: "0 1px 20px rgba(0,0,0,0.5)" }}
+            >
+              Travel across India. Share your skills. Build meaningful
+              experiences with trusted hosts who welcome you as family.
+            </p>
+            <div className="hero-support mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 pointer-events-auto">
+              <Link href="/auth/select-role">
+                <Button
+                  size="lg"
+                  className="bg-white text-sb-900 hover:bg-white/90 rounded-full px-8 h-11 text-sm font-semibold transition-all duration-200 active:scale-95"
+                >
+                  Start Your Journey{" "}
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+              <Link href="/opportunities">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-white/20 text-white hover:bg-white/10 rounded-full px-8 h-11 text-sm transition-all duration-200 active:scale-95"
+                >
+                  Browse Opportunities
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
 
-        {/* Scroll cue */}
+        {/* ----- Scroll Cue ----- */}
         <div
           ref={scrollCueRef}
-          className="absolute bottom-8 sm:bottom-12 left-0 right-0 flex flex-col items-center gap-3"
+          className="absolute bottom-6 sm:bottom-10 left-0 right-0 flex flex-col items-center gap-2 z-30"
         >
           <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
             Scroll to explore
@@ -329,9 +607,22 @@ export default function VolunteerLandingPage() {
         </div>
       </section>
 
-      {/* ===== INTRO / TRUST SECTION ===== */}
-      <section ref={introRef} className="relative py-28 sm:py-36 md:py-44 lg:py-52 bg-cream">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* ============================================================
+          INTRO / TRUST SECTION
+          Desktop: overlaps pinned hero, bg transitions from transparent → cream
+          Mobile: normal flow, opaque cream
+          ============================================================ */}
+      <section
+        ref={introRef}
+        className="relative py-24 sm:py-32 md:py-40 lg:py-52 md:-mt-[100vh]"
+      >
+        {/* Background layer — transparent on desktop initially, opaque on mobile */}
+        <div
+          ref={introBgRef}
+          className="absolute inset-0 bg-cream md:opacity-0"
+        />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 md:pt-[50vh]">
           <div className="max-w-4xl">
             <span className="reveal-item label-sm text-sb-500 mb-6 block">
               VOLUNTREE
@@ -340,17 +631,22 @@ export default function VolunteerLandingPage() {
               India&apos;s volunteer travel community.
             </h2>
             <p className="reveal-item mt-8 md:mt-10 text-base sm:text-lg md:text-xl text-text-secondary leading-relaxed max-w-2xl">
-              We connect passionate travelers with hosts across the country — from
-              Himalayan retreats to coastal villages. Every journey is an exchange
-              of skills, culture, and trust. Every connection is built on mutual
-              respect.
+              We connect passionate travelers with hosts across the country —
+              from Himalayan retreats to coastal villages. Every journey is an
+              exchange of skills, culture, and trust. Every connection is built
+              on mutual respect.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ===== VALUES SECTION ===== */}
-      <section ref={valuesRef} className="relative py-24 sm:py-32 md:py-40 bg-white">
+      {/* ============================================================
+          VALUES SECTION
+          ============================================================ */}
+      <section
+        ref={valuesRef}
+        className="relative py-24 sm:py-32 md:py-40 bg-white"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-x-16 gap-y-20 md:gap-y-28">
             {[
@@ -387,7 +683,9 @@ export default function VolunteerLandingPage() {
         </div>
       </section>
 
-      {/* ===== JOURNEY / PROFILE SECTION ===== */}
+      {/* ============================================================
+          JOURNEY / PROFILE SECTION
+          ============================================================ */}
       <section
         ref={journeyRef}
         className="relative py-28 sm:py-36 md:py-44 lg:py-52 bg-sb-50"
@@ -402,9 +700,9 @@ export default function VolunteerLandingPage() {
                 Build Your Story
               </h2>
               <p className="reveal-item mt-8 md:mt-10 text-base sm:text-lg text-text-secondary leading-relaxed max-w-lg">
-                Create a profile that reflects who you are. Highlight your skills,
-                share your passions, and let hosts discover what makes you unique.
-                Your journey starts with a single step.
+                Create a profile that reflects who you are. Highlight your
+                skills, share your passions, and let hosts discover what makes
+                you unique. Your journey starts with a single step.
               </p>
               <div className="reveal-item mt-10">
                 <Link href="/auth/select-role">
@@ -412,7 +710,8 @@ export default function VolunteerLandingPage() {
                     size="lg"
                     className="rounded-full px-8 h-12 text-sm font-semibold transition-all duration-200 active:scale-95"
                   >
-                    Create Your Profile <ArrowRight className="h-4 w-4 ml-2" />
+                    Create Your Profile{" "}
+                    <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
               </div>
@@ -449,8 +748,13 @@ export default function VolunteerLandingPage() {
         </div>
       </section>
 
-      {/* ===== DESTINATIONS SECTION ===== */}
-      <section ref={destinationsRef} className="relative py-28 sm:py-36 md:py-44 bg-cream">
+      {/* ============================================================
+          DESTINATIONS SECTION
+          ============================================================ */}
+      <section
+        ref={destinationsRef}
+        className="relative py-28 sm:py-36 md:py-44 bg-cream"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-16 md:mb-24">
             <span className="reveal-item label-sm text-sb-500 mb-6 block">
@@ -460,8 +764,8 @@ export default function VolunteerLandingPage() {
               Discover India
             </h2>
             <p className="reveal-item mt-6 md:mt-8 text-base sm:text-lg text-text-secondary leading-relaxed max-w-xl">
-              From snow-capped peaks to sun-drenched coastlines, find opportunities
-              in every corner of the country.
+              From snow-capped peaks to sun-drenched coastlines, find
+              opportunities in every corner of the country.
             </p>
           </div>
 
@@ -493,8 +797,13 @@ export default function VolunteerLandingPage() {
         </div>
       </section>
 
-      {/* ===== TRUST / SUPPORT SECTION ===== */}
-      <section ref={trustRef} className="relative py-28 sm:py-36 md:py-44 bg-white">
+      {/* ============================================================
+          TRUST / SUPPORT SECTION
+          ============================================================ */}
+      <section
+        ref={trustRef}
+        className="relative py-28 sm:py-36 md:py-44 bg-white"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
             <div>
@@ -505,9 +814,9 @@ export default function VolunteerLandingPage() {
                 Supported Every Step
               </h2>
               <p className="reveal-item mt-8 md:mt-10 text-base sm:text-lg text-text-secondary leading-relaxed max-w-lg">
-                From application to arrival, our team ensures your volunteer journey
-                is seamless. Safety checks, host verification, travel guidance, and
-                community support — we&apos;ve built it all.
+                From application to arrival, our team ensures your volunteer
+                journey is seamless. Safety checks, host verification, travel
+                guidance, and community support — we&apos;ve built it all.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-6 md:gap-8 content-center">
@@ -521,7 +830,9 @@ export default function VolunteerLandingPage() {
                   <p className="font-tanker text-3xl sm:text-4xl md:text-5xl text-sb-600 tracking-tight">
                     {stat.value}
                   </p>
-                  <p className="text-sm text-text-secondary mt-2">{stat.label}</p>
+                  <p className="text-sm text-text-secondary mt-2">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
@@ -529,7 +840,9 @@ export default function VolunteerLandingPage() {
         </div>
       </section>
 
-      {/* ===== COMMUNITY / GLOBAL SECTION ===== */}
+      {/* ============================================================
+          COMMUNITY / GLOBAL SECTION
+          ============================================================ */}
       <section
         ref={communityRef}
         className="relative py-28 sm:py-36 md:py-44 lg:py-52 bg-sb-700"
@@ -543,7 +856,8 @@ export default function VolunteerLandingPage() {
               India Awaits
             </h2>
             <p className="reveal-item mt-6 md:mt-8 text-base sm:text-lg text-white/60 leading-relaxed max-w-xl">
-              Your next chapter is already written — you just need to turn the page.
+              Your next chapter is already written — you just need to turn the
+              page.
             </p>
           </div>
 
@@ -575,8 +889,13 @@ export default function VolunteerLandingPage() {
         </div>
       </section>
 
-      {/* ===== CONTACT / FOOTER SECTION ===== */}
-      <section ref={contactRef} className="relative py-24 sm:py-32 md:py-40 bg-cream">
+      {/* ============================================================
+          CONTACT / FOOTER SECTION
+          ============================================================ */}
+      <section
+        ref={contactRef}
+        className="relative py-24 sm:py-32 md:py-40 bg-cream"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="reveal-item font-tanker text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-text leading-[1.05] tracking-tight">
@@ -599,7 +918,8 @@ export default function VolunteerLandingPage() {
                   size="lg"
                   className="rounded-full px-8 h-12 text-sm font-semibold transition-all duration-200 active:scale-95"
                 >
-                  Get Started <ArrowRight className="h-4 w-4 ml-2" />
+                  Get Started{" "}
+                  <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               </Link>
               <Link href="/contact">

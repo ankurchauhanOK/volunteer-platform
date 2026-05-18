@@ -262,6 +262,22 @@ body {
   color: var(--color-text-muted);
 }
 
+/* === ATMOSPHERIC CINEMATIC OVERLAYS === */
+
+.vignette-overlay {
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(15, 30, 25, 0.6) 100%);
+}
+
+.fog-layer {
+  background: linear-gradient(to bottom, rgba(255,255,255,0.02) 0%, transparent 40%, rgba(255,255,255,0.02) 100%);
+  filter: blur(60px);
+  animation: fogPulse 8s ease-in-out infinite;
+}
+
+.light-leak {
+  background: linear-gradient(135deg, transparent 70%, rgba(203, 162, 88, 0.03) 100%);
+}
+
 /* Ensure smooth rendering */
 * {
   -webkit-font-smoothing: antialiased;
