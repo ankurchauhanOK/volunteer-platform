@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Manrope } from "next/font/google"
+import { Manrope, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { Providers } from "@/components/Providers"
 
@@ -7,6 +7,12 @@ const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
+})
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 })
 
 export const metadata: Metadata = {
@@ -20,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${spaceGrotesk.variable}`}>
       <body className="min-h-screen flex flex-col bg-beige text-text antialiased font-sans">
         <Providers>{children}</Providers>
       </body>

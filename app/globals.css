@@ -102,7 +102,8 @@
 
   /* === TYPOGRAPHY === */
   --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-tanker: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-tanker: var(--font-display), var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, monospace;
 
   --font-size-xs: 0.75rem;   /* 12px */
@@ -115,6 +116,9 @@
   --font-size-4xl: 2.5rem;   /* 40px */
   --font-size-5xl: 3rem;     /* 48px */
   --font-size-6xl: 4rem;     /* 64px */
+  --font-size-7xl: 5rem;     /* 80px */
+  --font-size-8xl: 6.5rem;   /* 104px */
+  --font-size-9xl: 8.5rem;   /* 136px */
 
   /* === RADIUS === */
   --radius-sm: 0.375rem;
