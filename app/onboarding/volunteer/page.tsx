@@ -15,7 +15,7 @@ import { db } from "@/lib/store"
 import { StepLayout } from "@/components/onboarding/StepLayout"
 import { ChipInput } from "@/components/onboarding/ChipInput"
 import { CardSelect } from "@/components/onboarding/CardSelect"
-import { PhotoUpload } from "@/components/onboarding/PhotoUpload"
+
 import { SearchableSelect } from "@/components/onboarding/SearchableSelect"
 import { SectionFAQ } from "@/components/onboarding/SectionFAQ"
 import {
@@ -32,7 +32,6 @@ const TOTAL_STEPS = 8
 interface OnboardingForm {
   step: number
   fullName: string
-  profilePhoto: string
   age: string
   city: string
   country: string
@@ -66,7 +65,7 @@ interface OnboardingForm {
 
 const defaultForm: OnboardingForm = {
   step: 0,
-  fullName: "", profilePhoto: "", age: "", city: "", country: "India",
+  fullName: "", age: "", city: "", country: "India",
   gender: "", languages: [], qualification: "",
   skills: [], talentAreas: [], otherSkill: "",
   hobbies: [], hobbyRepresentation: "", hobbyDescription: "", hobbyProofUrl: "",
@@ -80,7 +79,7 @@ const defaultForm: OnboardingForm = {
 
 function calcCompleteness(form: OnboardingForm): number {
   const fields = [
-    form.fullName, !!form.profilePhoto, form.age, form.city, form.gender,
+    form.fullName, form.age, form.city, form.gender,
     form.languages.length > 0, form.qualification,
     form.skills.length > 0, form.talentAreas.length > 0,
     form.hobbies.length > 0, form.preferredDestinations.length > 0,
@@ -156,7 +155,6 @@ export default function VolunteerOnboardingPage() {
       setForm(prev => ({
         ...prev,
         fullName: prev.fullName || user.name || setupData.firstName || "",
-        profilePhoto: prev.profilePhoto || user.avatar || setupData.photos?.[0] || "",
         hobbies: prev.hobbies.length > 0 ? prev.hobbies : (setupData.interests || []),
       }))
     }
@@ -205,7 +203,6 @@ export default function VolunteerOnboardingPage() {
       emergencyContact: form.emergencyName
         ? { name: form.emergencyName, phone: form.emergencyPhone, relation: form.emergencyRelation }
         : undefined,
-      profilePhoto: form.profilePhoto || undefined,
       profileCompleteness: completeness,
       qualification: form.qualification || undefined,
       talentAreas: form.talentAreas,
@@ -228,7 +225,6 @@ export default function VolunteerOnboardingPage() {
 
     db.users.update(user.id, {
       onboardingComplete: true,
-      ...(form.profilePhoto ? { avatar: form.profilePhoto } : {}),
     })
     localStorage.removeItem("vt_onboarding_volunteer")
     refreshUser()
@@ -297,13 +293,7 @@ export default function VolunteerOnboardingPage() {
   const renderBasicDetails = () => (
     <div className="space-y-3">
       <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
-        <PhotoUpload
-        value={form.profilePhoto}
-        onChange={v => update("profilePhoto", v)}
-        helperText="A friendly photo helps hosts recognize you."
-      />
-
-      <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-2.5">
         <Input label="Full name" id="fullName" value={form.fullName} onChange={e => update("fullName", e.target.value)} placeholder="Your name" />
         <Input label="Age" type="number" id="age" value={form.age} onChange={e => update("age", e.target.value)} placeholder="e.g. 24" />
       </div>
@@ -586,7 +576,7 @@ export default function VolunteerOnboardingPage() {
           <div className="bg-white rounded-xl border border-border p-3 space-y-1.5">
             <div className="flex items-center gap-2">
               <Avatar className="w-8 h-8 ring-1 ring-sb-100">
-                <AvatarImage src={form.profilePhoto || user?.avatar} />
+                <AvatarImage src={user?.avatar || undefined} />
                 <AvatarFallback className="bg-sb-100 text-sb-700 text-[10px]">{(form.fullName || user?.name || "?").charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="min-w-0">
