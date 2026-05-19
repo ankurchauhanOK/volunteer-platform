@@ -102,8 +102,7 @@
 
   /* === TYPOGRAPHY === */
   --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-tanker: var(--font-display), var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display), var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-tanker: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, monospace;
 
   --font-size-xs: 0.75rem;   /* 12px */
@@ -116,9 +115,6 @@
   --font-size-4xl: 2.5rem;   /* 40px */
   --font-size-5xl: 3rem;     /* 48px */
   --font-size-6xl: 4rem;     /* 64px */
-  --font-size-7xl: 5rem;     /* 80px */
-  --font-size-8xl: 6.5rem;   /* 104px */
-  --font-size-9xl: 8.5rem;   /* 136px */
 
   /* === RADIUS === */
   --radius-sm: 0.375rem;
@@ -260,33 +256,6 @@ body {
 
 .text-muted {
   color: var(--color-text-muted);
-}
-
-/* === ATMOSPHERIC CINEMATIC OVERLAYS === */
-
-.vignette-overlay {
-  background: radial-gradient(ellipse at center, transparent 50%, rgba(15, 30, 25, 0.6) 100%);
-}
-
-.fog-layer {
-  background: linear-gradient(to bottom, rgba(255,255,255,0.02) 0%, transparent 40%, rgba(255,255,255,0.02) 100%);
-  filter: blur(60px);
-  animation: fogPulse 8s ease-in-out infinite;
-}
-
-.light-leak {
-  background: linear-gradient(135deg, transparent 70%, rgba(203, 162, 88, 0.03) 100%);
-}
-
-/* === TRAIN WINDOW CINEMATIC PAN === */
-/* For background-image panning */
-@keyframes trainPan {
-  0% {
-    background-position: 0% center;
-  }
-  100% {
-    background-position: 100% center;
-  }
 }
 
 /* Ensure smooth rendering */
