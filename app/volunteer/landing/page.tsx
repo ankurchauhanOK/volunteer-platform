@@ -9,45 +9,24 @@ import { Menu, X, ChevronDown, ArrowRight } from "lucide-react"
 
 gsap.registerPlugin(ScrollTrigger)
 
-/* ================================================================
-   SCENE ASSETS — Pexels free cinematic video loops
-   ================================================================ */
-const SCENES = [
-  {
-    src: "https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_25fps.mp4",
-    label: "Mountains",
-  },
-  {
-    src: "https://videos.pexels.com/video-files/1536322/1536322-hd_1920_1080_30fps.mp4",
-    label: "Forest",
-  },
-  {
-    src: "https://videos.pexels.com/video-files/4109928/4109928-hd_1920_1080_24fps.mp4",
-    label: "Village",
-  },
-  {
-    src: "https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_25fps.mp4",
-    label: "Desert",
-  },
-  {
-    src: "https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_25fps.mp4",
-    label: "Train",
-  },
-]
+/* Wide mountain panorama from Unsplash */
+const SCENERY_IMAGE =
+  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=3000&h=1200&fit=crop&q=80"
 
 export default function VolunteerLandingPage() {
   const [navScrolled, setNavScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [currentScene, setCurrentScene] = useState(0)
 
   /* ---------- Hero refs ---------- */
   const heroRef = useRef<HTMLDivElement>(null)
-  const windowRef = useRef<HTMLDivElement>(null)
+  const bgRef = useRef<HTMLImageElement>(null)
+  const sceneryContainerRef = useRef<HTMLDivElement>(null)
+  const sceneryImageRef = useRef<HTMLDivElement>(null)
+  const frameOverlayRef = useRef<HTMLImageElement>(null)
   const textTopLeftRef = useRef<HTMLDivElement>(null)
   const textBottomRightRef = useRef<HTMLDivElement>(null)
   const textBottomLeftRef = useRef<HTMLDivElement>(null)
   const bottomBarRef = useRef<HTMLDivElement>(null)
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
   /* ---------- Section refs ---------- */
   const introRef = useRef<HTMLDivElement>(null)
@@ -57,21 +36,6 @@ export default function VolunteerLandingPage() {
   const trustRef = useRef<HTMLDivElement>(null)
   const communityRef = useRef<HTMLDivElement>(null)
   const contactRef = useRef<HTMLDivElement>(null)
-
-  /* ---------- Scene rotation ---------- */
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentScene((prev) => {
-        const next = (prev + 1) % SCENES.length
-        videoRefs.current[next]?.play().catch(() => {})
-        return next
-      })
-    }, 12000)
-
-    videoRefs.current[0]?.play().catch(() => {})
-
-    return () => clearInterval(interval)
-  }, [])
 
   /* ---------- Nav scroll detection ---------- */
   useEffect(() => {
@@ -86,7 +50,7 @@ export default function VolunteerLandingPage() {
   useEffect(() => {
     const mm = gsap.matchMedia()
 
-    /* ---- Desktop: pinned hero with subtle zoom ---- */
+    /* ---- Desktop: pinned hero zoom ---- */
     mm.add("(min-width: 768px)", () => {
       const ctx = gsap.context(() => {
         const tl = gsap.timeline({
@@ -95,36 +59,56 @@ export default function VolunteerLandingPage() {
             start: "top top",
             end: "+=150%",
             pin: true,
-            scrub: 1.5,
+            scrub: 1.2,
           },
         })
 
-        /* Window subtly zooms and brightens */
+        /* Phase 1: text fades (20% - 50%) */
         tl.to(
-          windowRef.current,
-          { scale: 1.08, duration: 0.6, ease: "power2.out" },
-          0
-        )
-
-        /* Top-left text fades first */
-        tl.to(textTopLeftRef.current, { opacity: 0, y: -30, duration: 0.25 }, 0.1)
-
-        /* Bottom-right text fades */
-        tl.to(
-          textBottomRightRef.current,
-          { opacity: 0, y: 30, duration: 0.25 },
+          textTopLeftRef.current,
+          { opacity: 0, y: -40, duration: 0.25, ease: "power2.out" },
           0.15
         )
-
-        /* Bottom-left text fades */
         tl.to(
-          textBottomLeftRef.current,
-          { opacity: 0, y: 20, duration: 0.2 },
+          textBottomRightRef.current,
+          { opacity: 0, y: 40, duration: 0.25, ease: "power2.out" },
           0.2
         )
+        tl.to(
+          textBottomLeftRef.current,
+          { opacity: 0, y: 20, duration: 0.2, ease: "power2.out" },
+          0.25
+        )
+        tl.to(bottomBarRef.current, { opacity: 0, duration: 0.15 }, 0.3)
 
-        /* Bottom bar fades */
-        tl.to(bottomBarRef.current, { opacity: 0, duration: 0.15 }, 0.25)
+        /* Phase 2: scenery zooms to fullscreen (30% - 80%) */
+        tl.to(
+          sceneryContainerRef.current,
+          {
+            top: "0%",
+            left: "0%",
+            width: "100%",
+            height: "100%",
+            borderRadius: "0px",
+            duration: 0.45,
+            ease: "power2.inOut",
+          },
+          0.3
+        )
+
+        /* Frame overlay fades as we zoom through it */
+        tl.to(frameOverlayRef.current, { opacity: 0, duration: 0.25 }, 0.4)
+
+        /* Background wall subtly scales then fades */
+        tl.to(bgRef.current, { scale: 1.08, duration: 0.4 }, 0.3)
+        tl.to(bgRef.current, { opacity: 0, duration: 0.25 }, 0.55)
+
+        /* Scenery image keeps panning and scales slightly */
+        tl.to(
+          sceneryImageRef.current,
+          { scale: 1.3, duration: 0.5, ease: "power2.out" },
+          0.35
+        )
 
         /* Section reveals */
         const revealSection = (
@@ -164,7 +148,7 @@ export default function VolunteerLandingPage() {
       return () => ctx.revert()
     })
 
-    /* ---- Mobile: no pin, simple fades ---- */
+    /* ---- Mobile: no pin, lighter ---- */
     mm.add("(max-width: 767px)", () => {
       const ctx = gsap.context(() => {
         gsap.to(textTopLeftRef.current, {
@@ -227,7 +211,7 @@ export default function VolunteerLandingPage() {
   return (
     <div className="relative bg-cream">
       {/* ============================================================
-          NAVIGATION — minimal, transparent on hero
+          NAVIGATION
           ============================================================ */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -240,7 +224,7 @@ export default function VolunteerLandingPage() {
           <Link href="/" className="flex items-center gap-2">
             <div
               className={`flex h-7 w-7 items-center justify-center rounded-md transition-colors duration-500 ${
-                navScrolled ? "bg-sb-500" : "bg-white/10"
+                navScrolled ? "bg-[#7A2E2E]" : "bg-white/10"
               }`}
             >
               <svg
@@ -304,7 +288,11 @@ export default function VolunteerLandingPage() {
             }`}
             onClick={() => setMobileOpen(!mobileOpen)}
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </div>
 
@@ -313,7 +301,7 @@ export default function VolunteerLandingPage() {
             className={`border-t p-4 md:hidden ${
               navScrolled
                 ? "bg-cream/95 backdrop-blur-md border-border"
-                : "bg-sb-900/95 border-white/10"
+                : "bg-[#1a1a1a]/95 border-white/10"
             }`}
           >
             <nav className="flex flex-col gap-3">
@@ -345,46 +333,89 @@ export default function VolunteerLandingPage() {
       </header>
 
       {/* ============================================================
-          CINEMATIC HERO — Editorial composition matching Jesko exactly
+          CINEMATIC HERO — Exact screenshot composition
           ============================================================ */}
       <section
         ref={heroRef}
         className="relative h-screen w-full overflow-hidden"
-        style={{ background: "#0f0f0f" }}
       >
-        {/* Ambient background wall texture */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 40%, #1a1a1a 0%, #0f0f0f 60%, #0a0a0a 100%)",
-          }}
+        {/* ----- Layer 0: Train interior wall background ----- */}
+        <img
+          ref={bgRef}
+          src="/train-bg.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover will-change-transform"
         />
 
-        {/* Subtle wall light falloff from window */}
+        {/* ----- Layer 1: Scenery inside window ----- */}
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vh] pointer-events-none"
+          ref={sceneryContainerRef}
+          className="absolute overflow-hidden will-change-transform"
           style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(60,60,60,0.15) 0%, transparent 70%)",
+            top: "13%",
+            left: "15%",
+            width: "70%",
+            height: "68%",
+            borderRadius: "28px",
           }}
+        >
+          {/* Panning scenery image */}
+          <div
+            ref={sceneryImageRef}
+            className="absolute inset-0 will-change-transform"
+            style={{
+              backgroundImage: `url(${SCENERY_IMAGE})`,
+              backgroundSize: "400% 100%",
+              backgroundPosition: "0% center",
+              animation: "trainPan 25s linear infinite",
+            }}
+          />
+
+          {/* Subtle inner glass reflection */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 40%, rgba(255,255,255,0.02) 100%)",
+            }}
+          />
+
+          {/* Inner shadow for depth */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              boxShadow:
+                "inset 0 0 60px rgba(0,0,0,0.4), inset 0 0 120px rgba(0,0,0,0.15)",
+            }}
+          />
+        </div>
+
+        {/* ----- Layer 2: Window frame overlay (for zoom depth) ----- */}
+        <img
+          ref={frameOverlayRef}
+          src="/window-frame.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none will-change-transform"
+          style={{ zIndex: 5 }}
         />
 
-        {/* ----- TOP LEFT: "We are explorers" ----- */}
+        {/* ----- Layer 3: Typography ----- */}
+
+        {/* Top-left: "We are explorers" */}
         <div
           ref={textTopLeftRef}
           className="absolute z-20 will-change-transform"
           style={{
-            top: "12%",
-            left: "5%",
-            maxWidth: "45vw",
+            top: "16%",
+            left: "3%",
+            maxWidth: "50vw",
           }}
         >
           <h1
-            className="font-tanker text-white leading-[0.9] tracking-tight"
+            className="font-tanker leading-[0.88] tracking-tight"
             style={{
-              fontSize: "clamp(3rem, 8vw, 8rem)",
-              textShadow: "0 4px 30px rgba(0,0,0,0.6)",
+              fontSize: "clamp(2.8rem, 7.5vw, 7.5rem)",
+              color: "#7A2E2E",
             }}
           >
             We are
@@ -393,131 +424,21 @@ export default function VolunteerLandingPage() {
           </h1>
         </div>
 
-        {/* ----- CENTER: Train Window ----- */}
-        <div
-          ref={windowRef}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 will-change-transform"
-        >
-          {/* Outer wall shadow */}
-          <div
-            className="absolute -inset-10 md:-inset-16 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, transparent 70%)",
-              filter: "blur(40px)",
-            }}
-          />
-
-          {/* Outer frame — thick dark metal */}
-          <div
-            className="relative p-4 md:p-6 rounded-[36px] md:rounded-[48px]"
-            style={{
-              background:
-                "linear-gradient(180deg, #3a3a3a 0%, #252525 30%, #1a1a1a 70%, #0f0f0f 100%)",
-              boxShadow:
-                "0 50px 100px rgba(0,0,0,0.8), 0 25px 50px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.12)",
-            }}
-          >
-            {/* Middle frame — lighter metal ring */}
-            <div
-              className="p-2.5 md:p-3.5 rounded-[32px] md:rounded-[40px]"
-              style={{
-                background:
-                  "linear-gradient(180deg, #555 0%, #3a3a3a 50%, #2a2a2a 100%)",
-                boxShadow:
-                  "inset 0 2px 8px rgba(0,0,0,0.5), 0 1px 2px rgba(255,255,255,0.08)",
-              }}
-            >
-              {/* Inner frame — glossy highlight */}
-              <div
-                className="p-1 md:p-1.5 rounded-[28px] md:rounded-[36px]"
-                style={{
-                  background:
-                    "linear-gradient(180deg, #777 0%, #555 20%, #444 80%, #333 100%)",
-                  boxShadow:
-                    "inset 0 1px 3px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.3)",
-                }}
-              >
-                {/* Glass pane */}
-                <div
-                  className="relative w-[72vw] max-w-[380px] h-[55vh] max-h-[520px] md:w-[28vw] md:max-w-[420px] md:h-[72vh] md:max-h-[680px] overflow-hidden"
-                  style={{
-                    borderRadius: "24px",
-                    background: "#050505",
-                    boxShadow:
-                      "inset 0 0 60px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,0.5)",
-                  }}
-                >
-                  {/* Scenery video layers */}
-                  {SCENES.map((scene, i) => (
-                    <video
-                      key={i}
-                      ref={(el) => {
-                        videoRefs.current[i] = el
-                      }}
-                      src={scene.src}
-                      muted
-                      loop
-                      playsInline
-                      preload={i === 0 ? "metadata" : "none"}
-                      className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms]"
-                      style={{
-                        opacity: i === currentScene ? 1 : 0,
-                        transform: "scale(1.45)",
-                        animation: "trainPan 30s linear infinite",
-                      }}
-                    />
-                  ))}
-
-                  {/* Glass reflection overlay */}
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 35%, rgba(255,255,255,0.02) 100%)",
-                    }}
-                  />
-
-                  {/* Inner shadow for recessed depth */}
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      borderRadius: "24px",
-                      boxShadow:
-                        "inset 0 0 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.25)",
-                    }}
-                  />
-
-                  {/* Voluntree watermark inside glass */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <span
-                      className="font-tanker text-white/15 tracking-[0.2em]"
-                      style={{ fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)" }}
-                    >
-                      Voluntree
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ----- BOTTOM RIGHT: "We chase wonder" ----- */}
+        {/* Bottom-right: "We chase wonder" */}
         <div
           ref={textBottomRightRef}
           className="absolute z-20 text-right will-change-transform"
           style={{
-            bottom: "22%",
-            right: "4%",
-            maxWidth: "50vw",
+            bottom: "20%",
+            right: "3%",
+            maxWidth: "55vw",
           }}
         >
           <h1
-            className="font-tanker text-white leading-[0.9] tracking-tight"
+            className="font-tanker leading-[0.88] tracking-tight"
             style={{
-              fontSize: "clamp(2.8rem, 7.5vw, 7.5rem)",
-              textShadow: "0 4px 30px rgba(0,0,0,0.6)",
+              fontSize: "clamp(2.5rem, 6.5vw, 6.5rem)",
+              color: "#7A2E2E",
             }}
           >
             We chase
@@ -526,81 +447,88 @@ export default function VolunteerLandingPage() {
           </h1>
         </div>
 
-        {/* ----- BOTTOM LEFT: Supporting text ----- */}
+        {/* Bottom-left: Supporting text */}
         <div
           ref={textBottomLeftRef}
           className="absolute z-20 will-change-transform"
           style={{
-            bottom: "18%",
-            left: "5%",
-            maxWidth: "280px",
+            bottom: "15%",
+            left: "3%",
+            maxWidth: "300px",
           }}
         >
           <h2
-            className="font-tanker text-white leading-[1.05] tracking-tight mb-4"
+            className="font-tanker leading-[1.05] tracking-tight mb-3"
             style={{
-              fontSize: "clamp(1.4rem, 2.5vw, 2.2rem)",
-              textShadow: "0 2px 20px rgba(0,0,0,0.5)",
+              fontSize: "clamp(1.2rem, 2.2vw, 2rem)",
+              color: "#7A2E2E",
             }}
           >
             Your
             <br />
             freedom to
             <br />
-            travel
+            enjoy life
           </h2>
           <div
-            className="w-10 h-px mb-4"
-            style={{ background: "rgba(255,255,255,0.3)" }}
+            className="w-10 h-px mb-3"
+            style={{ background: "rgba(122, 46, 46, 0.3)" }}
           />
           <p
-            className="text-white/50 leading-relaxed"
+            className="leading-relaxed"
             style={{
-              fontSize: "clamp(0.75rem, 1vw, 0.875rem)",
-              textShadow: "0 1px 10px rgba(0,0,0,0.4)",
+              fontSize: "clamp(0.7rem, 0.95vw, 0.85rem)",
+              color: "rgba(122, 46, 46, 0.7)",
             }}
           >
-            Every journey is designed around discovery — so you can focus on
-            what truly matters, while the world opens itself to you.
+            Every journey is designed around your comfort, time, and ambitions
+            — so you can focus on what truly matters, while we take care of
+            everything else.
           </p>
         </div>
 
-        {/* ----- BOTTOM BAR: Scroll cue + CTA ----- */}
+        {/* Bottom bar: scroll indicator + CTA */}
         <div
           ref={bottomBarRef}
-          className="absolute z-20 w-full px-5 md:px-8"
-          style={{ bottom: "5%" }}
+          className="absolute z-20 w-full px-[3%]"
+          style={{ bottom: "3.5%" }}
         >
-          <div className="relative flex items-end justify-between">
-            {/* Left: empty for composition balance */}
-            <div className="hidden md:block w-32" />
+          <div className="flex items-center justify-between">
+            {/* Left spacer */}
+            <div className="hidden md:block w-40" />
 
-            {/* Center: minimal pill CTA */}
+            {/* Center: minimal CTA */}
             <div className="absolute left-1/2 -translate-x-1/2 bottom-0">
               <Link href="/auth/select-role">
                 <Button
                   size="sm"
-                  className="bg-white text-black hover:bg-white/90 rounded-full px-6 h-9 text-xs font-semibold transition-all duration-200 active:scale-95"
+                  className="bg-white text-[#7A2E2E] hover:bg-white/90 rounded-full px-5 h-8 text-[11px] font-semibold transition-all duration-200 active:scale-95"
                 >
                   Start Your Journey{" "}
-                  <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+                  <ArrowRight className="h-3 w-3 ml-1" />
                 </Button>
               </Link>
             </div>
 
-            {/* Right: scroll indicator line */}
-            <div className="hidden md:flex items-center gap-4 pb-1">
+            {/* Right: scroll cue */}
+            <div className="hidden md:flex items-center gap-3">
               <div className="flex items-center gap-1.5">
-                <ChevronDown className="h-3.5 w-3.5 text-white/30" />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">
+                <ChevronDown className="h-3 w-3" style={{ color: "rgba(122, 46, 46, 0.35)" }} />
+                <span
+                  className="text-[10px] font-semibold uppercase tracking-[0.2em]"
+                  style={{ color: "rgba(122, 46, 46, 0.4)" }}
+                >
                   Scroll down
                 </span>
               </div>
               <div
-                className="w-16 h-px"
-                style={{ background: "rgba(255,255,255,0.15)" }}
+                className="w-12 h-px"
+                style={{ background: "rgba(122, 46, 46, 0.2)" }}
               />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">
+              <span
+                className="text-[10px] font-semibold uppercase tracking-[0.15em]"
+                style={{ color: "rgba(122, 46, 46, 0.35)" }}
+              >
                 To start the journey
               </span>
             </div>

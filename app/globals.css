@@ -279,12 +279,13 @@ body {
 }
 
 /* === TRAIN WINDOW CINEMATIC PAN === */
+/* For background-image panning */
 @keyframes trainPan {
   0% {
-    transform: scale(1.45) translateX(12%);
+    background-position: 0% center;
   }
   100% {
-    transform: scale(1.45) translateX(-12%);
+    background-position: 100% center;
   }
 }
 
