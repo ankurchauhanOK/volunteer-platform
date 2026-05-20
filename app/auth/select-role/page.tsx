@@ -32,7 +32,7 @@ export default function SelectRolePage() {
   const handleSelect = (role: "volunteer" | "host") => {
     setLoading(role)
     updateUser({ role, onboardingComplete: false })
-    const redirect = role === "volunteer" ? "/onboarding/volunteer/profile-setup" : "/onboarding/host"
+    const redirect = role === "volunteer" ? "/onboarding/volunteer" : "/onboarding/host"
     window.location.replace(redirect)
   }
 
