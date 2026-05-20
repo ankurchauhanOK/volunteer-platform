@@ -27,7 +27,7 @@ import {
   qualificationOptions, languageOptions, indianCityOptions,
 } from "@/lib/utils"
 
-const TOTAL_STEPS = 9
+const TOTAL_STEPS = 4
 
 interface OnboardingForm {
   step: number
@@ -88,10 +88,7 @@ function calcCompleteness(form: OnboardingForm): number {
     form.fullName, form.email, form.birthDay, form.gender,
     form.travelDuration, form.travelCompanion,
     form.interests.length > 0,
-    form.hobbies.length > 0, form.preferredDestinations.length > 0,
-    form.travelType, form.travelStyle,
-    form.experienceLevel, form.emergencyName,
-    form.emergencyPhone, form.communityGuidelinesAgreed,
+    form.photos.filter(Boolean).length >= 2,
   ]
   const filled = fields.filter(Boolean).length
   return Math.round((filled / fields.length) * 100)
@@ -183,7 +180,11 @@ export default function VolunteerOnboardingPage() {
 
   const handleContinue = () => {
     save(form)
-    if (step < TOTAL_STEPS - 1) setStep(step + 1)
+    if (step < TOTAL_STEPS - 1) {
+      setStep(step + 1)
+    } else {
+      handleSubmit()
+    }
   }
 
   const handleSkip = () => {
@@ -245,11 +246,6 @@ export default function VolunteerOnboardingPage() {
       case 1: return renderInterests()
       case 2: return renderProfileIntro()
       case 3: return renderPhotoUpload()
-      case 4: return renderHobbies()
-      case 5: return renderTravelPrefs()
-      case 6: return renderAvailability()
-      case 7: return renderSafety()
-      case 8: return renderReview()
       default: return null
     }
   }
@@ -1054,7 +1050,7 @@ export default function VolunteerOnboardingPage() {
   }
 
   const stepLabels = [
-    "Basic Details", "Interests", "Profile Intro", "Photos", "Hobbies & Proof", "Travel Preferences", "Availability", "Safety", "Review",
+    "Basic Details", "Interests", "Profile Intro", "Photos",
   ]
 
   const getContinueLabel = () => {
@@ -1066,7 +1062,6 @@ export default function VolunteerOnboardingPage() {
     if (step === 0) return !form.fullName || !form.email
     if (step === 1) return form.interests.length === 0
     if (step === 3) return form.photos.filter(Boolean).length < 2
-    if (step === TOTAL_STEPS - 1) return completeness < 20
     return false
   }
 
@@ -1085,17 +1080,12 @@ export default function VolunteerOnboardingPage() {
         subtitle={
           step === 0 ? "Help hosts get to know the real you."
           : step === 1 ? "Select what genuinely interests you."
-          : step === 4 ? "Show hosts what makes you unique."
-          : step === 5 ? "Help us find the right stay for your travel style."
-          : step === 6 ? "Let hosts know when you're free to travel."
-          : step === 7 ? "This information helps keep your journey safe."
-          : step === 8 ? "Take one final look before you complete your profile."
           : undefined
         }
         currentStep={step}
         totalSteps={TOTAL_STEPS}
         onBack={step > 0 ? () => setStep(step - 1) : undefined}
-        onContinue={step === TOTAL_STEPS - 1 ? undefined : handleContinue}
+        onContinue={handleContinue}
         continueLabel={getContinueLabel()}
         continueDisabled={getContinueDisabled()}
         loading={loading}

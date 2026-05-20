@@ -44,7 +44,7 @@ export function StepLayout({
   bare = false,
   children,
 }: StepLayoutProps) {
-  const stepLabels = ["Welcome", "Basic Details", "Skills & Talents", "Hobbies & Proof", "Travel Preferences", "Availability", "Safety", "Review"]
+  const stepLabels = ["Basic Details", "Interests", "Profile Intro", "Photos"]
   const contentRef = useStepTransition(currentStep)
   const progressPercent = ((currentStep + 1) / totalSteps) * 100
 
