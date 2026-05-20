@@ -136,6 +136,7 @@ export default function VolunteerOnboardingPage() {
     return defaultForm
   })
   const [step, setStepState] = useState(form.step)
+  const fileInputRefs = useRef<(HTMLInputElement | null)[]>([])
 
   const completeness = useMemo(() => calcCompleteness(form), [form])
 
@@ -636,8 +637,6 @@ export default function VolunteerOnboardingPage() {
   )
 
   const renderPhotoUpload = () => {
-    const fileInputRefs = useRef<(HTMLInputElement | null)[]>([])
-
     const handleFileSelect = (index: number) => {
       fileInputRefs.current[index]?.click()
     }
