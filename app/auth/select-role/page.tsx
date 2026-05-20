@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useAuth } from "@/context/AuthContext"
 import { gsap } from "gsap"
@@ -32,16 +33,26 @@ export default function SelectRolePage() {
   const handleSelect = (role: "volunteer" | "host") => {
     setLoading(role)
     updateUser({ role, onboardingComplete: false })
+    localStorage.removeItem("vt_onboarding_volunteer")
+    localStorage.removeItem("vt_onboarding_host")
     const redirect = role === "volunteer" ? "/onboarding/volunteer" : "/onboarding/host"
     window.location.replace(redirect)
   }
+
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!user) {
+      router.replace("/auth/login")
+    }
+  }, [user, router])
 
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-beige">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-2 border-brand-500 border-t-transparent mx-auto mb-4" />
-          <p className="text-sm text-text-muted">Checking session...</p>
+          <p className="text-sm text-text-muted">Redirecting to sign in...</p>
         </div>
       </div>
     )

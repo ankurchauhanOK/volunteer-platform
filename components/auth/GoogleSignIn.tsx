@@ -64,6 +64,8 @@ export function GoogleSignIn() {
           return
         }
         if (result.onboardingComplete === false) {
+          localStorage.removeItem("vt_onboarding_volunteer")
+          localStorage.removeItem("vt_onboarding_host")
           const onboardingPath = result.role === "host" ? "/onboarding/host" : "/onboarding/volunteer"
           window.location.replace(onboardingPath)
           return

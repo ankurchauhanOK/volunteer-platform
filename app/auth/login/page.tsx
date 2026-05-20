@@ -42,6 +42,8 @@ function LoginForm() {
       }
       localStorage.setItem("vt_current_user", JSON.stringify(user))
       if (!user.onboardingComplete) {
+        localStorage.removeItem("vt_onboarding_volunteer")
+        localStorage.removeItem("vt_onboarding_host")
         const onboardingPath = user.role === "host" ? "/onboarding/host" : "/onboarding/volunteer"
         window.location.replace(onboardingPath)
         return

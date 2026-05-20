@@ -14,6 +14,7 @@ const TOTAL_STEPS = 5
 
 interface OnboardingForm {
   step: number
+  userId?: string
   fullName: string
   email: string
   birthDay: string
@@ -126,6 +127,13 @@ export default function VolunteerOnboardingPage() {
 
   useEffect(() => {
     if (user) {
+      // If saved state belongs to a different user, reset to step 0
+      if (form.userId && form.userId !== user.id) {
+        localStorage.removeItem("vt_onboarding_volunteer")
+        setForm(defaultForm)
+        setStepState(0)
+        return
+      }
       // Prefill from profile setup localStorage if available
       let setupData: { firstName?: string; photos?: string[]; interests?: string[] } = {}
       if (typeof window !== "undefined") {
@@ -144,11 +152,12 @@ export default function VolunteerOnboardingPage() {
         hobbies: prev.hobbies.length > 0 ? prev.hobbies : (setupData.interests || []),
       }))
     }
-  }, [user])
+  }, [user, form.userId])
 
   const save = useCallback((updated: OnboardingForm) => {
-    localStorage.setItem("vt_onboarding_volunteer", JSON.stringify(updated))
-  }, [])
+    if (!user) return
+    localStorage.setItem("vt_onboarding_volunteer", JSON.stringify({ ...updated, userId: user.id }))
+  }, [user])
 
   const update = <K extends keyof OnboardingForm>(key: K, value: OnboardingForm[K]) => {
     setForm(prev => {

@@ -41,6 +41,7 @@ const facilityOptions = [
 ]
 
 interface HostForm {
+  userId?: string
   hostType: string
   businessName: string
   contactPerson: string
@@ -102,15 +103,23 @@ export default function HostOnboardingPage() {
 
   useEffect(() => {
     if (user) {
+      // If saved state belongs to a different user, reset to step 0
+      if (form.userId && form.userId !== user.id) {
+        localStorage.removeItem("vt_onboarding_host")
+        setForm(defaultForm)
+        setStep(0)
+        return
+      }
       setForm(prev => ({
         ...prev,
         contactPerson: prev.contactPerson || user.name || "",
       }))
     }
-  }, [user])
+  }, [user, form.userId])
 
   const save = (updated: HostForm) => {
-    localStorage.setItem("vt_onboarding_host", JSON.stringify(updated))
+    if (!user) return
+    localStorage.setItem("vt_onboarding_host", JSON.stringify({ ...updated, userId: user.id }))
   }
 
   const update = (key: keyof HostForm, value: any) => {
