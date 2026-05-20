@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback, useMemo } from "react"
+import { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
 import { Providers } from "@/components/Providers"
@@ -27,7 +27,7 @@ import {
   qualificationOptions, languageOptions, indianCityOptions,
 } from "@/lib/utils"
 
-const TOTAL_STEPS = 7
+const TOTAL_STEPS = 9
 
 interface OnboardingForm {
   step: number
@@ -49,6 +49,7 @@ interface OnboardingForm {
   hobbyRepresentation: string
   hobbyDescription: string
   hobbyProofUrl: string
+  photos: string[]
   preferredDestinations: string[]
   travelType: string
   preferredEnvironment: string[]
@@ -73,7 +74,7 @@ const defaultForm: OnboardingForm = {
   gender: "", travelDuration: "", travelCompanion: "",
   languages: [], qualification: "",
   interests: [], skills: [], talentAreas: [], otherSkill: "",
-  hobbies: [], hobbyRepresentation: "", hobbyDescription: "", hobbyProofUrl: "",
+  hobbies: [], hobbyRepresentation: "", hobbyDescription: "", hobbyProofUrl: "", photos: [],
   preferredDestinations: [], travelType: "", preferredEnvironment: [],
   preferredStayType: [], soloOrGroup: "",
   travelStyle: "", experienceLevel: "", remoteWork: false,
@@ -242,11 +243,13 @@ export default function VolunteerOnboardingPage() {
     switch (step) {
       case 0: return renderBasicDetails()
       case 1: return renderInterests()
-      case 2: return renderHobbies()
-      case 3: return renderTravelPrefs()
-      case 4: return renderAvailability()
-      case 5: return renderSafety()
-      case 6: return renderReview()
+      case 2: return renderProfileIntro()
+      case 3: return renderPhotoUpload()
+      case 4: return renderHobbies()
+      case 5: return renderTravelPrefs()
+      case 6: return renderAvailability()
+      case 7: return renderSafety()
+      case 8: return renderReview()
       default: return null
     }
   }
@@ -592,6 +595,170 @@ export default function VolunteerOnboardingPage() {
     )
   }
 
+  const renderProfileIntro = () => (
+    <div className="relative min-h-[calc(100vh-180px)] flex items-center justify-center overflow-hidden">
+      {/* Cinematic background */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "linear-gradient(180deg, #E8E4DC 0%, #D4CFC4 40%, #C8C2B5 100%)",
+        }}
+      />
+      {/* Soft cloud-like overlay */}
+      <div
+        className="absolute inset-0 opacity-40"
+        style={{
+          background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.6) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(255,255,255,0.4) 0%, transparent 50%)",
+        }}
+      />
+      {/* Vignette */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "radial-gradient(ellipse at center, transparent 40%, rgba(31,77,58,0.08) 100%)",
+        }}
+      />
+
+      <div className="relative z-10 text-center px-6 max-w-[700px] mx-auto">
+        <h1
+          className="font-tanker text-[#1F4D3A] leading-[1.1] tracking-tight mb-5 text-balance"
+          style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
+        >
+          Now let&apos;s bring your profile to life with photos and prompts.
+        </h1>
+        <p className="text-lg text-[#4A6B5A] leading-relaxed max-w-lg mx-auto mb-10">
+          Show hosts the energy, personality, and moments that make you unique.
+        </p>
+        <button
+          onClick={handleContinue}
+          className="px-10 h-14 rounded-full bg-[#1F4D3A] text-[#F4F1EA] text-base font-semibold shadow-[0_4px_20px_rgba(31,77,58,0.3)] hover:shadow-[0_6px_28px_rgba(31,77,58,0.4)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+  )
+
+  const renderPhotoUpload = () => {
+    const fileInputRefs = useRef<(HTMLInputElement | null)[]>([])
+
+    const handleFileSelect = (index: number) => {
+      fileInputRefs.current[index]?.click()
+    }
+
+    const handleFileChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (!file) return
+      const url = URL.createObjectURL(file)
+      setForm(prev => {
+        const newPhotos = [...prev.photos]
+        newPhotos[index] = url
+        const updated = { ...prev, photos: newPhotos }
+        save(updated)
+        return updated
+      })
+    }
+
+    const handleRemove = (index: number) => {
+      setForm(prev => {
+        const newPhotos = prev.photos.filter((_, i) => i !== index)
+        const updated = { ...prev, photos: newPhotos }
+        save(updated)
+        return updated
+      })
+    }
+
+    const uploadedCount = form.photos.filter(Boolean).length
+
+    return (
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 py-10 md:py-14">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+          {/* LEFT: Text content */}
+          <div className="lg:sticky lg:top-24">
+            <h1
+              className="font-tanker text-[#1F4D3A] leading-[1.08] tracking-tight mb-4 text-balance"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)" }}
+            >
+              Add photos and videos that represent you
+            </h1>
+            <p className="text-base text-[#4A6B5A] leading-relaxed mb-6">
+              Upload at least 2 photos or videos to continue.
+            </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#E8F1EA] border border-[#7FA58A]/40 text-xs font-medium text-[#234232]">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              PNG, JPG and MP4 supported
+            </div>
+            <p className="text-sm text-[#6F8B78] mt-6 leading-relaxed max-w-sm">
+              Authentic travel moments help hosts understand who you are.
+            </p>
+
+            {/* CTA */}
+            <div className="mt-8">
+              <button
+                onClick={handleContinue}
+                disabled={uploadedCount < 2}
+                className="w-full sm:w-auto px-8 h-12 rounded-full bg-[#1F4D3A] text-[#F4F1EA] text-sm font-semibold shadow-[0_4px_14px_rgba(31,77,58,0.25)] hover:shadow-[0_6px_20px_rgba(31,77,58,0.35)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all duration-300"
+              >
+                Continue{" "}
+                <span className="text-xs opacity-70 ml-1">
+                  ({uploadedCount}/2 min)
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* RIGHT: Upload grid */}
+          <div className="grid grid-cols-2 gap-4">
+            {Array.from({ length: 6 }, (_, i) => (
+              <div key={i}>
+                <input
+                  ref={el => { fileInputRefs.current[i] = el }}
+                  type="file"
+                  accept="image/png,image/jpeg,image/jpg,video/mp4"
+                  className="hidden"
+                  onChange={e => handleFileChange(i, e)}
+                />
+                <button
+                  type="button"
+                  onClick={() => handleFileSelect(i)}
+                  className="relative w-full aspect-square rounded-[28px] bg-[#F4F1EA] border-2 border-dashed border-[#7FA58A]/30 hover:border-[#7FA58A]/60 hover:bg-[#EFE9E1] transition-all duration-300 flex items-center justify-center overflow-hidden group"
+                >
+                  {form.photos[i] ? (
+                    <>
+                      <img
+                        src={form.photos[i]}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                      <button
+                        type="button"
+                        onClick={e => { e.stopPropagation(); handleRemove(i) }}
+                        className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/90 text-[#1F4D3A] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </>
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-[#1F4D3A] flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-5 h-5 text-[#F4F1EA]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                      </svg>
+                    </div>
+                  )}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const renderHobbies = () => {
     const showProofSection = !!form.hobbyRepresentation
     return (
@@ -887,7 +1054,7 @@ export default function VolunteerOnboardingPage() {
   }
 
   const stepLabels = [
-    "Basic Details", "Interests", "Hobbies & Proof", "Travel Preferences", "Availability", "Safety", "Review",
+    "Basic Details", "Interests", "Profile Intro", "Photos", "Hobbies & Proof", "Travel Preferences", "Availability", "Safety", "Review",
   ]
 
   const getContinueLabel = () => {
@@ -898,6 +1065,7 @@ export default function VolunteerOnboardingPage() {
   const getContinueDisabled = () => {
     if (step === 0) return !form.fullName || !form.email
     if (step === 1) return form.interests.length === 0
+    if (step === 3) return form.photos.filter(Boolean).length < 2
     if (step === TOTAL_STEPS - 1) return completeness < 20
     return false
   }
@@ -917,11 +1085,11 @@ export default function VolunteerOnboardingPage() {
         subtitle={
           step === 0 ? "Help hosts get to know the real you."
           : step === 1 ? "Select what genuinely interests you."
-          : step === 2 ? "Show hosts what makes you unique."
-          : step === 3 ? "Help us find the right stay for your travel style."
-          : step === 4 ? "Let hosts know when you're free to travel."
-          : step === 5 ? "This information helps keep your journey safe."
-          : step === 6 ? "Take one final look before you complete your profile."
+          : step === 4 ? "Show hosts what makes you unique."
+          : step === 5 ? "Help us find the right stay for your travel style."
+          : step === 6 ? "Let hosts know when you're free to travel."
+          : step === 7 ? "This information helps keep your journey safe."
+          : step === 8 ? "Take one final look before you complete your profile."
           : undefined
         }
         currentStep={step}
@@ -933,7 +1101,7 @@ export default function VolunteerOnboardingPage() {
         loading={loading}
         hideBack={step === 0}
         dashboard
-        bare={step === 0}
+        bare={[0, 2, 3].includes(step)}
       >
         {renderStep()}
       </StepLayout>
