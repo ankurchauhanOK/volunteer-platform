@@ -27,7 +27,7 @@ import {
   qualificationOptions, languageOptions, indianCityOptions,
 } from "@/lib/utils"
 
-const TOTAL_STEPS = 8
+const TOTAL_STEPS = 6
 
 interface OnboardingForm {
   step: number
@@ -125,7 +125,6 @@ export default function VolunteerOnboardingPage() {
   const { user, refreshUser } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [skillSearch, setSkillSearch] = useState("")
   const [form, setForm] = useState<OnboardingForm>(() => {
     if (typeof window === "undefined") return defaultForm
     const saved = localStorage.getItem("vt_onboarding_volunteer")
@@ -240,61 +239,15 @@ export default function VolunteerOnboardingPage() {
 
   const renderStep = () => {
     switch (step) {
-      case 0: return renderWelcome()
-      case 1: return renderBasicDetails()
-      case 2: return renderSkills()
-      case 3: return renderHobbies()
-      case 4: return renderTravelPrefs()
-      case 5: return renderAvailability()
-      case 6: return renderSafety()
-      case 7: return renderReview()
+      case 0: return renderBasicDetails()
+      case 1: return renderHobbies()
+      case 2: return renderTravelPrefs()
+      case 3: return renderAvailability()
+      case 4: return renderSafety()
+      case 5: return renderReview()
       default: return null
     }
   }
-
-  const renderWelcome = () => (
-    <div className="space-y-3">
-      <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
-        <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-xl bg-sb-500 flex items-center justify-center shrink-0 ">
-          <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
-          </svg>
-        </div>
-        <div>
-          <h2 className="font-sans font-semibold text-2xl text-text">Begin Your Journey</h2>
-          <p className="text-xs text-text-secondary">Build your travel identity and find the perfect host match.</p>
-        </div>
-        {user && (user.name || user.email) && (
-          <div className="ml-auto flex items-center gap-2 bg-sb-50 rounded-xl px-3 py-1.5 border border-sb-200">
-            <Avatar className="w-6 h-6 ring-1 ring-sb-200">
-              <AvatarImage src={user.avatar} />
-              <AvatarFallback className="bg-sb-100 text-sb-700 text-[10px]">{user.name?.charAt(0) || "?"}</AvatarFallback>
-            </Avatar>
-            <span className="text-[11px] font-medium text-sb-700 truncate max-w-[100px]">{user.name}</span>
-          </div>
-        )}
-      </div>
-
-      <div className="bg-sb-50 rounded-xl border border-sb-200 p-3">
-        <p className="text-[10px] font-semibold text-sb-700 uppercase tracking-wider mb-2">We&apos;ll help you build</p>
-        <div className="grid grid-cols-3 gap-1.5">
-          {[
-            ["👤", "Profile"], ["💪", "Skills"], ["🎨", "Hobbies"],
-            ["🗺️", "Travel"], ["📅", "Dates"], ["🛡️", "Safety"],
-          ].map(([icon, label]) => (
-            <div key={label} className="flex items-center gap-1.5 text-xs text-text bg-white/70 rounded-lg px-2 py-1.5 border border-sb-200/50">
-              <span>{icon}</span>
-              <span className="font-medium">{label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <p className="text-[10px] text-text-muted text-center">You can always update your profile later in settings.</p>
-      </div>
-    </div>
-  )
 
   const months = [
     "January", "February", "March", "April", "May", "June",
@@ -471,168 +424,6 @@ export default function VolunteerOnboardingPage() {
       </div>
     </div>
   )
-
-  const allInterestOptions = [
-    "Photography", "Filmmaking", "Content creation", "Social media",
-    "Blogging", "Writing", "Digital marketing", "Graphic design",
-    "Website designing", "Video editing", "Video making", "Music",
-    "Dance", "Painting & drawing", "Art", "Reading",
-    "Podcasts", "Fashion & style", "Cooking", "Baking",
-    "Cooking classes", "Yoga", "Meditation", "Wellness",
-    "Sports", "Hiking", "Cycling", "Trekking",
-    "Camping", "Adventure activities", "Travel", "Solo travel",
-    "Cultural exchange", "Nature", "Environmentalism", "Eco projects",
-    "Gardening", "Farming", "Agricultural skills", "Animal care",
-    "Teaching", "Language learning", "Community management", "Hospitality",
-    "Front desk management", "Trip leading", "Surfing", "Swimming",
-    "Rafting", "Bird watching", "Crafts", "DIY projects",
-    "Pottery", "Calligraphy", "Journaling", "Technology",
-    "Movies", "Theater", "History", "Festivals",
-    "Volunteering", "Storytelling", "Travel storytelling", "Creative arts",
-    "Content strategy", "Public speaking", "Event management", "Science & research",
-    "Health & fitness", "Mindfulness", "Remote work", "Sustainability",
-    "Eco tourism", "Spirituality", "Culture", "Street photography",
-    "Documentary making", "Illustration", "Animation", "Interior styling",
-    "Coffee culture", "Cafe hopping", "Minimalism", "Backpacking",
-    "Homestay living", "Farm stay life", "Wildlife", "Ocean life",
-    "Mountain life", "Urban exploration", "Slow travel", "Creative travel",
-  ]
-
-  const toggleSkill = (skill: string) => {
-    setForm(prev => {
-      const next = prev.skills.includes(skill)
-        ? prev.skills.filter(s => s !== skill)
-        : [...prev.skills, skill]
-      const updated = { ...prev, skills: next }
-      save(updated)
-      return updated
-    })
-  }
-
-  const removeSkill = (skill: string) => {
-    setForm(prev => {
-      const next = prev.skills.filter(s => s !== skill)
-      const updated = { ...prev, skills: next }
-      save(updated)
-      return updated
-    })
-  }
-
-  const renderSkills = () => {
-    const searchLower = skillSearch.trim().toLowerCase()
-    const filtered = searchLower
-      ? allInterestOptions.filter(o => !form.skills.includes(o) && o.toLowerCase().includes(searchLower))
-      : allInterestOptions.filter(o => !form.skills.includes(o))
-
-    return (
-      <div className="max-w-[820px] mx-auto px-4 sm:px-6 py-10 md:py-16">
-        {/* Heading */}
-        <div className="text-center mb-10">
-          <h1
-            className="font-tanker text-[#234232] leading-[1.08] tracking-tight mb-3 text-balance"
-            style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)" }}
-          >
-            What are you into?
-          </h1>
-          <p className="text-base text-[#6F8B78] leading-relaxed">
-            Select the things that genuinely interest you.
-          </p>
-        </div>
-
-        {/* Selected Picks */}
-        {form.skills.length > 0 && (
-          <div className="mb-8">
-            <div className="bg-[#EFE9E1]/60 rounded-xl border border-[#7FA58A]/30 p-4 sm:p-5">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-semibold text-[#6F8B78] uppercase tracking-wider">
-                  Your picks
-                </span>
-                <span className="text-xs font-medium text-[#234232]">
-                  {form.skills.length} selected
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {form.skills.map(skill => (
-                  <div
-                    key={skill}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium bg-[#E8F1EA] border border-[#7FA58A] text-[#234232]"
-                  >
-                    <span>{skill}</span>
-                    <button
-                      type="button"
-                      onClick={() => removeSkill(skill)}
-                      className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-[#7FA58A]/20 transition-colors"
-                    >
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Search */}
-        <div className="mb-8 relative">
-          <svg
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6F8B78] pointer-events-none"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input
-            type="text"
-            value={skillSearch}
-            onChange={e => setSkillSearch(e.target.value)}
-            placeholder="Search interests..."
-            className="w-full h-12 rounded-full border bg-white pl-11 pr-10 text-sm text-[#234232] placeholder:text-[#6F8B78] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-200 border-[#7FA58A]/40"
-          />
-          {skillSearch && (
-            <button
-              type="button"
-              onClick={() => setSkillSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center text-[#6F8B78] hover:text-[#234232] hover:bg-[#E8F1EA] transition-colors"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          )}
-        </div>
-
-        {/* Chip Cloud */}
-        <div className="flex flex-wrap justify-center gap-2.5 pb-8">
-          {filtered.map(interest => (
-            <button
-              key={interest}
-              type="button"
-              onClick={() => toggleSkill(interest)}
-              className="px-4 py-2 rounded-full text-sm font-medium bg-transparent text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B] hover:bg-[#E8F1EA]/50 transition-all duration-200"
-            >
-              {interest}
-            </button>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <div className="pt-4 flex justify-center">
-          <button
-            onClick={handleContinue}
-            className="w-14 h-14 rounded-full bg-[#234232] text-[#F7F4EE] flex items-center justify-center shadow-[0_4px_14px_rgba(35,66,50,0.25)] hover:shadow-[0_6px_20px_rgba(35,66,50,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    )
-  }
 
   const renderHobbies = () => {
     const showProofSection = !!form.hobbyRepresentation
@@ -929,20 +720,17 @@ export default function VolunteerOnboardingPage() {
   }
 
   const stepLabels = [
-    "Welcome", "Basic Details", "Skills & Talents", "Hobbies & Proof",
-    "Travel Preferences", "Availability", "Safety", "Review",
+    "Basic Details", "Hobbies & Proof", "Travel Preferences", "Availability", "Safety", "Review",
   ]
 
   const getContinueLabel = () => {
-    if (step === 0) return "Start Profile"
     if (step === TOTAL_STEPS - 1) return "Complete Profile"
     return "Continue"
   }
 
   const getContinueDisabled = () => {
-    if (step === 0) return false
-    if (step === 1) return !form.fullName || !form.email
-    if (step === 7) return completeness < 20
+    if (step === 0) return !form.fullName || !form.email
+    if (step === TOTAL_STEPS - 1) return completeness < 20
     return false
   }
 
@@ -959,27 +747,24 @@ export default function VolunteerOnboardingPage() {
       <StepLayout
         title={stepLabels[step]}
         subtitle={
-          step === 0 ? "Tell us about you so we can match you with the right opportunities."
-          : step === 1 ? "Help hosts get to know the real you."
-          : step === 2 ? "Share what you can bring to a volunteer experience."
-          : step === 3 ? "Show hosts what makes you unique."
-          : step === 4 ? "Help us find the right stay for your travel style."
-          : step === 5 ? "Let hosts know when you're free to travel."
-          : step === 6 ? "This information helps keep your journey safe."
-          : step === 7 ? "Take one final look before you complete your profile."
+          step === 0 ? "Help hosts get to know the real you."
+          : step === 1 ? "Show hosts what makes you unique."
+          : step === 2 ? "Help us find the right stay for your travel style."
+          : step === 3 ? "Let hosts know when you're free to travel."
+          : step === 4 ? "This information helps keep your journey safe."
+          : step === 5 ? "Take one final look before you complete your profile."
           : undefined
         }
         currentStep={step}
         totalSteps={TOTAL_STEPS}
         onBack={step > 0 ? () => setStep(step - 1) : undefined}
         onContinue={step === TOTAL_STEPS - 1 ? undefined : handleContinue}
-        onSkip={step === 0 ? handleSkip : undefined}
         continueLabel={getContinueLabel()}
         continueDisabled={getContinueDisabled()}
         loading={loading}
         hideBack={step === 0}
         dashboard
-        bare={step === 1}
+        bare={step === 0}
       >
         {renderStep()}
       </StepLayout>
