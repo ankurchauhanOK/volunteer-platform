@@ -74,50 +74,52 @@ export function StepLayout({
           </>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {helperPanel ? (
-            <>
-              <div className="lg:col-span-5 xl:col-span-4 space-y-3">
-                <div className="bg-white rounded-xl border border-border p-5 lg:sticky lg:top-20 shadow-[0_0_0.5px_rgba(0,0,0,0.14),0_1px_1px_rgba(0,0,0,0.24)]">
-                  <h1 className="font-sans heading-2xl text-text">{title}</h1>
-                  {subtitle && <p className="text-xs text-text-secondary mt-2 leading-relaxed">{subtitle}</p>}
-                  {helperPanel}
-                </div>
-              </div>
-              <div className="lg:col-span-7 xl:col-span-8" ref={contentRef}>
-                {dashboard ? (
-                  children
-                ) : (
-                  <div className="bg-white rounded-xl border border-border p-5 sm:p-6 shadow-[0_0_0.5px_rgba(0,0,0,0.14),0_1px_1px_rgba(0,0,0,0.24)]">
-                    {children}
+        {bare ? (
+          <div ref={contentRef}>{children}</div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {helperPanel ? (
+              <>
+                <div className="lg:col-span-5 xl:col-span-4 space-y-3">
+                  <div className="bg-white rounded-xl border border-border p-5 lg:sticky lg:top-20 shadow-[0_0_0.5px_rgba(0,0,0,0.14),0_1px_1px_rgba(0,0,0,0.24)]">
+                    <h1 className="font-sans heading-2xl text-text">{title}</h1>
+                    {subtitle && <p className="text-xs text-text-secondary mt-2 leading-relaxed">{subtitle}</p>}
+                    {helperPanel}
                   </div>
-                )}
-              </div>
-            </>
-          ) : (
-            <div className={bare ? "" : "lg:col-span-10 lg:col-start-2"} ref={contentRef}>
-              {dashboard || bare ? (
-                <>
-                  {!bare && (
+                </div>
+                <div className="lg:col-span-7 xl:col-span-8" ref={contentRef}>
+                  {dashboard ? (
+                    children
+                  ) : (
+                    <div className="bg-white rounded-xl border border-border p-5 sm:p-6 shadow-[0_0_0.5px_rgba(0,0,0,0.14),0_1px_1px_rgba(0,0,0,0.24)]">
+                      {children}
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <div className="lg:col-span-10 lg:col-start-2" ref={contentRef}>
+                {dashboard ? (
+                  <>
                     <div className="mb-4">
                       <h1 className="font-sans heading-2xl text-text">{title}</h1>
                       {subtitle && <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">{subtitle}</p>}
                     </div>
-                  )}
-                  {children}
-                </>
-              ) : (
-                <div className="bg-white rounded-xl border border-border p-5 sm:p-6 shadow-[0_0_0.5px_rgba(0,0,0,0.14),0_1px_1px_rgba(0,0,0,0.24)]">
-                  <div className="mb-4">
-                    <h1 className="font-sans heading-2xl text-text">{title}</h1>
-                    {subtitle && <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">{subtitle}</p>}
+                    {children}
+                  </>
+                ) : (
+                  <div className="bg-white rounded-xl border border-border p-5 sm:p-6 shadow-[0_0_0.5px_rgba(0,0,0,0.14),0_1px_1px_rgba(0,0,0,0.24)]">
+                    <div className="mb-4">
+                      <h1 className="font-sans heading-2xl text-text">{title}</h1>
+                      {subtitle && <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">{subtitle}</p>}
+                    </div>
+                    {children}
                   </div>
-                  {children}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         {!hideFooter && (
           <>

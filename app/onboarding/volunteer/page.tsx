@@ -332,22 +332,22 @@ export default function VolunteerOnboardingPage() {
   }
 
   const renderBasicDetails = () => (
-    <div className="max-w-[760px] mx-auto py-8 md:py-12">
+    <div className="max-w-[860px] mx-auto px-4 sm:px-6 py-10 md:py-16">
       {/* Editorial Header */}
-      <div className="text-center mb-10 md:mb-14">
+      <div className="text-center mb-12 md:mb-16">
         <h1
-          className="font-tanker text-[#234232] leading-[1.1] tracking-tight mb-4"
-          style={{ fontSize: "clamp(1.8rem, 4vw, 3.2rem)" }}
+          className="font-tanker text-[#234232] leading-[1.08] tracking-tight mb-4 text-balance"
+          style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)" }}
         >
           Tell us about yourself so we can personalize your journey.
         </h1>
-        <p className="text-sm text-[#6F8B78] max-w-md mx-auto leading-relaxed">
+        <p className="text-base text-[#6F8B78] max-w-lg mx-auto leading-relaxed">
           The questions help us match you with the right hosts and experiences.
         </p>
       </div>
 
       {/* Form */}
-      <div className="space-y-8 md:space-y-10">
+      <div className="space-y-10 md:space-y-12">
         {/* Row 1: First / Last Name */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
