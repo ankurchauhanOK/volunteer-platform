@@ -31,16 +31,14 @@ const TOTAL_STEPS = 8
 
 interface OnboardingForm {
   step: number
-  firstName: string
-  lastName: string
   fullName: string
-  age: string
+  email: string
   birthDay: string
   birthMonth: string
   birthYear: string
-  city: string
-  country: string
   gender: string
+  travelDuration: string
+  travelCompanion: string
   languages: string[]
   qualification: string
   skills: string[]
@@ -52,7 +50,6 @@ interface OnboardingForm {
   hobbyProofUrl: string
   preferredDestinations: string[]
   travelType: string
-  travelExperience: string
   preferredEnvironment: string[]
   preferredStayType: string[]
   soloOrGroup: string
@@ -71,12 +68,12 @@ interface OnboardingForm {
 
 const defaultForm: OnboardingForm = {
   step: 0,
-  firstName: "", lastName: "", fullName: "", age: "", birthDay: "", birthMonth: "", birthYear: "",
-  city: "", country: "India",
-  gender: "", languages: [], qualification: "",
+  fullName: "", email: "", birthDay: "", birthMonth: "", birthYear: "",
+  gender: "", travelDuration: "", travelCompanion: "",
+  languages: [], qualification: "",
   skills: [], talentAreas: [], otherSkill: "",
   hobbies: [], hobbyRepresentation: "", hobbyDescription: "", hobbyProofUrl: "",
-  preferredDestinations: [], travelType: "", travelExperience: "", preferredEnvironment: [],
+  preferredDestinations: [], travelType: "", preferredEnvironment: [],
   preferredStayType: [], soloOrGroup: "",
   travelStyle: "", experienceLevel: "", remoteWork: false,
   emergencyName: "", emergencyPhone: "", emergencyRelation: "",
@@ -86,7 +83,8 @@ const defaultForm: OnboardingForm = {
 
 function calcCompleteness(form: OnboardingForm): number {
   const fields = [
-    form.firstName, form.lastName, form.age, form.city, form.gender,
+    form.fullName, form.email, form.birthDay, form.gender,
+    form.travelDuration, form.travelCompanion,
     form.languages.length > 0, form.qualification,
     form.skills.length > 0, form.talentAreas.length > 0,
     form.hobbies.length > 0, form.preferredDestinations.length > 0,
@@ -162,9 +160,8 @@ export default function VolunteerOnboardingPage() {
       const nameParts = (user.name || setupData.firstName || "").split(" ")
       setForm(prev => ({
         ...prev,
-        firstName: prev.firstName || nameParts[0] || "",
-        lastName: prev.lastName || nameParts.slice(1).join(" ") || "",
         fullName: prev.fullName || user.name || setupData.firstName || "",
+        email: prev.email || user.email || "",
         hobbies: prev.hobbies.length > 0 ? prev.hobbies : (setupData.interests || []),
       }))
     }
@@ -199,10 +196,8 @@ export default function VolunteerOnboardingPage() {
 
     db.volunteerProfiles.upsert({
       userId: user.id,
-      age: form.age ? parseInt(form.age) : undefined,
       gender: form.gender || undefined,
-      city: form.city || undefined,
-      country: form.country,
+      country: "India",
       bio: form.hobbyDescription || undefined,
       languages: form.languages,
       skills: form.skills,
@@ -305,84 +300,55 @@ export default function VolunteerOnboardingPage() {
     "July", "August", "September", "October", "November", "December"
   ]
 
-  const travelExperienceOptions = [
-    "Cultural Exchange",
-    "Eco Volunteering",
-    "Slow Travel",
-    "Creative Retreats",
-    "Community Living",
-    "Adventure Travel",
-  ]
-
-  const interestChips = [
-    "Photography", "Trekking", "Cooking", "Storytelling", "Music",
-    "Yoga", "Farming", "Teaching", "Design", "Animal Care",
-    "Filmmaking", "Writing", "Painting", "Sustainability",
-  ]
-
-  const toggleInterest = (interest: string) => {
-    setForm(prev => {
-      const next = prev.hobbies.includes(interest)
-        ? prev.hobbies.filter(h => h !== interest)
-        : [...prev.hobbies, interest]
-      const updated = { ...prev, hobbies: next }
-      save(updated)
-      return updated
-    })
-  }
+  const travelDurationOptions = ["0-1 year", "1-3 year", "3 year +"]
+  const travelCompanionOptions = ["Solo", "With friends", "With a travel group", "I'm open to anything"]
 
   const renderBasicDetails = () => (
-    <div className="max-w-[860px] mx-auto px-4 sm:px-6 py-10 md:py-16">
+    <div className="max-w-[820px] mx-auto px-4 sm:px-6 py-10 md:py-16">
       {/* Editorial Header */}
       <div className="text-center mb-12 md:mb-16">
         <h1
           className="font-tanker text-[#234232] leading-[1.08] tracking-tight mb-4 text-balance"
           style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)" }}
         >
-          Tell us about yourself so we can personalize your journey.
+          Tell us about yourself
         </h1>
         <p className="text-base text-[#6F8B78] max-w-lg mx-auto leading-relaxed">
-          The questions help us match you with the right hosts and experiences.
+          Help us personalize your volunteering journey.
         </p>
       </div>
 
       {/* Form */}
       <div className="space-y-10 md:space-y-12">
-        {/* Row 1: First / Last Name */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
-              First name
-            </label>
-            <input
-              type="text"
-              value={form.firstName}
-              onChange={e => {
-                update("firstName", e.target.value)
-                update("fullName", `${e.target.value} ${form.lastName}`.trim())
-              }}
-              placeholder="First name"
-              className="w-full h-12 px-4 rounded-xl bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
-              Last name
-            </label>
-            <input
-              type="text"
-              value={form.lastName}
-              onChange={e => {
-                update("lastName", e.target.value)
-                update("fullName", `${form.firstName} ${e.target.value}`.trim())
-              }}
-              placeholder="Last name"
-              className="w-full h-12 px-4 rounded-xl bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250"
-            />
-          </div>
+        {/* Name */}
+        <div>
+          <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
+            Name
+          </label>
+          <input
+            type="text"
+            value={form.fullName}
+            onChange={e => update("fullName", e.target.value)}
+            placeholder="Your full name"
+            className="w-full h-12 px-4 rounded-xl bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250"
+          />
         </div>
 
-        {/* Row 2: Birthday */}
+        {/* Email */}
+        <div>
+          <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
+            Email
+          </label>
+          <input
+            type="email"
+            value={form.email}
+            onChange={e => update("email", e.target.value)}
+            placeholder="your@email.com"
+            className="w-full h-12 px-4 rounded-xl bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250"
+          />
+        </div>
+
+        {/* Birthday */}
         <div>
           <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
             Birthday
@@ -420,15 +386,12 @@ export default function VolunteerOnboardingPage() {
               })}
             </select>
           </div>
-          <p className="text-[11px] text-[#6F8B78] mt-2">
-            Only your age — not your specific birth date — will be visible to hosts.
-          </p>
         </div>
 
-        {/* Row 3: Gender pills */}
+        {/* Gender */}
         <div>
           <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-3">
-            Which gender best describes you?
+            Gender
           </label>
           <div className="flex flex-wrap gap-2.5">
             {["Man", "Woman", "Non-binary", "More +"].map(g => (
@@ -448,48 +411,47 @@ export default function VolunteerOnboardingPage() {
           </div>
         </div>
 
-        {/* Row 4: Travel Experience */}
-        <div>
-          <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
-            What kind of travel experience are you looking for?
-          </label>
-          <div className="relative">
-            <select
-              value={form.travelExperience}
-              onChange={e => update("travelExperience", e.target.value)}
-              className="w-full h-12 px-4 rounded-xl bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250 appearance-none"
-            >
-              <option value="">Please choose</option>
-              {travelExperienceOptions.map(opt => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-              <svg className="w-4 h-4 text-[#6F8B78]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        {/* Row 5: Interest Chips */}
+        {/* Travel Duration */}
         <div>
           <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-3">
-            What are you into?
+            I have been travelling for
           </label>
-          <div className="flex flex-wrap gap-2">
-            {interestChips.map(interest => (
+          <div className="flex flex-wrap gap-2.5">
+            {travelDurationOptions.map(opt => (
               <button
-                key={interest}
+                key={opt}
                 type="button"
-                onClick={() => toggleInterest(interest)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                  form.hobbies.includes(interest)
+                onClick={() => update("travelDuration", opt)}
+                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                  form.travelDuration === opt
                     ? "bg-[#234232] text-[#F7F4EE]"
                     : "bg-transparent text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
                 }`}
               >
-                {interest}
+                {opt}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Travel Companion */}
+        <div>
+          <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-3">
+            I usually travel
+          </label>
+          <div className="flex flex-wrap gap-2.5">
+            {travelCompanionOptions.map(opt => (
+              <button
+                key={opt}
+                type="button"
+                onClick={() => update("travelCompanion", opt)}
+                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                  form.travelCompanion === opt
+                    ? "bg-[#234232] text-[#F7F4EE]"
+                    : "bg-transparent text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
+                }`}
+              >
+                {opt}
               </button>
             ))}
           </div>
@@ -499,7 +461,7 @@ export default function VolunteerOnboardingPage() {
         <div className="pt-2">
           <button
             onClick={handleContinue}
-            disabled={!form.firstName}
+            disabled={!form.fullName || !form.email}
             className="w-full h-14 rounded-full bg-[#234232] text-[#F7F4EE] text-base font-semibold shadow-[0_4px_14px_rgba(35,66,50,0.25)] hover:shadow-[0_6px_20px_rgba(35,66,50,0.35)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-[0_4px_14px_rgba(35,66,50,0.25)] transition-all duration-300"
           >
             Continue Your Journey
@@ -769,7 +731,7 @@ export default function VolunteerOnboardingPage() {
               </Avatar>
               <div className="min-w-0">
                 <p className="text-xs font-semibold text-text truncate">{form.fullName || user?.name}</p>
-                <p className="text-[10px] text-text-muted truncate">{form.city || form.country}</p>
+                <p className="text-[10px] text-text-muted truncate">India</p>
               </div>
             </div>
           </div>
@@ -850,7 +812,7 @@ export default function VolunteerOnboardingPage() {
 
   const getContinueDisabled = () => {
     if (step === 0) return false
-    if (step === 1) return !form.firstName
+    if (step === 1) return !form.fullName || !form.email
     if (step === 7) return completeness < 20
     return false
   }
