@@ -21,6 +21,7 @@ interface StepLayoutProps {
   hideFooter?: boolean
   helperPanel?: ReactNode
   dashboard?: boolean
+  bare?: boolean
   children: ReactNode
 }
 
@@ -40,6 +41,7 @@ export function StepLayout({
   hideFooter = false,
   helperPanel,
   dashboard = false,
+  bare = false,
   children,
 }: StepLayoutProps) {
   const stepLabels = ["Welcome", "Basic Details", "Skills & Talents", "Hobbies & Proof", "Travel Preferences", "Availability", "Safety", "Review"]
@@ -93,13 +95,15 @@ export function StepLayout({
               </div>
             </>
           ) : (
-            <div className="lg:col-span-10 lg:col-start-2" ref={contentRef}>
-              {dashboard ? (
+            <div className={bare ? "" : "lg:col-span-10 lg:col-start-2"} ref={contentRef}>
+              {dashboard || bare ? (
                 <>
-                  <div className="mb-4">
-                    <h1 className="font-sans heading-2xl text-text">{title}</h1>
-                    {subtitle && <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">{subtitle}</p>}
-                  </div>
+                  {!bare && (
+                    <div className="mb-4">
+                      <h1 className="font-sans heading-2xl text-text">{title}</h1>
+                      {subtitle && <p className="text-xs text-text-secondary mt-1.5 leading-relaxed">{subtitle}</p>}
+                    </div>
+                  )}
                   {children}
                 </>
               ) : (
