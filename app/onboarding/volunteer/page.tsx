@@ -7,27 +7,10 @@ import { Providers } from "@/components/Providers"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Textarea } from "@/components/ui/Textarea"
-import { Badge } from "@/components/ui/Badge"
-import { Progress } from "@/components/ui/Progress"
-import { Separator } from "@/components/ui/Separator"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar"
 import { db } from "@/lib/store"
 import { StepLayout } from "@/components/onboarding/StepLayout"
-import { ChipInput } from "@/components/onboarding/ChipInput"
-import { CardSelect } from "@/components/onboarding/CardSelect"
 
-import { SearchableSelect } from "@/components/onboarding/SearchableSelect"
-import { SectionFAQ } from "@/components/onboarding/SectionFAQ"
-import {
-  skillOptions, popularSkills, talentAreaOptions, hobbyOptions,
-  hobbyRepresentationOptions, destinationOptions, travelTypeOptions,
-  environmentOptions, stayTypeOptions,
-  soloGroupOptions, travelStyleOptions, experienceLevelOptions,
-  relationshipOptions, genderOptions,
-  qualificationOptions, languageOptions, indianCityOptions,
-} from "@/lib/utils"
-
-const TOTAL_STEPS = 4
+const TOTAL_STEPS = 5
 
 interface OnboardingForm {
   step: number
@@ -50,6 +33,7 @@ interface OnboardingForm {
   hobbyDescription: string
   hobbyProofUrl: string
   photos: string[]
+  bio: string
   preferredDestinations: string[]
   travelType: string
   preferredEnvironment: string[]
@@ -74,7 +58,7 @@ const defaultForm: OnboardingForm = {
   gender: "", travelDuration: "", travelCompanion: "",
   languages: [], qualification: "",
   interests: [], skills: [], talentAreas: [], otherSkill: "",
-  hobbies: [], hobbyRepresentation: "", hobbyDescription: "", hobbyProofUrl: "", photos: [],
+  hobbies: [], hobbyRepresentation: "", hobbyDescription: "", hobbyProofUrl: "", photos: [], bio: "",
   preferredDestinations: [], travelType: "", preferredEnvironment: [],
   preferredStayType: [], soloOrGroup: "",
   travelStyle: "", experienceLevel: "", remoteWork: false,
@@ -89,19 +73,13 @@ function calcCompleteness(form: OnboardingForm): number {
     form.travelDuration, form.travelCompanion,
     form.interests.length > 0,
     form.photos.filter(Boolean).length >= 2,
+    form.bio.length > 10,
   ]
   const filled = fields.filter(Boolean).length
   return Math.round((filled / fields.length) * 100)
 }
 
-const skillIcons: Record<string, string> = {
-  teaching: "📚", farming: "🌾", hospitality: "🏨", "social media": "📱",
-  photography: "📸", video: "🎥", "animal care": "🐾", yoga: "🧘",
-  language: "🗣️", cooking: "🍳", "content writing": "✍️", "graphic design": "🎨",
-  "web development": "💻", music: "🎵", art: "🎭", dance: "💃",
-  sports: "⚽", english: "🔤", marketing: "📢", events: "🎪",
-  reception: "💁", housekeeping: "🧹", "event help": "🎯",
-}
+
 
 const hobbyIcons: Record<string, string> = {
   trekking: "🏔️", photography: "📸", yoga: "🧘", cooking: "🍳",
@@ -202,7 +180,7 @@ export default function VolunteerOnboardingPage() {
       userId: user.id,
       gender: form.gender || undefined,
       country: "India",
-      bio: form.hobbyDescription || undefined,
+      bio: form.bio || form.hobbyDescription || undefined,
       languages: form.languages,
       interests: form.interests,
       skills: form.skills,
@@ -247,6 +225,7 @@ export default function VolunteerOnboardingPage() {
       case 1: return renderInterests()
       case 2: return renderProfileIntro()
       case 3: return renderPhotoUpload()
+      case 4: return renderBio()
       default: return null
     }
   }
@@ -754,302 +733,89 @@ export default function VolunteerOnboardingPage() {
     )
   }
 
-  const renderHobbies = () => {
-    const showProofSection = !!form.hobbyRepresentation
-    return (
-      <div className="space-y-3">
-        <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
-          <ChipInput
-          label="What do you love doing?"
-          options={hobbyOptions}
-          selected={form.hobbies}
-          onChange={v => update("hobbies", v)}
-          searchPlaceholder="Search hobbies..."
-          helperText="Select the hobbies that make you, you."
-          iconMap={hobbyIcons}
-        />
+  const renderBio = () => {
+    const [wordCount, setWordCount] = useState(0)
 
-        <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-text uppercase tracking-wider">How to show your hobby?</label>
-          <div className="grid grid-cols-3 gap-1.5">
-            {hobbyRepresentationOptions.map(opt => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => update("hobbyRepresentation", opt.value)}
-                className={`flex flex-col items-center gap-0.5 rounded-lg border py-2 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-500 ${
-                  form.hobbyRepresentation === opt.value
-                    ? "border-sb-200 bg-sb-50"
-                    : "border-border hover:border-gray-200"
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const text = e.target.value
+      update("bio", text)
+      const count = text.trim().length > 0 ? text.trim().split(/\s+/).length : 0
+      setWordCount(count)
+    }
+
+    return (
+      <div className="relative min-h-[calc(100vh-180px)] flex flex-col items-center justify-center px-4 sm:px-6">
+        <div className="w-full max-w-2xl mx-auto flex flex-col items-center text-center">
+          {/* Progress dots */}
+          <div className="flex items-center gap-3 mb-10">
+            {Array.from({ length: TOTAL_STEPS }, (_, i) => (
+              <div
+                key={i}
+                className={`rounded-full transition-all duration-500 ${
+                  i === step
+                    ? "w-8 h-2 bg-[#1F4D3A]"
+                    : i < step
+                    ? "w-2 h-2 bg-[#1F4D3A]/40"
+                    : "w-2 h-2 bg-[#D4CFC4]"
                 }`}
-              >
-                <span className="text-base">{opt.icon}</span>
-                <span className={`text-[10px] font-medium ${
-                  form.hobbyRepresentation === opt.value ? "text-sb-700" : "text-text-secondary"
-                }`}>{opt.label}</span>
-              </button>
+              />
             ))}
           </div>
-        </div>
 
-        {showProofSection && (
-          <div className="bg-sb-50 rounded-lg p-3 space-y-2 border border-sb-200/50">
-            <p className="text-[10px] font-semibold text-text uppercase tracking-wider flex items-center gap-1">
-              <span className="text-sb-500">✦</span> Share your proof
-            </p>
-            {["text", "mixed"].includes(form.hobbyRepresentation) && (
-              <Textarea label="Short description" id="hobbyDesc" value={form.hobbyDescription} onChange={e => update("hobbyDescription", e.target.value)} placeholder="Tell hosts what you enjoy..." rows={2} />
-            )}
-            {["photo", "mixed"].includes(form.hobbyRepresentation) && (
-              <div className="border border-dashed border-gray-200 rounded-lg p-3 text-center"><p className="text-xs text-gray-400">Upload a photo — Coming soon</p></div>
-            )}
-            {["video", "mixed"].includes(form.hobbyRepresentation) && (
-              <div className="border border-dashed border-gray-200 rounded-lg p-3 text-center"><p className="text-xs text-gray-400">Upload a video — Coming soon</p></div>
-            )}
-            {["audio", "mixed"].includes(form.hobbyRepresentation) && (
-              <div className="border border-dashed border-gray-200 rounded-lg p-3 text-center"><p className="text-xs text-gray-400">Record audio — Coming soon</p></div>
-            )}
-            {["portfolio", "mixed"].includes(form.hobbyRepresentation) && (
-              <Input label="Portfolio link" id="portfolio" value={form.hobbyProofUrl} onChange={e => update("hobbyProofUrl", e.target.value)} placeholder="https://..." />
-            )}
-          </div>
-        )}
+          <h1
+            className="font-tanker text-[#1F4D3A] leading-[1.1] tracking-tight mb-5 text-balance"
+            style={{ fontSize: "clamp(2rem, 4.5vw, 3.2rem)" }}
+          >
+            Tell us something about yourself
+          </h1>
+          <p className="font-sans text-lg text-[#4A6B5A] leading-relaxed max-w-xl mb-10">
+            Share a little about your personality, travel mindset, or the experiences that shape you.
+          </p>
 
-        <SectionFAQ
-          items={[
-            { question: "📸 What is profile proof?", answer: "Any example of your work or hobby — a photo, video, recording, or portfolio link. Hosts love seeing real examples!" },
-          ]}
-        />
-        </div>
-      </div>
-    )
-  }
-
-  const renderTravelPrefs = () => (
-    <div className="space-y-3">
-      <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
-        <ChipInput
-        label="Preferred destinations in India"
-        options={destinationOptions}
-        selected={form.preferredDestinations}
-        onChange={v => update("preferredDestinations", v)}
-        searchPlaceholder="Search destinations..."
-        iconMap={destIcons}
-      />
-
-      <CardSelect label="🗺️ Travel type" options={travelTypeOptions} selected={form.travelType} onChange={v => update("travelType", v as any)} />
-
-      <div className="grid grid-cols-2 gap-2.5">
-        <CardSelect label="🌿 Environment" options={environmentOptions.map(e => ({ value: e.toLowerCase(), label: e }))} selected={form.preferredEnvironment} onChange={v => update("preferredEnvironment", v as any)} multi columns={2} />
-        <CardSelect label="🏠 Stay type" options={stayTypeOptions.map(s => ({ value: s.toLowerCase(), label: s }))} selected={form.preferredStayType} onChange={v => update("preferredStayType", v as any)} multi columns={2} />
-      </div>
-
-      <CardSelect label="👤 Solo or group?" options={soloGroupOptions.map(s => ({ value: s.value, label: s.label }))} selected={form.soloOrGroup} onChange={v => update("soloOrGroup", v as any)} columns={2} />
-
-      <SectionFAQ
-        items={[
-          { question: "🤔 Why ask for travel preferences?", answer: "The more specific you are, the better your matches. Hosts look for volunteers who genuinely want to visit their region." },
-        ]}
-      />
-      </div>
-    </div>
-  )
-
-  const renderAvailability = () => (
-    <div className="space-y-3">
-      <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
-        <SearchableSelect label="Travel style" options={travelStyleOptions} value={form.travelStyle} onChange={v => update("travelStyle", v)} placeholder="How do you like to travel?" />
-
-        <CardSelect label="Experience" options={experienceLevelOptions} selected={form.experienceLevel} onChange={v => update("experienceLevel", v as any)} columns={2} />
-
-      <div className="flex items-center justify-between rounded-lg border border-border p-3 bg-white">
-        <div>
-          <p className="text-xs font-medium text-gray-900">Remote work while traveling?</p>
-          <p className="text-[10px] text-gray-500">Do you work remotely during volunteering?</p>
-        </div>
-        <div className="flex gap-1">
-          {["Yes", "No"].map(opt => (
-            <button
-              key={opt}
-              type="button"
-              onClick={() => update("remoteWork", opt === "Yes")}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-500 ${
-                (opt === "Yes" ? form.remoteWork === true : form.remoteWork === false)
-                  ? "bg-sb-50 text-sb-700 border border-sb-200"
-                  : "bg-gray-50 text-gray-500 border border-gray-200"
-              }`}
-            >
-              {opt}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      </div>
-    </div>
-  )
-
-  const renderSafety = () => (
-    <div className="space-y-3">
-      <div className="bg-white rounded-xl border border-border p-5 shadow-sm">
-        <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-50 border border-amber-100">
-        <span className="text-base">🛡️</span>
-        <div className="text-[11px] text-amber-800 leading-relaxed">
-          <p className="font-medium">Your safety matters</p>
-          Emergency contact details are only shared with hosts after your application is accepted.
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-2.5">
-        <Input label="Emergency contact name" id="emergencyName" value={form.emergencyName} onChange={e => update("emergencyName", e.target.value)} placeholder="Full name" />
-        <Input label="Emergency contact phone" id="emergencyPhone" type="tel" value={form.emergencyPhone} onChange={e => update("emergencyPhone", e.target.value)} placeholder="+91-XXXXXXXXXX" />
-      </div>
-
-      <SearchableSelect label="Relationship" options={relationshipOptions} value={form.emergencyRelation} onChange={v => update("emergencyRelation", v)} placeholder="Select relationship" />
-
-      <details className="group rounded-lg border border-border bg-white">
-        <summary className="text-[11px] font-medium text-text-secondary cursor-pointer hover:text-text transition-colors px-3 py-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-500">
-          Optional emergency details
-        </summary>
-        <div className="px-3 pb-3 space-y-2">
-          <Textarea label="Notes" id="emergencyNotes" value={form.emergencyNotes} onChange={e => update("emergencyNotes", e.target.value)} placeholder="Special instructions?" rows={1} />
-          <Textarea label="Medical" id="medical" value={form.medicalConsiderations} onChange={e => update("medicalConsiderations", e.target.value)} placeholder="Allergies, conditions..." rows={1} />
-          <Input label="Special requirements" id="special" value={form.specialRequirements} onChange={e => update("specialRequirements", e.target.value)} placeholder="Dietary, accessibility, etc." />
-        </div>
-      </details>
-
-      <div className="space-y-2">
-        {[
-          { key: "communityGuidelinesAgreed", label: "I agree to follow Voluntree's community guidelines and treat all hosts and volunteers with respect." },
-          { key: "respectfulConductAgreed", label: "I commit to respectful, responsible conduct during my volunteer stays." },
-        ].map(({ key, label }) => (
-          <label key={key} className="flex items-start gap-2 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={form[key as keyof OnboardingForm] as boolean}
-              onChange={e => update(key as keyof OnboardingForm, e.target.checked)}
-              className="mt-0.5 w-3.5 h-3.5 rounded border-gray-300 text-sb-600 focus:ring-sb-500"
+          {/* Textarea */}
+          <div className="w-full relative group">
+            <textarea
+              value={form.bio}
+              onChange={handleChange}
+              placeholder="I love slow travel, meeting new people, and experiencing cultures through local communities..."
+              className="w-full h-64 md:h-80 bg-white border border-[#E5E5E5] focus:border-[#1F4D3A] focus:ring-2 focus:ring-[#1F4D3A]/10 resize-none px-6 py-6 md:px-8 md:py-8 font-sans text-base text-[#1c1c18] placeholder:text-[#c0c9c2] rounded-2xl transition-all duration-300 shadow-[0_8px_30px_rgba(2,54,37,0.03)]"
             />
-            <span className="text-[11px] text-gray-600 group-hover:text-gray-900 transition-colors leading-relaxed">{label}</span>
-          </label>
-        ))}
-      </div>
-
-      <SectionFAQ
-        items={[
-          { question: "🛡️ Why is emergency contact needed?", answer: "Standard safety practice. Only shared with hosts after application is confirmed." },
-          { question: "👁️ How will hosts see my profile?", answer: "Skills, hobbies, and preferences are visible. Emergency contact is never on your public profile." },
-        ]}
-      />
-      </div>
-    </div>
-  )
-
-  const renderReview = () => {
-    const suggestions: string[] = []
-    if (!form.skills.length) suggestions.push("Add more skills")
-    if (!form.hobbies.length) suggestions.push("Add hobbies")
-    if (!form.hobbyRepresentation) suggestions.push("Upload proof of your hobby")
-    if (!form.hobbyDescription && form.hobbies.length > 0) suggestions.push("Complete your bio")
-    if (!form.emergencyName) suggestions.push("Add emergency contact")
-
-    const completenessColor = completeness >= 80 ? "text-sb-600" : completeness >= 50 ? "text-amber-600" : "text-text-muted"
-
-    return (
-      <div className="space-y-3">
-        <div className="bg-white rounded-xl border border-border p-4">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <h3 className="text-sm font-bold text-text">Profile completeness</h3>
-              <p className="text-[10px] text-text-secondary">How your profile looks to hosts</p>
-            </div>
-            <div className="text-right">
-              <span className={`text-2xl font-bold ${completenessColor}`}>{completeness}%</span>
-              {completeness >= 80 && <p className="text-[10px] font-medium text-sb-600">Looks great!</p>}
+            <div className="absolute bottom-5 right-6 md:right-8 flex items-center gap-4">
+              <span
+                className={`text-xs font-semibold uppercase tracking-wider transition-colors ${
+                  wordCount > 0 ? "text-[#1F4D3A]/70" : "text-[#717973]"
+                }`}
+              >
+                {wordCount} word{wordCount !== 1 ? "s" : ""}
+              </span>
             </div>
           </div>
-          <Progress value={completeness} className="h-2" />
-        </div>
 
-        <div className="grid grid-cols-2 gap-2">
-          <div className="bg-white rounded-xl border border-border p-3 space-y-1.5">
-            <div className="flex items-center gap-2">
-              <Avatar className="w-8 h-8 ring-1 ring-sb-100">
-                <AvatarImage src={user?.avatar || undefined} />
-                <AvatarFallback className="bg-sb-100 text-sb-700 text-[10px]">{(form.fullName || user?.name || "?").charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div className="min-w-0">
-                <p className="text-xs font-semibold text-text truncate">{form.fullName || user?.name}</p>
-                <p className="text-[10px] text-text-muted truncate">India</p>
-              </div>
-            </div>
+          {/* CTA */}
+          <div className="mt-12">
+            <button
+              onClick={handleContinue}
+              className="group relative px-10 h-14 bg-[#1F4D3A] text-[#F4F1EA] rounded-full font-sans text-sm font-semibold shadow-[0_4px_20px_rgba(31,77,58,0.25)] hover:shadow-[0_8px_28px_rgba(31,77,58,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center gap-2"
+            >
+              <span>Complete Profile</span>
+              <svg
+                className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </button>
           </div>
-          <div className="bg-white rounded-xl border border-border p-3 space-y-1">
-            <p className="text-[10px] text-text-muted">Languages</p>
-            <div className="flex flex-wrap gap-1">
-              {form.languages.length > 0 ? form.languages.slice(0, 3).map(l => (
-                <Badge key={l} variant="primary" size="sm">{l}</Badge>
-              )) : <span className="text-[10px] text-text-muted italic">Not set</span>}
-              {form.languages.length > 3 && <Badge variant="outline" size="sm">+{form.languages.length - 3}</Badge>}
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-2">
-          {form.skills.length > 0 && (
-            <div className="bg-white rounded-xl border border-border p-3 space-y-1.5">
-              <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>💪</span> Skills</p>
-              <div className="flex flex-wrap gap-1">
-                {form.skills.slice(0, 4).map(s => <Badge key={s} variant="primary" size="sm">{s}</Badge>)}
-                {form.skills.length > 4 && <Badge variant="outline" size="sm">+{form.skills.length - 4}</Badge>}
-              </div>
-            </div>
-          )}
-
-          {form.hobbies.length > 0 && (
-            <div className="bg-white rounded-xl border border-border p-3 space-y-1.5">
-              <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>🎨</span> Hobbies</p>
-              <div className="flex flex-wrap gap-1">
-                {form.hobbies.slice(0, 4).map(h => <Badge key={h} variant="purple" size="sm">{h}</Badge>)}
-                {form.hobbies.length > 4 && <Badge variant="outline" size="sm">+{form.hobbies.length - 4}</Badge>}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {(form.preferredDestinations.length > 0 || form.travelType) && (
-          <div className="bg-white rounded-xl border border-border p-3 space-y-1.5">
-            <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>🗺️</span> Travel</p>
-            <div className="flex flex-wrap gap-1">
-              {form.preferredDestinations.slice(0, 4).map(d => <Badge key={d} variant="info" size="sm">{d}</Badge>)}
-              {form.preferredDestinations.length > 4 && <Badge variant="outline" size="sm">+{form.preferredDestinations.length - 4}</Badge>}
-              {form.travelType && <Badge variant="secondary" size="sm">{travelTypeOptions.find(t => t.value === form.travelType)?.label || form.travelType}</Badge>}
-            </div>
-          </div>
-        )}
-
-        {suggestions.length > 0 && (
-          <div className="bg-white border border-border rounded-xl p-3">
-            <p className="text-[10px] font-semibold text-text flex items-center gap-1"><span>💡</span> Tips</p>
-            <div className="flex flex-wrap gap-1 mt-1">
-              {suggestions.map(s => (
-                <span key={s} className="text-[10px] text-text-secondary bg-gray-100 px-1.5 py-0.5 rounded-full border border-border">{s}</span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className="flex justify-center pt-1">
-          <Button onClick={handleSubmit} loading={loading} size="lg" className="w-full sm:w-auto bg-sb-500 text-white rounded-full">
-            Complete Profile
-          </Button>
         </div>
       </div>
     )
   }
 
   const stepLabels = [
-    "Basic Details", "Interests", "Profile Intro", "Photos",
+    "Basic Details", "Interests", "Profile Intro", "Photos", "Your Story",
   ]
 
   const getContinueLabel = () => {
@@ -1090,7 +856,8 @@ export default function VolunteerOnboardingPage() {
         loading={loading}
         hideBack={step === 0}
         dashboard
-        bare={[0, 2, 3].includes(step)}
+        bare={[0, 2, 3, 4].includes(step)}
+        hideFooter={[2, 3, 4].includes(step)}
       >
         {renderStep()}
       </StepLayout>
