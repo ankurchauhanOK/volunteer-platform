@@ -41,6 +41,11 @@ function LoginForm() {
         return
       }
       localStorage.setItem("vt_current_user", JSON.stringify(user))
+      if (!user.onboardingComplete) {
+        const onboardingPath = user.role === "host" ? "/onboarding/host" : "/onboarding/volunteer"
+        window.location.replace(onboardingPath)
+        return
+      }
       const redirect =
         searchParams.get("redirect") ||
         (user.role === "volunteer" ? "/volunteer/dashboard" :

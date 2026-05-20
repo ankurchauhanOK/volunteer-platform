@@ -1,12 +1,13 @@
 "use client"
 
 import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
 
 export function AuthGuard({ children, requiredRole }: { children: React.ReactNode; requiredRole?: string }) {
   const { user, isLoading } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     if (isLoading) return
@@ -16,8 +17,16 @@ export function AuthGuard({ children, requiredRole }: { children: React.ReactNod
     }
     if (requiredRole && user.role !== requiredRole && user.role !== "admin") {
       router.push("/")
+      return
     }
-  }, [user, isLoading, router, requiredRole])
+    // Block un-onboarded users from every page except onboarding and auth flows
+    if (!user.onboardingComplete) {
+      const onboardingPath = user.role === "host" ? "/onboarding/host" : "/onboarding/volunteer"
+      if (pathname !== onboardingPath && !pathname.startsWith("/auth/")) {
+        router.replace(onboardingPath)
+      }
+    }
+  }, [user, isLoading, router, pathname, requiredRole])
 
   if (isLoading) {
     return (

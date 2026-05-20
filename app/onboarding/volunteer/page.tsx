@@ -117,6 +117,7 @@ export default function VolunteerOnboardingPage() {
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([])
 
   const completeness = useMemo(() => calcCompleteness(form), [form])
+  const bioWordCount = useMemo(() => form.bio.trim().length > 0 ? form.bio.trim().split(/\s+/).length : 0, [form.bio])
 
   const setStep = useCallback((s: number) => {
     setStepState(s)
@@ -734,15 +735,6 @@ export default function VolunteerOnboardingPage() {
   }
 
   const renderBio = () => {
-    const [wordCount, setWordCount] = useState(0)
-
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const text = e.target.value
-      update("bio", text)
-      const count = text.trim().length > 0 ? text.trim().split(/\s+/).length : 0
-      setWordCount(count)
-    }
-
     return (
       <div className="relative min-h-[calc(100vh-180px)] flex flex-col items-center justify-center px-4 sm:px-6">
         <div className="w-full max-w-2xl mx-auto flex flex-col items-center text-center">
@@ -776,17 +768,17 @@ export default function VolunteerOnboardingPage() {
           <div className="w-full relative group">
             <textarea
               value={form.bio}
-              onChange={handleChange}
+              onChange={e => update("bio", e.target.value)}
               placeholder="I love slow travel, meeting new people, and experiencing cultures through local communities..."
               className="w-full h-64 md:h-80 bg-white border border-[#E5E5E5] focus:border-[#1F4D3A] focus:ring-2 focus:ring-[#1F4D3A]/10 resize-none px-6 py-6 md:px-8 md:py-8 font-sans text-base text-[#1c1c18] placeholder:text-[#c0c9c2] rounded-2xl transition-all duration-300 shadow-[0_8px_30px_rgba(2,54,37,0.03)]"
             />
             <div className="absolute bottom-5 right-6 md:right-8 flex items-center gap-4">
               <span
                 className={`text-xs font-semibold uppercase tracking-wider transition-colors ${
-                  wordCount > 0 ? "text-[#1F4D3A]/70" : "text-[#717973]"
+                  bioWordCount > 0 ? "text-[#1F4D3A]/70" : "text-[#717973]"
                 }`}
               >
-                {wordCount} word{wordCount !== 1 ? "s" : ""}
+                {bioWordCount} word{bioWordCount !== 1 ? "s" : ""}
               </span>
             </div>
           </div>

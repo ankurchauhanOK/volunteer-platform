@@ -8,7 +8,7 @@ interface AuthContextType {
   user: User | null
   isLoading: boolean
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
-  googleLogin: (email: string, name: string, picture?: string) => Promise<{ success: boolean; error?: string; isNewUser?: boolean; role?: string }>
+  googleLogin: (email: string, name: string, picture?: string) => Promise<{ success: boolean; error?: string; isNewUser?: boolean; role?: string; onboardingComplete?: boolean }>
   logout: () => void
   updateUser: (data: Partial<User>) => void
   refreshUser: () => void
@@ -53,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (existing) {
       setUser(existing)
       localStorage.setItem("vt_current_user", JSON.stringify(existing))
-      return { success: true, isNewUser: false, role: existing.role }
+      return { success: true, isNewUser: false, role: existing.role, onboardingComplete: existing.onboardingComplete }
     }
     const newUser = db.users.create({
       email,

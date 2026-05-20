@@ -61,13 +61,18 @@ export function GoogleSignIn() {
       if (result.success) {
         if (result.isNewUser) {
           window.location.replace("/auth/select-role")
-        } else {
-          const redirect =
-            searchParams.get("redirect") ||
-            (result.role === "volunteer" ? "/volunteer/dashboard" :
-             result.role === "host" ? "/host/dashboard" : "/")
-          window.location.replace(redirect)
+          return
         }
+        if (result.onboardingComplete === false) {
+          const onboardingPath = result.role === "host" ? "/onboarding/host" : "/onboarding/volunteer"
+          window.location.replace(onboardingPath)
+          return
+        }
+        const redirect =
+          searchParams.get("redirect") ||
+          (result.role === "volunteer" ? "/volunteer/dashboard" :
+           result.role === "host" ? "/host/dashboard" : "/")
+        window.location.replace(redirect)
       } else {
         setError(result.error || "Google sign-in failed")
         setLoading(false)

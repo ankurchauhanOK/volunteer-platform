@@ -48,7 +48,7 @@ export function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          {user ? (
+          {user && user.onboardingComplete ? (
             <div className="flex items-center gap-3">
               <Link href={user.role === "host" ? "/host/messages" : "/volunteer/messages"}>
                 <Button variant="ghost" size="icon" className="relative">
@@ -93,7 +93,7 @@ export function Navbar() {
               </Link>
             ))}
             <Separator />
-            {user ? (
+            {user && user.onboardingComplete ? (
               <>
                 <Link href={user.role === "host" ? "/host/dashboard" : "/volunteer/dashboard"} onClick={() => setMobileOpen(false)}>
                   <Button variant="outline" className="w-full justify-start"><LayoutDashboard className="h-4 w-4 mr-2" /> Dashboard</Button>
