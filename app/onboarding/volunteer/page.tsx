@@ -874,7 +874,7 @@ export default function VolunteerOnboardingPage() {
         hideHeader={step === 5}
         dashboard
         bare={[0, 2, 3, 4, 5].includes(step)}
-        hideFooter={[2, 3, 4, 5].includes(step)}
+        hideFooter={[0, 1, 2, 3, 4, 5].includes(step)}
       >
         {renderStep()}
       </StepLayout>
