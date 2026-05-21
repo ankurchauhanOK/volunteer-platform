@@ -9,8 +9,10 @@ import { Input } from "@/components/ui/Input"
 import { Textarea } from "@/components/ui/Textarea"
 import { db } from "@/lib/store"
 import { StepLayout } from "@/components/onboarding/StepLayout"
+import { PromptPersonalityFlow } from "@/components/onboarding/PromptPersonalityFlow"
+import type { PromptAnswer } from "@/lib/types"
 
-const TOTAL_STEPS = 5
+const TOTAL_STEPS = 6
 
 interface OnboardingForm {
   step: number
@@ -51,6 +53,7 @@ interface OnboardingForm {
   specialRequirements: string
   communityGuidelinesAgreed: boolean
   respectfulConductAgreed: boolean
+  promptAnswers: PromptAnswer[]
 }
 
 const defaultForm: OnboardingForm = {
@@ -66,6 +69,7 @@ const defaultForm: OnboardingForm = {
   emergencyName: "", emergencyPhone: "", emergencyRelation: "",
   emergencyNotes: "", medicalConsiderations: "", specialRequirements: "",
   communityGuidelinesAgreed: false, respectfulConductAgreed: false,
+  promptAnswers: [],
 }
 
 function calcCompleteness(form: OnboardingForm): number {
@@ -75,6 +79,7 @@ function calcCompleteness(form: OnboardingForm): number {
     form.interests.length > 0,
     form.photos.filter(Boolean).length >= 2,
     form.bio.length > 10,
+    form.promptAnswers.length >= 3,
   ]
   const filled = fields.filter(Boolean).length
   return Math.round((filled / fields.length) * 100)
@@ -218,6 +223,7 @@ export default function VolunteerOnboardingPage() {
       communityGuidelinesAgreed: form.communityGuidelinesAgreed || undefined,
       respectfulConductAgreed: form.respectfulConductAgreed || undefined,
       onboardingStep: step,
+      promptAnswers: form.promptAnswers,
     })
 
     db.users.update(user.id, {
@@ -236,6 +242,13 @@ export default function VolunteerOnboardingPage() {
       case 2: return renderProfileIntro()
       case 3: return renderPhotoUpload()
       case 4: return renderBio()
+      case 5: return (
+        <PromptPersonalityFlow
+          answers={form.promptAnswers}
+          onAnswersChange={(answers) => update("promptAnswers", answers)}
+          onComplete={handleContinue}
+        />
+      )
       default: return null
     }
   }
@@ -816,11 +829,12 @@ export default function VolunteerOnboardingPage() {
   }
 
   const stepLabels = [
-    "Basic Details", "Interests", "Profile Intro", "Photos", "Your Story",
+    "Basic Details", "Interests", "Profile Intro", "Photos", "Your Story", "Personality Prompts",
   ]
 
   const getContinueLabel = () => {
     if (step === TOTAL_STEPS - 1) return "Complete Profile"
+    if (step === 4) return "Continue"
     return "Continue"
   }
 
@@ -828,6 +842,7 @@ export default function VolunteerOnboardingPage() {
     if (step === 0) return !form.fullName || !form.email
     if (step === 1) return form.interests.length === 0
     if (step === 3) return form.photos.filter(Boolean).length < 2
+    if (step === 5) return form.promptAnswers.length < 3
     return false
   }
 
@@ -856,9 +871,10 @@ export default function VolunteerOnboardingPage() {
         continueDisabled={getContinueDisabled()}
         loading={loading}
         hideBack={step === 0}
+        hideHeader={step === 5}
         dashboard
-        bare={[0, 2, 3, 4].includes(step)}
-        hideFooter={[2, 3, 4].includes(step)}
+        bare={[0, 2, 3, 4, 5].includes(step)}
+        hideFooter={[2, 3, 4, 5].includes(step)}
       >
         {renderStep()}
       </StepLayout>

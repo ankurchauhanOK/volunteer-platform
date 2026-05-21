@@ -12,6 +12,12 @@ export interface User {
   onboardingComplete: boolean
 }
 
+export interface PromptAnswer {
+  promptId: string
+  promptText: string
+  answer: string
+}
+
 export interface VolunteerProfile {
   userId: string
   profilePhoto?: string
@@ -54,6 +60,9 @@ export interface VolunteerProfile {
   respectfulConductAgreed?: boolean
   phoneVerified?: boolean
   onboardingStep?: number
+
+  // Personality prompts
+  promptAnswers?: PromptAnswer[]
 }
 
 export interface HostProfile {
