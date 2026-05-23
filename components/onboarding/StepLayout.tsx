@@ -17,6 +17,7 @@ interface StepLayoutProps {
   continueDisabled?: boolean
   loading?: boolean
   hideBack?: boolean
+  homeHref?: string
   hideHeader?: boolean
   hideFooter?: boolean
   helperPanel?: ReactNode
@@ -37,6 +38,7 @@ export function StepLayout({
   continueDisabled = false,
   loading = false,
   hideBack = false,
+  homeHref,
   hideHeader = false,
   hideFooter = false,
   helperPanel,
@@ -58,7 +60,7 @@ export function StepLayout({
               <div className="flex items-center justify-between">
                 {/* Left: Back */}
                 <div className="w-24">
-                  {!hideBack && onBack && (
+                  {!hideBack && onBack ? (
                     <button
                       type="button"
                       onClick={onBack}
@@ -70,7 +72,17 @@ export function StepLayout({
                       </svg>
                       Back
                     </button>
-                  )}
+                  ) : homeHref ? (
+                    <a
+                      href={homeHref}
+                      className="flex items-center gap-1.5 text-sm text-text-secondary hover:text-text transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                      </svg>
+                      Back
+                    </a>
+                  ) : null}
                 </div>
 
                 {/* Center: Logo + Name */}
