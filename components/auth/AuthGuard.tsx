@@ -23,7 +23,7 @@ export function AuthGuard({ children, requiredRole }: { children: React.ReactNod
     if (!user.onboardingComplete) {
       const onboardingPath = user.role === "host" ? "/onboarding/host" : "/onboarding/volunteer"
       if (pathname !== onboardingPath && !pathname.startsWith("/auth/")) {
-        router.replace(onboardingPath)
+        router.replace("/auth/select-role")
       }
     }
   }, [user, isLoading, router, pathname, requiredRole])
