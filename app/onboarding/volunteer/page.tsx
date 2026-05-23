@@ -289,7 +289,7 @@ export default function VolunteerOnboardingPage() {
             value={form.fullName}
             onChange={e => update("fullName", e.target.value)}
             placeholder="Your full name"
-            className="w-full h-12 px-4 rounded-xl bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250"
+            className="w-full h-14 px-5 rounded-full bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250"
           />
         </div>
 
@@ -304,7 +304,7 @@ export default function VolunteerOnboardingPage() {
             value={form.email}
             onChange={e => update("email", e.target.value)}
             placeholder="your@gmail.com"
-            className={`w-full h-12 px-4 rounded-xl bg-[#E8F1EA] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:ring-1 transition-all duration-250 ${
+            className={`w-full h-14 px-5 rounded-full bg-[#E8F1EA] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:ring-1 transition-all duration-250 ${
               form.email && !form.email.toLowerCase().includes("@gmail.com")
                 ? "border-red-400 focus:border-red-500 focus:ring-red-500/30"
                 : "border-[#7FA58A] focus:border-[#5A8A6B] focus:ring-[#5A8A6B]/30"
@@ -326,7 +326,7 @@ export default function VolunteerOnboardingPage() {
             <select
               value={form.birthMonth}
               onChange={e => update("birthMonth", e.target.value)}
-              className="h-12 px-3 rounded-xl bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250 appearance-none flex-1 min-w-0"
+              className="h-14 px-4 rounded-full bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250 appearance-none flex-1 min-w-0"
             >
               <option value="">Month</option>
               {months.map((m, i) => (
@@ -336,7 +336,7 @@ export default function VolunteerOnboardingPage() {
             <select
               value={form.birthDay}
               onChange={e => update("birthDay", e.target.value)}
-              className="h-12 px-3 rounded-xl bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250 appearance-none w-20"
+              className="h-14 px-4 rounded-full bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250 appearance-none w-20"
             >
               <option value="">Day</option>
               {Array.from({ length: 31 }, (_, i) => (
@@ -346,7 +346,7 @@ export default function VolunteerOnboardingPage() {
             <select
               value={form.birthYear}
               onChange={e => update("birthYear", e.target.value)}
-              className="h-12 px-3 rounded-xl bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250 appearance-none w-24"
+              className="h-14 px-4 rounded-full bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250 appearance-none w-24"
             >
               <option value="">Year</option>
               {Array.from({ length: 60 }, (_, i) => {
