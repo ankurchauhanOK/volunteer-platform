@@ -779,13 +779,10 @@ export default function VolunteerOnboardingPage() {
     return (
       <div className="relative min-h-[calc(100vh-180px)] flex flex-col items-center justify-center px-4 sm:px-6">
         <div className="w-full max-w-2xl mx-auto flex flex-col items-center text-center">
-          <h1
-            className="font-tanker text-[#1F4D3A] leading-[1.1] tracking-tight mb-5 text-balance"
-            style={{ fontSize: "clamp(2rem, 4.5vw, 3.2rem)" }}
-          >
+          <h1 className="font-[Literata] text-[36px] md:text-[48px] font-semibold text-[#023625] leading-[1.1] tracking-tight mb-5">
             Tell us something about yourself
           </h1>
-          <p className="font-sans text-lg text-[#4A6B5A] leading-relaxed max-w-xl mb-10">
+          <p className="font-[Plus_Jakarta_Sans] text-[16px] md:text-[18px] text-[#414944] leading-relaxed max-w-xl mb-10">
             Share a little about your personality, travel mindset, or the experiences that shape you.
           </p>
 
@@ -795,12 +792,12 @@ export default function VolunteerOnboardingPage() {
               value={form.bio}
               onChange={e => update("bio", e.target.value)}
               placeholder="I love slow travel, meeting new people, and experiencing cultures through local communities..."
-              className="w-full h-64 md:h-80 bg-white border border-[#E5E5E5] focus:border-[#1F4D3A] focus:ring-2 focus:ring-[#1F4D3A]/10 resize-none px-6 py-6 md:px-8 md:py-8 font-sans text-base text-[#1c1c18] placeholder:text-[#c0c9c2] rounded-2xl transition-all duration-300 shadow-[0_8px_30px_rgba(2,54,37,0.03)]"
+              className="w-full h-64 md:h-80 bg-white border border-[#E5E5E5] focus:border-[#023625] focus:ring-2 focus:ring-[#023625]/10 resize-none px-6 py-6 md:px-8 md:py-8 font-[Plus_Jakarta_Sans] text-base text-[#1c1c18] placeholder:text-[#c0c9c2] rounded-2xl transition-all duration-300 shadow-[0_8px_30px_rgba(2,54,37,0.03)]"
             />
             <div className="absolute bottom-5 right-6 md:right-8 flex items-center gap-4">
               <span
                 className={`text-xs font-semibold uppercase tracking-wider transition-colors ${
-                  bioWordCount > 0 ? "text-[#1F4D3A]/70" : "text-[#717973]"
+                  bioWordCount > 0 ? "text-[#023625]/70" : "text-[#717973]"
                 }`}
               >
                 {bioWordCount} word{bioWordCount !== 1 ? "s" : ""}
@@ -812,7 +809,7 @@ export default function VolunteerOnboardingPage() {
           <div className="mt-12">
             <button
               onClick={handleContinue}
-              className="group relative px-10 h-14 bg-[#1F4D3A] text-[#F4F1EA] rounded-full font-sans text-sm font-semibold shadow-[0_4px_20px_rgba(31,77,58,0.25)] hover:shadow-[0_8px_28px_rgba(31,77,58,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center gap-2"
+              className="group relative px-10 h-14 bg-[#023625] text-white rounded-full font-[Plus_Jakarta_Sans] text-[14px] font-semibold tracking-wider uppercase shadow-[0_4px_20px_rgba(2,54,37,0.25)] hover:shadow-[0_8px_28px_rgba(2,54,37,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center gap-2"
             >
               <span>Complete Profile</span>
               <svg
