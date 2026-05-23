@@ -499,9 +499,10 @@ export default function VolunteerOnboardingPage() {
     const filtered = searchLower
       ? allInterestOptions.filter(o => !form.interests.includes(o) && o.toLowerCase().includes(searchLower))
       : allInterestOptions.filter(o => !form.interests.includes(o))
+    const isStep1Complete = form.interests.length > 0
 
     return (
-      <div className="max-w-[820px] mx-auto px-4 sm:px-6 py-10 md:py-16">
+      <div className="max-w-[820px] mx-auto px-4 sm:px-6 py-10 md:py-16 pb-32">
         {/* Heading */}
         <div className="text-center mb-10">
           <h1
@@ -596,17 +597,18 @@ export default function VolunteerOnboardingPage() {
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="pt-4 flex justify-center">
-          <button
-            onClick={handleContinue}
-            className="w-14 h-14 rounded-full bg-[#234232] text-[#F7F4EE] flex items-center justify-center shadow-[0_4px_14px_rgba(35,66,50,0.25)] hover:shadow-[0_6px_20px_rgba(35,66,50,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-            </svg>
-          </button>
-        </div>
+        {/* Floating Continue Button */}
+        <button
+          onClick={handleContinue}
+          disabled={!isStep1Complete}
+          className={`fixed bottom-6 right-6 z-50 h-14 px-8 rounded-full text-base font-semibold shadow-[0_10px_30px_rgba(31,77,69,0.20)] transition-all duration-300 ${
+            isStep1Complete
+              ? "bg-[#1F4D45] text-white hover:bg-[#2B645A] hover:shadow-[0_14px_40px_rgba(31,77,69,0.28)] hover:-translate-y-0.5 active:translate-y-0"
+              : "bg-[#1F4D45]/40 text-white/70 cursor-not-allowed"
+          }`}
+        >
+          Continue
+        </button>
       </div>
     )
   }
