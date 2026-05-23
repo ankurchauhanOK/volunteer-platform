@@ -282,7 +282,7 @@ export default function VolunteerOnboardingPage() {
         {/* Name */}
         <div>
           <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
-            Name
+            Name <span className="text-red-600">*</span>
           </label>
           <input
             type="text"
@@ -296,7 +296,7 @@ export default function VolunteerOnboardingPage() {
         {/* Email */}
         <div>
           <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
-            Email
+            Email <span className="text-red-600">*</span>
           </label>
           <input
             type="email"
@@ -310,7 +310,7 @@ export default function VolunteerOnboardingPage() {
         {/* Birthday */}
         <div>
           <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
-            Birthday
+            Birthday <span className="text-red-600">*</span>
           </label>
           <div className="flex gap-3">
             <select
@@ -350,7 +350,7 @@ export default function VolunteerOnboardingPage() {
         {/* Gender */}
         <div>
           <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-3">
-            Gender
+            Gender <span className="text-red-600">*</span>
           </label>
           <div className="flex flex-wrap gap-2.5">
             {["Man", "Woman", "Non-binary", "More +"].map(g => (
@@ -840,7 +840,7 @@ export default function VolunteerOnboardingPage() {
   }
 
   const getContinueDisabled = () => {
-    if (step === 0) return !form.fullName || !form.email
+    if (step === 0) return !form.fullName || !form.email || !form.birthDay || !form.birthMonth || !form.birthYear || !form.gender
     if (step === 1) return form.interests.length === 0
     if (step === 3) return form.photos.filter(Boolean).length < 2
     if (step === 5) return form.promptAnswers.length < 3
