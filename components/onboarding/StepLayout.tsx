@@ -3,7 +3,6 @@
 import type { ReactNode } from "react"
 import { useStepTransition } from "@/lib/motion"
 import { Button } from "@/components/ui/Button"
-import { Progress } from "@/components/ui/Progress"
 
 interface StepLayoutProps {
   title: string
@@ -46,9 +45,7 @@ export function StepLayout({
   bare = false,
   children,
 }: StepLayoutProps) {
-  const stepLabels = ["Basic Details", "Interests", "Profile Intro", "Photos"]
   const contentRef = useStepTransition(currentStep)
-  const progressPercent = ((currentStep + 1) / totalSteps) * 100
 
   return (
     <div className="min-h-screen bg-cream">
@@ -100,15 +97,18 @@ export function StepLayout({
               </div>
             </div>
 
-            {/* Progress */}
-            <div className="mb-6 px-1">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold text-sb-600 uppercase tracking-wider">
-                  Step {currentStep + 1} of {totalSteps}
-                </span>
-                <span className="text-xs text-text-muted">{stepLabels[currentStep] || `Step ${currentStep + 1}`}</span>
-              </div>
-              <Progress value={progressPercent} className="h-1.5" />
+            {/* Dot / Pill Progress */}
+            <div className="flex items-center justify-center gap-2.5 mt-7 mb-12">
+              {Array.from({ length: totalSteps }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`h-2 rounded-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                    i === currentStep
+                      ? "w-9 bg-[#1F4D45]"
+                      : "w-2 bg-[#B8C8C1]"
+                  }`}
+                />
+              ))}
             </div>
           </>
         )}
