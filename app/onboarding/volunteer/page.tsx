@@ -408,7 +408,7 @@ export default function VolunteerOnboardingPage() {
           <label className="block text-[13px] font-semibold text-[#18332D] uppercase tracking-[0.08em] mb-3">
             I usually travel
           </label>
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             {travelCompanionOptions.map(opt => (
               <button
                 key={opt}
