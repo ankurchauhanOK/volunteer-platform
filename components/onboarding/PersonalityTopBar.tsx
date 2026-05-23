@@ -23,11 +23,12 @@ export function PersonalityTopBar({
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center justify-center w-10 h-10 rounded-full text-[#023625] hover:bg-[#f1eee7] transition-all duration-200 active:scale-95"
+          className="flex items-center gap-1.5 text-[14px] font-medium text-[#023625] hover:text-[#0E4B36] transition-all duration-200 active:scale-95"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
+          Back
         </button>
 
         <div className="font-[Literata] text-[22px] font-semibold text-[#023625] tracking-tight">
