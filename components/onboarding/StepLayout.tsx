@@ -17,7 +17,6 @@ interface StepLayoutProps {
   continueDisabled?: boolean
   loading?: boolean
   hideBack?: boolean
-  homeHref?: string
   hideHeader?: boolean
   hideFooter?: boolean
   helperPanel?: ReactNode
@@ -38,7 +37,6 @@ export function StepLayout({
   continueDisabled = false,
   loading = false,
   hideBack = false,
-  homeHref,
   hideHeader = false,
   hideFooter = false,
   helperPanel,
@@ -55,46 +53,45 @@ export function StepLayout({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         {!hideHeader && (
           <>
-            <div className="flex items-center justify-between mb-5">
-              <div className="w-20">
-                {!hideBack && onBack ? (
-                  <button
-                    type="button"
-                    onClick={onBack}
-                    disabled={loading}
-                    className="flex items-center gap-1.5 text-sm text-text-secondary hover:text-text transition-colors disabled:opacity-50"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Back
-                  </button>
-                ) : homeHref ? (
-                  <a
-                    href={homeHref}
-                    className="flex items-center gap-1.5 text-sm text-text-secondary hover:text-text transition-colors"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Home
-                  </a>
-                ) : null}
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-sb-500 flex items-center justify-center shadow-sm">
-                  <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
-                  </svg>
+            {/* Navbar Card */}
+            <div className="bg-white rounded-xl border border-border p-4 sm:p-5 mb-6 shadow-[0_0_0.5px_rgba(0,0,0,0.14),0_2px_4px_rgba(0,0,0,0.06)]">
+              <div className="flex items-center justify-between">
+                {/* Left: Back */}
+                <div className="w-24">
+                  {!hideBack && onBack && (
+                    <button
+                      type="button"
+                      onClick={onBack}
+                      disabled={loading}
+                      className="flex items-center gap-1.5 text-sm text-text-secondary hover:text-text transition-colors disabled:opacity-50"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                      </svg>
+                      Back
+                    </button>
+                  )}
                 </div>
-                <span className="font-sans text-lg text-text tracking-normal">Voluntree</span>
+
+                {/* Center: Logo + Name */}
+                <div className="flex items-center justify-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-sb-500 flex items-center justify-center shadow-[0_2px_6px_rgba(0,117,74,0.25)]">
+                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l9 4.5v7c0 5-9 8.5-9 8.5S3 18.5 3 13.5v-7L12 2z" />
+                    </svg>
+                  </div>
+                  <span className="font-sans text-lg font-semibold text-text tracking-normal">Voluntree</span>
+                </div>
+
+                {/* Right: spacer */}
+                <div className="w-24" />
               </div>
-              <div className="w-20" />
             </div>
 
-            <div className="mb-4">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="label-sm text-sb-600">
+            {/* Progress */}
+            <div className="mb-6 px-1">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-sb-600 uppercase tracking-wider">
                   Step {currentStep + 1} of {totalSteps}
                 </span>
                 <span className="text-xs text-text-muted">{stepLabels[currentStep] || `Step ${currentStep + 1}`}</span>
