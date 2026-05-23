@@ -59,15 +59,10 @@ export function GoogleSignIn() {
         payload.picture as string | undefined,
       )
       if (result.success) {
-        if (result.isNewUser) {
-          window.location.replace("/auth/select-role")
-          return
-        }
-        if (result.onboardingComplete === false) {
+        if (result.isNewUser || result.onboardingComplete === false) {
           localStorage.removeItem("vt_onboarding_volunteer")
           localStorage.removeItem("vt_onboarding_host")
-          const onboardingPath = result.role === "host" ? "/onboarding/host" : "/onboarding/volunteer"
-          window.location.replace(onboardingPath)
+          window.location.replace("/auth/select-role")
           return
         }
         const redirect =

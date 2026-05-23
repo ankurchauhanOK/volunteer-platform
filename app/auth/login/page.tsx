@@ -41,8 +41,7 @@ function LoginForm() {
       if (!user.onboardingComplete) {
         localStorage.removeItem("vt_onboarding_volunteer")
         localStorage.removeItem("vt_onboarding_host")
-        const onboardingPath = user.role === "host" ? "/onboarding/host" : "/onboarding/volunteer"
-        window.location.replace(onboardingPath)
+        window.location.replace("/auth/select-role")
         return
       }
       const redirect =
