@@ -304,7 +304,7 @@ export default function VolunteerOnboardingPage() {
             value={form.email}
             onChange={e => update("email", e.target.value)}
             placeholder="your@gmail.com"
-            className={`w-full h-14 px-5 rounded-full bg-[#F9FCFA] text-[#18332D] placeholder-[#7E918A] focus:outline-none focus:bg-white transition-all duration-250 ${
+            className={`w-full h-14 px-5 rounded-full bg-[#F9FCFA] border text-[#18332D] placeholder-[#7E918A] focus:outline-none focus:bg-white transition-all duration-250 ${
               form.email && !form.email.toLowerCase().includes("@gmail.com")
                 ? "border-red-400 focus:border-red-500 focus:shadow-[0_0_0_4px_rgba(239,68,68,0.12)]"
                 : "border-[#C7D8D1] focus:border-[#4FA08C] focus:shadow-[0_0_0_4px_rgba(79,160,140,0.12)]"
@@ -368,9 +368,9 @@ export default function VolunteerOnboardingPage() {
                 key={g}
                 type="button"
                 onClick={() => update("gender", g)}
-                className={`h-14 rounded-[18px] text-sm font-medium transition-all duration-200 ${
+                className={`h-14 rounded-full text-sm font-medium transition-all duration-200 ${
                   form.gender === g
-                    ? "bg-[#1F4D45] text-white border border-[#2B645A] shadow-[0_4px_12px_rgba(31,77,69,0.12)]"
+                    ? "bg-[#E8F5EE] text-[#1E3932] border border-[#00754A] shadow-[0_4px_12px_rgba(0,117,74,0.10)]"
                     : "bg-[#F9FCFA] text-[#18332D] border border-[#C7D8D1] hover:border-[#98B9AE]"
                 }`}
               >
@@ -391,9 +391,9 @@ export default function VolunteerOnboardingPage() {
                 key={opt}
                 type="button"
                 onClick={() => update("travelDuration", opt)}
-                className={`h-14 rounded-[18px] text-sm font-medium transition-all duration-200 ${
+                className={`h-14 rounded-full text-sm font-medium transition-all duration-200 ${
                   form.travelDuration === opt
-                    ? "bg-[#1F4D45] text-white border border-[#2B645A] shadow-[0_4px_12px_rgba(31,77,69,0.12)]"
+                    ? "bg-[#E8F5EE] text-[#1E3932] border border-[#00754A] shadow-[0_4px_12px_rgba(0,117,74,0.10)]"
                     : "bg-[#F9FCFA] text-[#18332D] border border-[#C7D8D1] hover:border-[#98B9AE]"
                 }`}
               >
@@ -408,15 +408,15 @@ export default function VolunteerOnboardingPage() {
           <label className="block text-[13px] font-semibold text-[#18332D] uppercase tracking-[0.08em] mb-3">
             I usually travel
           </label>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {travelCompanionOptions.map(opt => (
               <button
                 key={opt}
                 type="button"
                 onClick={() => update("travelCompanion", opt)}
-                className={`h-14 rounded-[18px] text-sm font-medium transition-all duration-200 ${
+                className={`h-14 rounded-full text-sm font-medium transition-all duration-200 ${
                   form.travelCompanion === opt
-                    ? "bg-[#1F4D45] text-white border border-[#2B645A] shadow-[0_4px_12px_rgba(31,77,69,0.12)]"
+                    ? "bg-[#E8F5EE] text-[#1E3932] border border-[#00754A] shadow-[0_4px_12px_rgba(0,117,74,0.10)]"
                     : "bg-[#F9FCFA] text-[#18332D] border border-[#C7D8D1] hover:border-[#98B9AE]"
                 }`}
               >
