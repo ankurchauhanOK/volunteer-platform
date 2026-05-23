@@ -297,14 +297,24 @@ export default function VolunteerOnboardingPage() {
         <div>
           <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
             Email <span className="text-red-600">*</span>
+            <span className="text-[#6F8B78] font-normal lowercase ml-1">(Gmail only)</span>
           </label>
           <input
             type="email"
             value={form.email}
             onChange={e => update("email", e.target.value)}
-            placeholder="your@email.com"
-            className="w-full h-12 px-4 rounded-xl bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250"
+            placeholder="your@gmail.com"
+            className={`w-full h-12 px-4 rounded-xl bg-[#E8F1EA] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:ring-1 transition-all duration-250 ${
+              form.email && !form.email.toLowerCase().includes("@gmail.com")
+                ? "border-red-400 focus:border-red-500 focus:ring-red-500/30"
+                : "border-[#7FA58A] focus:border-[#5A8A6B] focus:ring-[#5A8A6B]/30"
+            }`}
           />
+          {form.email && !form.email.toLowerCase().includes("@gmail.com") && (
+            <p className="text-[13px] text-red-600 mt-2">
+              Please use a Gmail address (e.g. name@gmail.com)
+            </p>
+          )}
         </div>
 
         {/* Birthday */}
@@ -420,7 +430,7 @@ export default function VolunteerOnboardingPage() {
         <div className="pt-2">
           <button
             onClick={handleContinue}
-            disabled={!form.fullName || !form.email || !form.birthDay || !form.birthMonth || !form.birthYear || !form.gender}
+            disabled={!form.fullName || !form.email || !isGmail(form.email) || !form.birthDay || !form.birthMonth || !form.birthYear || !form.gender}
             className="w-full h-14 rounded-full bg-[#234232] text-[#F7F4EE] text-base font-semibold shadow-[0_4px_14px_rgba(35,66,50,0.25)] hover:shadow-[0_6px_20px_rgba(35,66,50,0.35)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-[0_4px_14px_rgba(35,66,50,0.25)] transition-all duration-300"
           >
             Continue Your Journey
@@ -839,8 +849,10 @@ export default function VolunteerOnboardingPage() {
     return "Continue"
   }
 
+  const isGmail = (email: string) => email.toLowerCase().includes("@gmail.com")
+
   const getContinueDisabled = () => {
-    if (step === 0) return !form.fullName || !form.email || !form.birthDay || !form.birthMonth || !form.birthYear || !form.gender
+    if (step === 0) return !form.fullName || !form.email || !isGmail(form.email) || !form.birthDay || !form.birthMonth || !form.birthYear || !form.gender
     if (step === 1) return form.interests.length === 0
     if (step === 3) return form.photos.filter(Boolean).length < 2
     if (step === 5) return form.promptAnswers.length < 3
