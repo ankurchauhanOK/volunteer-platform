@@ -13,12 +13,14 @@ interface PromptPersonalityFlowProps {
   answers: PromptAnswer[]
   onAnswersChange: (answers: PromptAnswer[]) => void
   onComplete: () => void
+  onBackToPreviousStep?: () => void
 }
 
 export function PromptPersonalityFlow({
   answers,
   onAnswersChange,
   onComplete,
+  onBackToPreviousStep,
 }: PromptPersonalityFlowProps) {
   const [view, setView] = useState<FlowView>("overview")
   const [activePromptId, setActivePromptId] = useState<string | null>(null)
@@ -69,9 +71,9 @@ export function PromptPersonalityFlow({
     } else if (view === "hub") {
       setView("overview")
     } else if (view === "overview") {
-      // Handled by parent StepLayout back button
+      onBackToPreviousStep?.()
     }
-  }, [view])
+  }, [view, onBackToPreviousStep])
 
   const currentAnswer = answers.find((a) => a.promptId === activePromptId)?.answer || ""
 
@@ -81,7 +83,7 @@ export function PromptPersonalityFlow({
   return (
     <div className="min-h-[calc(100vh-180px)] flex flex-col bg-[#F5F2EA]">
       <PersonalityTopBar
-        onBack={view === "overview" ? undefined : handleBack}
+        onBack={handleBack}
         progressDots={progressDots}
         showSkip={false}
       />

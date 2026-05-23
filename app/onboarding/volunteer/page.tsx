@@ -247,6 +247,7 @@ export default function VolunteerOnboardingPage() {
           answers={form.promptAnswers}
           onAnswersChange={(answers) => update("promptAnswers", answers)}
           onComplete={handleContinue}
+          onBackToPreviousStep={() => setStep(step - 1)}
         />
       )
       default: return null
@@ -854,6 +855,9 @@ export default function VolunteerOnboardingPage() {
     )
   }
 
+  // Inline-CTA steps handle their own Continue; StepLayout footer shows Back only.
+  const isInlineCtaStep = [0, 1, 2, 3, 4].includes(step)
+
   return (
     <Providers>
       <StepLayout
@@ -866,7 +870,7 @@ export default function VolunteerOnboardingPage() {
         currentStep={step}
         totalSteps={TOTAL_STEPS}
         onBack={step > 0 ? () => setStep(step - 1) : undefined}
-        onContinue={handleContinue}
+        onContinue={isInlineCtaStep ? undefined : handleContinue}
         continueLabel={getContinueLabel()}
         continueDisabled={getContinueDisabled()}
         loading={loading}
@@ -874,7 +878,7 @@ export default function VolunteerOnboardingPage() {
         hideHeader={step === 5}
         dashboard
         bare={[0, 2, 3, 4, 5].includes(step)}
-        hideFooter={[0, 1, 2, 3, 4, 5].includes(step)}
+        hideFooter={[0, 5].includes(step)}
       >
         {renderStep()}
       </StepLayout>
