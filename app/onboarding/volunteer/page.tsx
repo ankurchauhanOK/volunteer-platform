@@ -278,10 +278,10 @@ export default function VolunteerOnboardingPage() {
       </div>
 
       {/* Form */}
-      <div className="space-y-10 md:space-y-12">
+      <div className="space-y-12">
         {/* Name */}
         <div>
-          <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
+          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
             Name <span className="text-red-600">*</span>
           </label>
           <input
@@ -295,7 +295,7 @@ export default function VolunteerOnboardingPage() {
 
         {/* Email */}
         <div>
-          <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
+          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
             Email <span className="text-red-600">*</span>
             <span className="text-[#6F8B78] font-normal lowercase ml-1">(Gmail only)</span>
           </label>
@@ -319,7 +319,7 @@ export default function VolunteerOnboardingPage() {
 
         {/* Birthday */}
         <div>
-          <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-2.5">
+          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
             Birthday <span className="text-red-600">*</span>
           </label>
           <div className="flex gap-3">
@@ -359,19 +359,19 @@ export default function VolunteerOnboardingPage() {
 
         {/* Gender */}
         <div>
-          <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-3">
+          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
             Gender <span className="text-red-600">*</span>
           </label>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="grid grid-cols-4 gap-4">
             {["Man", "Woman", "Non-binary", "More +"].map(g => (
               <button
                 key={g}
                 type="button"
                 onClick={() => update("gender", g)}
-                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`h-14 rounded-[18px] text-sm font-medium transition-all duration-200 ${
                   form.gender === g
-                    ? "bg-[#234232] text-[#F7F4EE]"
-                    : "bg-transparent text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
+                    ? "bg-[#1F4D45] text-white border border-[#2B645A] shadow-[0_4px_12px_rgba(31,77,69,0.12)]"
+                    : "bg-[#E8F1EA] text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
                 }`}
               >
                 {g}
@@ -382,19 +382,19 @@ export default function VolunteerOnboardingPage() {
 
         {/* Travel Duration */}
         <div>
-          <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-3">
+          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
             I have been travelling for
           </label>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="grid grid-cols-3 gap-4">
             {travelDurationOptions.map(opt => (
               <button
                 key={opt}
                 type="button"
                 onClick={() => update("travelDuration", opt)}
-                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`h-14 rounded-[18px] text-sm font-medium transition-all duration-200 ${
                   form.travelDuration === opt
-                    ? "bg-[#234232] text-[#F7F4EE]"
-                    : "bg-transparent text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
+                    ? "bg-[#1F4D45] text-white border border-[#2B645A] shadow-[0_4px_12px_rgba(31,77,69,0.12)]"
+                    : "bg-[#E8F1EA] text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
                 }`}
               >
                 {opt}
@@ -405,19 +405,19 @@ export default function VolunteerOnboardingPage() {
 
         {/* Travel Companion */}
         <div>
-          <label className="block text-xs font-semibold text-[#234232] uppercase tracking-wider mb-3">
+          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
             I usually travel
           </label>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="grid grid-cols-2 gap-4">
             {travelCompanionOptions.map(opt => (
               <button
                 key={opt}
                 type="button"
                 onClick={() => update("travelCompanion", opt)}
-                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`h-14 rounded-[18px] text-sm font-medium transition-all duration-200 ${
                   form.travelCompanion === opt
-                    ? "bg-[#234232] text-[#F7F4EE]"
-                    : "bg-transparent text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
+                    ? "bg-[#1F4D45] text-white border border-[#2B645A] shadow-[0_4px_12px_rgba(31,77,69,0.12)]"
+                    : "bg-[#E8F1EA] text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
                 }`}
               >
                 {opt}
@@ -427,11 +427,11 @@ export default function VolunteerOnboardingPage() {
         </div>
 
         {/* CTA */}
-        <div className="pt-2">
+        <div className="pt-2 flex justify-center">
           <button
             onClick={handleContinue}
             disabled={!form.fullName || !form.email || !isGmail(form.email) || !form.birthDay || !form.birthMonth || !form.birthYear || !form.gender}
-            className="w-full h-14 rounded-full bg-[#234232] text-[#F7F4EE] text-base font-semibold shadow-[0_4px_14px_rgba(35,66,50,0.25)] hover:shadow-[0_6px_20px_rgba(35,66,50,0.35)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-[0_4px_14px_rgba(35,66,50,0.25)] transition-all duration-300"
+            className="w-full max-w-[600px] h-14 rounded-[20px] bg-[#1F4D45] text-white text-base font-semibold shadow-[0_10px_30px_rgba(31,77,69,0.12)] hover:bg-[#2B645A] hover:shadow-[0_14px_40px_rgba(31,77,69,0.18)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-[#1F4D45] disabled:hover:shadow-[0_10px_30px_rgba(31,77,69,0.12)] transition-all duration-300"
           >
             Continue Your Journey
           </button>
