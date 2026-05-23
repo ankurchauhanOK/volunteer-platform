@@ -262,8 +262,11 @@ export default function VolunteerOnboardingPage() {
   const travelDurationOptions = ["0-1 year", "1-3 year", "3 year +"]
   const travelCompanionOptions = ["Solo", "With friends", "With a travel group", "I'm open to anything"]
 
-  const renderBasicDetails = () => (
-    <div className="max-w-[820px] mx-auto px-4 sm:px-6 py-10 md:py-16">
+  const renderBasicDetails = () => {
+    const isStep0Complete = form.fullName && form.email && isGmail(form.email) && form.birthDay && form.birthMonth && form.birthYear && form.gender
+
+    return (
+    <div className="max-w-[820px] mx-auto px-4 sm:px-6 py-10 md:py-16 pb-32">
       {/* Editorial Header */}
       <div className="text-center mb-12 md:mb-16">
         <h1
@@ -425,20 +428,23 @@ export default function VolunteerOnboardingPage() {
             ))}
           </div>
         </div>
-
-        {/* CTA */}
-        <div className="pt-2 flex justify-center">
-          <button
-            onClick={handleContinue}
-            disabled={!form.fullName || !form.email || !isGmail(form.email) || !form.birthDay || !form.birthMonth || !form.birthYear || !form.gender}
-            className="w-full max-w-[600px] h-14 rounded-[20px] bg-[#1F4D45] text-white text-base font-semibold shadow-[0_10px_30px_rgba(31,77,69,0.12)] hover:bg-[#2B645A] hover:shadow-[0_14px_40px_rgba(31,77,69,0.18)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-[#1F4D45] disabled:hover:shadow-[0_10px_30px_rgba(31,77,69,0.12)] transition-all duration-300"
-          >
-            Continue Your Journey
-          </button>
-        </div>
       </div>
+
+      {/* Floating Continue Button */}
+      <button
+        onClick={handleContinue}
+        disabled={!isStep0Complete}
+        className={`fixed bottom-6 right-6 z-50 h-14 px-8 rounded-full text-base font-semibold shadow-[0_10px_30px_rgba(31,77,69,0.20)] transition-all duration-300 ${
+          isStep0Complete
+            ? "bg-[#1F4D45] text-white hover:bg-[#2B645A] hover:shadow-[0_14px_40px_rgba(31,77,69,0.28)] hover:-translate-y-0.5 active:translate-y-0"
+            : "bg-[#1F4D45]/40 text-white/70 cursor-not-allowed"
+        }`}
+      >
+        Continue
+      </button>
     </div>
-  )
+    )
+  }
 
   const allInterestOptions = [
     "Photography", "Filmmaking", "Content creation", "Social media",
