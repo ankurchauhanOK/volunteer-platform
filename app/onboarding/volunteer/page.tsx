@@ -779,22 +779,6 @@ export default function VolunteerOnboardingPage() {
     return (
       <div className="relative min-h-[calc(100vh-180px)] flex flex-col items-center justify-center px-4 sm:px-6">
         <div className="w-full max-w-2xl mx-auto flex flex-col items-center text-center">
-          {/* Progress dots */}
-          <div className="flex items-center gap-3 mb-10">
-            {Array.from({ length: TOTAL_STEPS }, (_, i) => (
-              <div
-                key={i}
-                className={`rounded-full transition-all duration-500 ${
-                  i === step
-                    ? "w-8 h-2 bg-[#1F4D3A]"
-                    : i < step
-                    ? "w-2 h-2 bg-[#1F4D3A]/40"
-                    : "w-2 h-2 bg-[#D4CFC4]"
-                }`}
-              />
-            ))}
-          </div>
-
           <h1
             className="font-tanker text-[#1F4D3A] leading-[1.1] tracking-tight mb-5 text-balance"
             style={{ fontSize: "clamp(2rem, 4.5vw, 3.2rem)" }}
