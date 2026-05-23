@@ -267,12 +267,12 @@ export default function VolunteerOnboardingPage() {
       {/* Editorial Header */}
       <div className="text-center mb-12 md:mb-16">
         <h1
-          className="font-tanker text-[#234232] leading-[1.08] tracking-tight mb-4 text-balance"
+          className="font-tanker text-[#18332D] leading-[1.08] tracking-tight mb-4 text-balance"
           style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)" }}
         >
           Tell us about yourself
         </h1>
-        <p className="text-base text-[#6F8B78] max-w-lg mx-auto leading-relaxed">
+        <p className="text-base text-[#7E918A] max-w-lg mx-auto leading-relaxed">
           Help us personalize your volunteering journey.
         </p>
       </div>
@@ -281,7 +281,7 @@ export default function VolunteerOnboardingPage() {
       <div className="space-y-12">
         {/* Name */}
         <div>
-          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
+          <label className="block text-[13px] font-semibold text-[#18332D] uppercase tracking-[0.08em] mb-3">
             Name <span className="text-red-600">*</span>
           </label>
           <input
@@ -289,25 +289,25 @@ export default function VolunteerOnboardingPage() {
             value={form.fullName}
             onChange={e => update("fullName", e.target.value)}
             placeholder="Your full name"
-            className="w-full h-14 px-5 rounded-full bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250"
+            className="w-full h-14 px-5 rounded-full bg-[#F9FCFA] border border-[#C7D8D1] text-[#18332D] placeholder-[#7E918A] focus:outline-none focus:border-[#4FA08C] focus:bg-white focus:shadow-[0_0_0_4px_rgba(79,160,140,0.12)] transition-all duration-250"
           />
         </div>
 
         {/* Email */}
         <div>
-          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
+          <label className="block text-[13px] font-semibold text-[#18332D] uppercase tracking-[0.08em] mb-3">
             Email <span className="text-red-600">*</span>
-            <span className="text-[#6F8B78] font-normal lowercase ml-1">(Gmail only)</span>
+            <span className="text-[#7E918A] font-normal lowercase ml-1">(Gmail only)</span>
           </label>
           <input
             type="email"
             value={form.email}
             onChange={e => update("email", e.target.value)}
             placeholder="your@gmail.com"
-            className={`w-full h-14 px-5 rounded-full bg-[#E8F1EA] text-[#234232] placeholder-[#6F8B78] focus:outline-none focus:ring-1 transition-all duration-250 ${
+            className={`w-full h-14 px-5 rounded-full bg-[#F9FCFA] text-[#18332D] placeholder-[#7E918A] focus:outline-none focus:bg-white transition-all duration-250 ${
               form.email && !form.email.toLowerCase().includes("@gmail.com")
-                ? "border-red-400 focus:border-red-500 focus:ring-red-500/30"
-                : "border-[#7FA58A] focus:border-[#5A8A6B] focus:ring-[#5A8A6B]/30"
+                ? "border-red-400 focus:border-red-500 focus:shadow-[0_0_0_4px_rgba(239,68,68,0.12)]"
+                : "border-[#C7D8D1] focus:border-[#4FA08C] focus:shadow-[0_0_0_4px_rgba(79,160,140,0.12)]"
             }`}
           />
           {form.email && !form.email.toLowerCase().includes("@gmail.com") && (
@@ -319,14 +319,14 @@ export default function VolunteerOnboardingPage() {
 
         {/* Birthday */}
         <div>
-          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
+          <label className="block text-[13px] font-semibold text-[#18332D] uppercase tracking-[0.08em] mb-3">
             Birthday <span className="text-red-600">*</span>
           </label>
           <div className="flex gap-3">
             <select
               value={form.birthMonth}
               onChange={e => update("birthMonth", e.target.value)}
-              className="h-14 px-4 rounded-full bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250 appearance-none flex-1 min-w-0"
+              className="h-14 px-4 rounded-full bg-[#F9FCFA] border border-[#C7D8D1] text-[#18332D] focus:outline-none focus:border-[#4FA08C] focus:bg-white focus:shadow-[0_0_0_4px_rgba(79,160,140,0.12)] transition-all duration-250 appearance-none flex-1 min-w-0"
             >
               <option value="">Month</option>
               {months.map((m, i) => (
@@ -336,7 +336,7 @@ export default function VolunteerOnboardingPage() {
             <select
               value={form.birthDay}
               onChange={e => update("birthDay", e.target.value)}
-              className="h-14 px-4 rounded-full bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250 appearance-none w-20"
+              className="h-14 px-4 rounded-full bg-[#F9FCFA] border border-[#C7D8D1] text-[#18332D] focus:outline-none focus:border-[#4FA08C] focus:bg-white focus:shadow-[0_0_0_4px_rgba(79,160,140,0.12)] transition-all duration-250 appearance-none w-20"
             >
               <option value="">Day</option>
               {Array.from({ length: 31 }, (_, i) => (
@@ -346,7 +346,7 @@ export default function VolunteerOnboardingPage() {
             <select
               value={form.birthYear}
               onChange={e => update("birthYear", e.target.value)}
-              className="h-14 px-4 rounded-full bg-[#E8F1EA] border border-[#7FA58A] text-[#234232] focus:outline-none focus:border-[#5A8A6B] focus:ring-1 focus:ring-[#5A8A6B]/30 transition-all duration-250 appearance-none w-24"
+              className="h-14 px-4 rounded-full bg-[#F9FCFA] border border-[#C7D8D1] text-[#18332D] focus:outline-none focus:border-[#4FA08C] focus:bg-white focus:shadow-[0_0_0_4px_rgba(79,160,140,0.12)] transition-all duration-250 appearance-none w-24"
             >
               <option value="">Year</option>
               {Array.from({ length: 60 }, (_, i) => {
@@ -359,7 +359,7 @@ export default function VolunteerOnboardingPage() {
 
         {/* Gender */}
         <div>
-          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
+          <label className="block text-[13px] font-semibold text-[#18332D] uppercase tracking-[0.08em] mb-3">
             Gender <span className="text-red-600">*</span>
           </label>
           <div className="grid grid-cols-4 gap-4">
@@ -371,7 +371,7 @@ export default function VolunteerOnboardingPage() {
                 className={`h-14 rounded-[18px] text-sm font-medium transition-all duration-200 ${
                   form.gender === g
                     ? "bg-[#1F4D45] text-white border border-[#2B645A] shadow-[0_4px_12px_rgba(31,77,69,0.12)]"
-                    : "bg-[#E8F1EA] text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
+                    : "bg-[#F9FCFA] text-[#18332D] border border-[#C7D8D1] hover:border-[#98B9AE]"
                 }`}
               >
                 {g}
@@ -382,7 +382,7 @@ export default function VolunteerOnboardingPage() {
 
         {/* Travel Duration */}
         <div>
-          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
+          <label className="block text-[13px] font-semibold text-[#18332D] uppercase tracking-[0.08em] mb-3">
             I have been travelling for
           </label>
           <div className="grid grid-cols-3 gap-4">
@@ -394,7 +394,7 @@ export default function VolunteerOnboardingPage() {
                 className={`h-14 rounded-[18px] text-sm font-medium transition-all duration-200 ${
                   form.travelDuration === opt
                     ? "bg-[#1F4D45] text-white border border-[#2B645A] shadow-[0_4px_12px_rgba(31,77,69,0.12)]"
-                    : "bg-[#E8F1EA] text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
+                    : "bg-[#F9FCFA] text-[#18332D] border border-[#C7D8D1] hover:border-[#98B9AE]"
                 }`}
               >
                 {opt}
@@ -405,7 +405,7 @@ export default function VolunteerOnboardingPage() {
 
         {/* Travel Companion */}
         <div>
-          <label className="block text-[13px] font-semibold text-[#234232] uppercase tracking-[0.08em] mb-3">
+          <label className="block text-[13px] font-semibold text-[#18332D] uppercase tracking-[0.08em] mb-3">
             I usually travel
           </label>
           <div className="grid grid-cols-2 gap-4">
@@ -417,7 +417,7 @@ export default function VolunteerOnboardingPage() {
                 className={`h-14 rounded-[18px] text-sm font-medium transition-all duration-200 ${
                   form.travelCompanion === opt
                     ? "bg-[#1F4D45] text-white border border-[#2B645A] shadow-[0_4px_12px_rgba(31,77,69,0.12)]"
-                    : "bg-[#E8F1EA] text-[#234232] border border-[#7FA58A] hover:border-[#5A8A6B]"
+                    : "bg-[#F9FCFA] text-[#18332D] border border-[#C7D8D1] hover:border-[#98B9AE]"
                 }`}
               >
                 {opt}
