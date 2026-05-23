@@ -420,7 +420,7 @@ export default function VolunteerOnboardingPage() {
         <div className="pt-2">
           <button
             onClick={handleContinue}
-            disabled={!form.fullName || !form.email}
+            disabled={!form.fullName || !form.email || !form.birthDay || !form.birthMonth || !form.birthYear || !form.gender}
             className="w-full h-14 rounded-full bg-[#234232] text-[#F7F4EE] text-base font-semibold shadow-[0_4px_14px_rgba(35,66,50,0.25)] hover:shadow-[0_6px_20px_rgba(35,66,50,0.35)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-[0_4px_14px_rgba(35,66,50,0.25)] transition-all duration-300"
           >
             Continue Your Journey
