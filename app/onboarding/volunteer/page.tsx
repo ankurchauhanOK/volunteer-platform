@@ -890,6 +890,7 @@ export default function VolunteerOnboardingPage() {
         continueDisabled={getContinueDisabled()}
         loading={loading}
         hideBack={step === 0}
+        homeHref={step === 0 ? "/" : undefined}
         hideHeader={step === 5}
         dashboard
         bare={[0, 2, 3, 4, 5].includes(step)}
