@@ -16,7 +16,7 @@ export function PromptOverview({ answers, onPickPrompt, onEditPrompt }: PromptOv
   const emptySlots = Math.max(0, MAX_CARDS - filledCards.length)
 
   return (
-    <div className="flex flex-col items-center w-full max-w-5xl mx-auto px-6 md:px-8 py-8 md:py-12">
+    <div className="flex flex-col items-center w-full max-w-5xl mx-auto px-6 md:px-8 pt-8 md:pt-12 pb-32">
       {/* Hero */}
       <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
         <h1

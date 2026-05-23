@@ -115,22 +115,20 @@ export function PromptPersonalityFlow({
           />
         )}
 
-        {/* Bottom continue CTA only on overview */}
+        {/* Floating Continue CTA only on overview */}
         {view === "overview" && (
-          <div className="w-full flex justify-center pb-8">
-            <button
-              type="button"
-              onClick={onComplete}
-              disabled={answers.length < 3}
-              className={`font-[Plus_Jakarta_Sans] text-[14px] font-semibold tracking-wider uppercase px-12 py-4 rounded-full transition-all duration-300 ${
-                answers.length >= 3
-                  ? "bg-[#023625] text-white hover:shadow-[0_8px_28px_rgba(2,54,37,0.25)] hover:-translate-y-0.5 active:translate-y-0"
-                  : "bg-[#717973] text-[#e5e2db] cursor-not-allowed opacity-60"
-              }`}
-            >
-              Continue
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={onComplete}
+            disabled={answers.length < 3}
+            className={`fixed bottom-6 right-6 z-50 h-14 px-8 rounded-full text-base font-semibold shadow-[0_10px_30px_rgba(31,77,69,0.20)] transition-all duration-300 ${
+              answers.length >= 3
+                ? "bg-[#1F4D45] text-white hover:bg-[#2B645A] hover:shadow-[0_14px_40px_rgba(31,77,69,0.28)] hover:-translate-y-0.5 active:translate-y-0"
+                : "bg-[#1F4D45]/40 text-white/70 cursor-not-allowed"
+            }`}
+          >
+            Continue
+          </button>
         )}
       </main>
 
