@@ -7,10 +7,11 @@ import { useAuth } from "@/context/AuthContext"
 import { gsap } from "gsap"
 
 export default function SelectRolePage() {
-  const { user, updateUser } = useAuth()
+  const { user, isLoading, updateUser } = useAuth()
   const [loading, setLoading] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   useEffect(() => {
     if (containerRef.current) {
@@ -30,6 +31,25 @@ export default function SelectRolePage() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.replace("/auth/login")
+    }
+  }, [user, isLoading, router])
+
+  if (isLoading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-beige">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-brand-500 border-t-transparent mx-auto mb-4" />
+          <p className="text-sm text-text-muted">
+            {isLoading ? "Loading..." : "Redirecting to sign in..."}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   const handleSelect = (role: "volunteer" | "host") => {
     setLoading(role)
     updateUser({ role, onboardingComplete: false })
@@ -37,25 +57,6 @@ export default function SelectRolePage() {
     localStorage.removeItem("vt_onboarding_host")
     const redirect = role === "volunteer" ? "/onboarding/volunteer" : "/onboarding/host"
     window.location.replace(redirect)
-  }
-
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!user) {
-      router.replace("/auth/login")
-    }
-  }, [user, router])
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-beige">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-brand-500 border-t-transparent mx-auto mb-4" />
-          <p className="text-sm text-text-muted">Redirecting to sign in...</p>
-        </div>
-      </div>
-    )
   }
 
   return (
