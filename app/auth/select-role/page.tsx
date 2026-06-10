@@ -55,7 +55,7 @@ export default function SelectRolePage() {
     updateUser({ role, onboardingComplete: false })
     localStorage.removeItem("vt_onboarding_volunteer")
     localStorage.removeItem("vt_onboarding_host")
-    const redirect = role === "volunteer" ? "/onboarding/volunteer" : "/onboarding/host"
+    const redirect = role === "volunteer" ? "/onboarding/volunteer" : "/onboarding/host/welcome"
     window.location.replace(redirect)
   }
 

@@ -15,6 +15,16 @@
   --color-sb-800: #162b25;
   --color-sb-900: #0f1e19;
 
+  /* === PREMIUM HOST ONBOARDING PALETTE === */
+  --color-ivory: #F6F4EF;
+  --color-forest: #0D4F3A;
+  --color-forest-secondary: #1D6B4F;
+  --color-forest-light: #E8F0EC;
+  --color-onboarding-border: #D9DDD8;
+  --color-onboarding-text: #1A1A1A;
+  --color-onboarding-muted: #6F756F;
+  --color-onboarding-surface: #FFFFFF;
+
   /* Legacy brand-* mapped to Starbucks greens for compatibility */
   --color-brand-50: #e8f5ee;
   --color-brand-100: #d4e9e2;
@@ -103,6 +113,7 @@
   /* === TYPOGRAPHY === */
   --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-tanker: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-playfair: var(--font-playfair), "Playfair Display", Georgia, serif;
   --font-mono: ui-monospace, monospace;
 
   --font-size-xs: 0.75rem;   /* 12px */

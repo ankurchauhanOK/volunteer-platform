@@ -22,7 +22,8 @@ export function AuthGuard({ children, requiredRole }: { children: React.ReactNod
     // Block un-onboarded users from every page except onboarding and auth flows
     if (!user.onboardingComplete) {
       const onboardingPath = user.role === "host" ? "/onboarding/host" : "/onboarding/volunteer"
-      if (pathname !== onboardingPath && !pathname.startsWith("/auth/")) {
+      const isOnboardingPage = pathname === onboardingPath || pathname.startsWith(`${onboardingPath}/`)
+      if (!isOnboardingPage && !pathname.startsWith("/auth/")) {
         router.replace("/auth/select-role")
       }
     }

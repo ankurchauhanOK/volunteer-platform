@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Manrope, Literata, Plus_Jakarta_Sans } from "next/font/google"
+import { Manrope, Literata, Plus_Jakarta_Sans, Playfair_Display } from "next/font/google"
 import "./globals.css"
 import { Providers } from "@/components/Providers"
 
@@ -22,6 +22,13 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700"],
 })
 
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+})
+
 export const metadata: Metadata = {
   title: "Voluntree - Travel Free. Travel Safe. Travel Creatively.",
   description: "A community-driven platform connecting volunteers with hosts across India. Swap your skills for adventure.",
@@ -33,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${literata.variable} ${plusJakartaSans.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${literata.variable} ${plusJakartaSans.variable} ${playfairDisplay.variable}`}>
       <body className="min-h-screen flex flex-col bg-beige text-text antialiased font-sans">
         <Providers>{children}</Providers>
       </body>
