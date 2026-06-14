@@ -1,20 +1,59 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { OnboardingLayout } from "@/components/onboarding/host/OnboardingLayout"
 import { useHostOnboarding } from "@/components/onboarding/host/HostOnboardingContext"
 
 export default function AddressConfirmPage() {
-  const { goNext, goBack, isStepValid } = useHostOnboarding()
+  const { data, updateData, goNext, goBack } = useHostOnboarding()
+
+  const [form, setForm] = useState({
+    street: "",
+    flat: "",
+    city: "",
+    state: "",
+    country: "",
+    pinCode: "",
+    landmark: "",
+  })
+
+  // Pre-fill from selected address
+  useEffect(() => {
+    if (data.address) {
+      setForm((prev) => ({
+        street: data.address?.street || prev.street,
+        flat: data.address?.flat || prev.flat,
+        city: data.address?.city || prev.city,
+        state: data.address?.state || prev.state,
+        country: data.address?.country || prev.country,
+        pinCode: data.address?.pinCode || prev.pinCode,
+        landmark: data.address?.landmark || prev.landmark,
+      }))
+    }
+  }, [])
+
+  const update = (key: keyof typeof form, value: string) => {
+    setForm((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const handleNext = () => {
+    updateData("address", {
+      ...data.address,
+      ...form,
+    })
+    goNext()
+  }
+
+  const isValid = form.street && form.city && form.state && form.pinCode
 
   return (
     <OnboardingLayout
-      onNext={goNext}
+      onNext={handleNext}
       onBack={goBack}
-      nextDisabled={!isStepValid()}
+      nextDisabled={!isValid}
     >
       <div className="w-full flex items-center justify-center min-h-[calc(100vh-200px)]">
         <div className="w-full max-w-[640px] mx-auto">
-          {/* Modal-style container */}
           <div
             className="w-full p-10"
             style={{
@@ -38,28 +77,28 @@ export default function AddressConfirmPage() {
               Guests will only receive your exact address after booking confirmation.
             </p>
 
-            {/* Form Fields */}
             <div className="space-y-4">
-              {/* Country */}
-              <div className="relative">
+              {/* Country (read-only) */}
+              <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#6F756F" }}>
                   Country / Region
                 </label>
-                <div className="h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white flex items-center justify-between">
-                  <span className="text-base text-[#1A1A1A]">India - IN</span>
-                  <svg className="w-5 h-5 text-[#6F756F]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                  </svg>
+                <div
+                  className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-[#F9F9F7] flex items-center text-base text-[#6F756F]"
+                >
+                  {form.country || "India"}
                 </div>
               </div>
 
               {/* Street Address */}
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#6F756F" }}>
-                  Street Address
+                  Street Address <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
+                  value={form.street}
+                  onChange={(e) => update("street", e.target.value)}
                   placeholder="Street name and number"
                   className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                 />
@@ -72,6 +111,8 @@ export default function AddressConfirmPage() {
                 </label>
                 <input
                   type="text"
+                  value={form.flat}
+                  onChange={(e) => update("flat", e.target.value)}
                   placeholder="e.g. Apt 4B"
                   className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                 />
@@ -81,30 +122,36 @@ export default function AddressConfirmPage() {
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#6F756F" }}>
-                    City / Town
+                    City / Town <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
+                    value={form.city}
+                    onChange={(e) => update("city", e.target.value)}
                     placeholder="City"
                     className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#6F756F" }}>
-                    State
+                    State <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
+                    value={form.state}
+                    onChange={(e) => update("state", e.target.value)}
                     placeholder="State"
                     className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#6F756F" }}>
-                    PIN Code
+                    PIN Code <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
+                    value={form.pinCode}
+                    onChange={(e) => update("pinCode", e.target.value)}
                     placeholder="Zip / Postal"
                     className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                   />
@@ -118,6 +165,8 @@ export default function AddressConfirmPage() {
                 </label>
                 <input
                   type="text"
+                  value={form.landmark}
+                  onChange={(e) => update("landmark", e.target.value)}
                   placeholder="e.g. Near Central Park"
                   className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                 />

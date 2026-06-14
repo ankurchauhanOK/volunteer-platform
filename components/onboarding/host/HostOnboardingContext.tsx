@@ -7,13 +7,16 @@ import { useAuth } from "@/context/AuthContext"
 export interface HostOnboardingData {
   // Page 2-3: Address
   address?: {
-    country?: string
+    displayName?: string
     street?: string
     flat?: string
     city?: string
     state?: string
+    country?: string
     pinCode?: string
     landmark?: string
+    lat?: number
+    lng?: number
   }
   // Page 4: Location
   location?: {
@@ -136,7 +139,7 @@ export function HostOnboardingProvider({ children }: { children: React.ReactNode
   const isStepValid = useCallback(() => {
     switch (currentStep) {
       case 1: // Address
-        return !!data.address?.street && !!data.address?.city
+        return !!data.address?.city
       case 2: // Address Confirm
         return !!data.address?.street && !!data.address?.city && !!data.address?.state && !!data.address?.pinCode
       case 3: // Location
