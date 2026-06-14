@@ -39,7 +39,7 @@ export function OnboardingLayout({
       )}
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-8">
+      <main className="flex-1 flex flex-col items-center justify-center px-8 pb-28">
         <div className="w-full max-w-[1280px] mx-auto">
           {children}
         </div>

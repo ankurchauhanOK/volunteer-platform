@@ -90,52 +90,52 @@ export default function FinalDetailsPage() {
             >
               Tell us something about yourself
             </h2>
-            <p className="text-sm mb-8" style={{ color: "#6F756F" }}>
+            <p className="text-sm mb-6" style={{ color: "#6F756F" }}>
               Guests appreciate knowing who they&apos;re booking with. Add a few details about yourself or your business.
             </p>
 
             {/* About You Fields */}
-            <div className="space-y-4 mb-10">
+            <div className="space-y-3 mb-8">
               <input
                 type="text"
                 value={form.fullName}
                 onChange={(e) => setForm(prev => ({ ...prev, fullName: e.target.value }))}
                 placeholder="Business owner's name"
-                className="w-full h-14 px-5 rounded-full border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                className="w-full h-[52px] px-5 rounded-full border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
               />
               <input
                 type="tel"
                 value={form.birthday}
                 onChange={(e) => setForm(prev => ({ ...prev, birthday: e.target.value }))}
                 placeholder="Contact number"
-                className="w-full h-14 px-5 rounded-full border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                className="w-full h-[52px] px-5 rounded-full border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
               />
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="Email address"
-                className="w-full h-14 px-5 rounded-full border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                className="w-full h-[52px] px-5 rounded-full border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
               />
               <input
                 type="url"
                 placeholder="Website (optional)"
-                className="w-full h-14 px-5 rounded-full border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                className="w-full h-[52px] px-5 rounded-full border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
               />
               <input
                 type="text"
                 placeholder="Social media handle (optional)"
-                className="w-full h-14 px-5 rounded-full border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                className="w-full h-[52px] px-5 rounded-full border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
               />
             </div>
           </div>
 
           {/* Travel Experience */}
-          <div className="mb-10">
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4" style={{ color: "#6F756F" }}>
+          <div className="mb-8">
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: "#6F756F" }}>
               Travel Experience
             </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2.5">
               {travelExperienceOptions.map(opt => (
                 <button
                   key={opt}
@@ -154,11 +154,11 @@ export default function FinalDetailsPage() {
           </div>
 
           {/* Travel Style */}
-          <div className="mb-10">
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4" style={{ color: "#6F756F" }}>
+          <div className="mb-8">
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: "#6F756F" }}>
               Travel Style
             </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2.5">
               {travelStyleOptions.map(opt => (
                 <button
                   key={opt}
@@ -177,11 +177,11 @@ export default function FinalDetailsPage() {
           </div>
 
           {/* Interests */}
-          <div className="mb-10">
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4" style={{ color: "#6F756F" }}>
+          <div className="mb-8">
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: "#6F756F" }}>
               Interests
             </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2.5">
               {interestOptions.map(interest => (
                 <button
                   key={interest}

@@ -55,7 +55,7 @@ export default function AddressConfirmPage() {
       <div className="w-full flex items-center justify-center min-h-[calc(100vh-200px)]">
         <div className="w-full max-w-[640px] mx-auto">
           <div
-            className="w-full p-10"
+            className="w-full p-8"
             style={{
               backgroundColor: "#FFFFFF",
               borderRadius: "32px",
@@ -63,7 +63,7 @@ export default function AddressConfirmPage() {
             }}
           >
             <h1
-              className="text-center mb-3"
+              className="text-center mb-2"
               style={{
                 fontFamily: "var(--font-playfair), serif",
                 fontSize: "48px",
@@ -73,18 +73,18 @@ export default function AddressConfirmPage() {
             >
               Confirm your address
             </h1>
-            <p className="text-center text-sm mb-10" style={{ color: "#6F756F" }}>
+            <p className="text-center text-sm mb-6" style={{ color: "#6F756F" }}>
               Guests will only receive your exact address after booking confirmation.
             </p>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* Country (read-only) */}
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#6F756F" }}>
                   Country / Region
                 </label>
                 <div
-                  className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-[#F9F9F7] flex items-center text-base text-[#6F756F]"
+                  className="w-full h-[52px] px-5 rounded-2xl border border-[#D9DDD8] bg-[#F9F9F7] flex items-center text-base text-[#6F756F]"
                 >
                   {form.country || "India"}
                 </div>
@@ -100,7 +100,7 @@ export default function AddressConfirmPage() {
                   value={form.street}
                   onChange={(e) => update("street", e.target.value)}
                   placeholder="Street name and number"
-                  className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                  className="w-full h-[52px] px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                 />
               </div>
 
@@ -114,12 +114,12 @@ export default function AddressConfirmPage() {
                   value={form.flat}
                   onChange={(e) => update("flat", e.target.value)}
                   placeholder="e.g. Apt 4B"
-                  className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                  className="w-full h-[52px] px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                 />
               </div>
 
               {/* City, State, PIN */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2.5">
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#6F756F" }}>
                     City / Town <span className="text-red-500">*</span>
@@ -129,7 +129,7 @@ export default function AddressConfirmPage() {
                     value={form.city}
                     onChange={(e) => update("city", e.target.value)}
                     placeholder="City"
-                    className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                    className="w-full h-[52px] px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                   />
                 </div>
                 <div>
@@ -141,7 +141,7 @@ export default function AddressConfirmPage() {
                     value={form.state}
                     onChange={(e) => update("state", e.target.value)}
                     placeholder="State"
-                    className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                    className="w-full h-[52px] px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                   />
                 </div>
                 <div>
@@ -153,7 +153,7 @@ export default function AddressConfirmPage() {
                     value={form.pinCode}
                     onChange={(e) => update("pinCode", e.target.value)}
                     placeholder="Zip / Postal"
-                    className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                    className="w-full h-[52px] px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                   />
                 </div>
               </div>
@@ -168,7 +168,7 @@ export default function AddressConfirmPage() {
                   value={form.landmark}
                   onChange={(e) => update("landmark", e.target.value)}
                   placeholder="e.g. Near Central Park"
-                  className="w-full h-14 px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
+                  className="w-full h-[52px] px-5 rounded-2xl border border-[#D9DDD8] bg-white text-base text-[#1A1A1A] placeholder-[#6F756F] outline-none focus:border-[#0D4F3A] transition-all"
                 />
               </div>
             </div>
